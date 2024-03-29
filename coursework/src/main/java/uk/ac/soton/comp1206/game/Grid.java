@@ -57,22 +57,22 @@ public class Grid {
         } else {
             return true;
         }
+
     }
 
     public void playPiece(GamePiece piece, int x, int y) {
-
-        int[][] shape = piece.getBlocks();
         if (canPlayPiece(piece, x, y)) {
-            for (int j = 0; j < shape.length; j++) {
-                for (int i = 0; i < shape.length; i++) {
-                    int value = shape[i][j];
-                    if (value == 0) {
-                        set(x + i, y + j, 5);
+            int[][] shape = piece.getBlocks();  // Fetching the shape we want
+            for (int i = 0; i < shape.length; i++) {    // This is between 1-3
+                for (int j = 0; j < shape.length; j++) {// Go to row, then check all columns
+                    // Check the value in the matrix is not 0 -> block should be present
+                    if (shape[i][j] != 0) {
+                        set(x + i, y + i, piece.getValue());
                     }
                 }
             }
+            logger.info("Placed a: " + piece.name);
         }
-
     }
 
     /**

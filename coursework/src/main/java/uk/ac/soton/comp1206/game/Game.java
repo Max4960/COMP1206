@@ -76,8 +76,8 @@ public class Game {
         if (newValue  > GamePiece.PIECES) {
             newValue = 0;
         }
-
-        grid.playPiece(currentPiece, x, y);
+        //GamePiece.createPiece(0);
+        grid.playPiece(spawnPiece(), x, y);
 
         //Update the grid with the new value
         grid.set(x,y,newValue);

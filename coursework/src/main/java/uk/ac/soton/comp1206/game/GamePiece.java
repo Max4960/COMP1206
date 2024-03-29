@@ -26,7 +26,7 @@ public class GamePiece {
     /**
      * The name of this piece
      */
-    private final String name;
+    public final String name;   //Public for debugging
 
     /**
      * Create a new GamePiece of the specified piece number
