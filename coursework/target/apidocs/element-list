@@ -1,0 +1,8 @@
+module:uk.ac.soton.comp1206
+uk.ac.soton.comp1206
+uk.ac.soton.comp1206.component
+uk.ac.soton.comp1206.event
+uk.ac.soton.comp1206.game
+uk.ac.soton.comp1206.network
+uk.ac.soton.comp1206.scene
+uk.ac.soton.comp1206.ui

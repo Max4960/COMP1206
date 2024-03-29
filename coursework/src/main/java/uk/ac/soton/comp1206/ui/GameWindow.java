@@ -62,7 +62,7 @@ public class GameWindow {
     }
 
     /**
-     * Setup the font and any other resources we need
+     * Set up the font and any other resources we need
      */
     private void setupResources() {
         logger.info("Loading resources");
@@ -86,7 +86,7 @@ public class GameWindow {
     public void startChallenge() { loadScene(new ChallengeScene(this)); }
 
     /**
-     * Setup the default settings for the stage itself (the window), such as the title and minimum width and height.
+     * Set up the default settings for the stage itself (the window), such as the title and minimum width and height.
      */
     public void setupStage() {
         stage.setTitle("TetrECS");

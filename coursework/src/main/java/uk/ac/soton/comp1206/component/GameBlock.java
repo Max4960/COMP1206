@@ -166,7 +166,7 @@ public class GameBlock extends Canvas {
     }
 
     /**
-     * Get the current value held by this block, representing it's colour
+     * Get the current value held by this block, representing its colour
      * @return value
      */
     public int getValue() {

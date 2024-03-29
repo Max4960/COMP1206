@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
 
+import java.util.Random;
+
 /**
  * The Game class handles the main logic, state and properties of the TetrECS game. Methods to manipulate the game state
  * and to handle actions made by the player should take place inside this class.
@@ -26,6 +28,9 @@ public class Game {
      * The grid model linked to the game
      */
     protected final Grid grid;
+
+    // !---------- Added by Max ----------!
+    public GamePiece currentPiece;
 
     /**
      * Create a new game with the specified rows and columns. Creates a corresponding grid model.
@@ -53,6 +58,7 @@ public class Game {
      */
     public void initialiseGame() {
         logger.info("Initialising game");
+        currentPiece = spawnPiece();
     }
 
     /**
@@ -70,6 +76,8 @@ public class Game {
         if (newValue  > GamePiece.PIECES) {
             newValue = 0;
         }
+
+        grid.playPiece(currentPiece, x, y);
 
         //Update the grid with the new value
         grid.set(x,y,newValue);
@@ -99,5 +107,13 @@ public class Game {
         return rows;
     }
 
+    public GamePiece spawnPiece() {
+        Random toPlace = new Random();
+        return GamePiece.createPiece(toPlace.nextInt(GamePiece.PIECES));
+    }
+
+    public void nextPiece() {
+        currentPiece = spawnPiece();
+    }
 
 }

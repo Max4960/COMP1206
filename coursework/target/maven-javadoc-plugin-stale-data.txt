@@ -1,0 +1,53 @@
+@options
+@packages
+@argfile
+--class-path
+'C:/Users/ASUS/.m2/repository/org/openjfx/javafx-controls/21-ea+5/javafx-controls-21-ea+5.jar;C:/Users/ASUS/.m2/repository/org/openjfx/javafx-graphics/21-ea+5/javafx-graphics-21-ea+5.jar;C:/Users/ASUS/.m2/repository/org/openjfx/javafx-base/21-ea+5/javafx-base-21-ea+5.jar;C:/Users/ASUS/.m2/repository/org/openjfx/javafx-fxml/21-ea+5/javafx-fxml-21-ea+5.jar;C:/Users/ASUS/.m2/repository/org/openjfx/javafx-media/21-ea+5/javafx-media-21-ea+5.jar;C:/Users/ASUS/.m2/repository/org/apache/logging/log4j/log4j-core/2.20.0/log4j-core-2.20.0.jar'
+--module-path
+'C:/Users/ASUS/.m2/repository/com/neovisionaries/nv-websocket-client/2.14/nv-websocket-client-2.14.jar;C:/Users/ASUS/.m2/repository/org/openjfx/javafx-controls/21-ea+5/javafx-controls-21-ea+5-win.jar;C:/Users/ASUS/Documents/COMP1206-main/COMP1206-main/coursework/target/classes;C:/Users/ASUS/.m2/repository/org/openjfx/javafx-base/21-ea+5/javafx-base-21-ea+5-win.jar;C:/Users/ASUS/.m2/repository/org/openjfx/javafx-media/21-ea+5/javafx-media-21-ea+5-win.jar;C:/Users/ASUS/.m2/repository/org/apache/logging/log4j/log4j-api/2.20.0/log4j-api-2.20.0.jar;C:/Users/ASUS/.m2/repository/org/openjfx/javafx-graphics/21-ea+5/javafx-graphics-21-ea+5-win.jar;C:/Users/ASUS/.m2/repository/org/openjfx/javafx-fxml/21-ea+5/javafx-fxml-21-ea+5-win.jar'
+--patch-module
+uk.ac.soton.comp1206='C:/Users/ASUS/Documents/COMP1206-main/COMP1206-main/coursework/src/main/java'
+-encoding
+'UTF-8'
+-protected
+-source
+'17'
+--module-source-path
+'C:/Users/ASUS/Documents/COMP1206-main/COMP1206-main/coursework/target/apidocs/src'
+-author
+-bottom
+'Copyright &#169; 2024. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/ASUS/Documents/COMP1206-main/COMP1206-main/coursework/target/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'tetrecs 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'tetrecs 1.0-SNAPSHOT API'
+uk.ac.soton.comp1206
+uk.ac.soton.comp1206.component
+uk.ac.soton.comp1206.event
+uk.ac.soton.comp1206.game
+uk.ac.soton.comp1206.network
+uk.ac.soton.comp1206.scene
+uk.ac.soton.comp1206.ui
+'C:/Users/ASUS/Documents/COMP1206-main/COMP1206-main/coursework/src/main/java/module-info.java'
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\allclasses-index.html = 1711714108774
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\allpackages-index.html = 1711714108776
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\constant-values.html = 1711714108647
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\element-list = 1711714108537
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\help-doc.html = 1711714108811
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\index-all.html = 1711714108802
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\index.html = 1711714108806
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\member-search-index.js = 1711714108781
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\module-search-index.js = 1711714108777
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\overview-tree.html = 1711714108754
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\package-search-index.js = 1711714108778
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\search.html = 1711714108804
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\tag-search-index.js = 1711714108783
+C:\Users\ASUS\Documents\COMP1206-main\COMP1206-main\coursework\target\apidocs\type-search-index.js = 1711714108779

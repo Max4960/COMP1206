@@ -2,6 +2,9 @@ package uk.ac.soton.comp1206.game;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import uk.ac.soton.comp1206.component.GameBoard;
 
 /**
  * The Grid is a model which holds the state of a game board. It is made up of a set of Integer values arranged in a 2D
@@ -12,24 +15,21 @@ import javafx.beans.property.SimpleIntegerProperty;
  *
  * The Grid contains functions related to modifying the model, for example, placing a piece inside the grid.
  *
- * The Grid should be linked to a GameBoard for it's display.
+ * The Grid should be linked to a GameBoard for its display.
  */
 public class Grid {
 
-    /**
-     * The number of columns in this grid
-     */
+    // The number of columns in this grid
     private final int cols;
 
-    /**
-     * The number of rows in this grid
-     */
+    // The number of rows in this grid
     private final int rows;
 
-    /**
-     * The grid is a 2D arrow with rows and columns of SimpleIntegerProperties.
-     */
+    // The grid is a 2D arrow with rows and columns of SimpleIntegerProperties.
     private final SimpleIntegerProperty[][] grid;
+
+    // The grids Logger
+    private static final Logger logger = LogManager.getLogger(Grid.class);
 
     /**
      * Create a new Grid with the specified number of columns and rows and initialise them
@@ -49,6 +49,29 @@ public class Grid {
                 grid[x][y] = new SimpleIntegerProperty(0);
             }
         }
+    }
+
+    public Boolean canPlayPiece(GamePiece piece, int x, int y) {
+        if (x == 0 || y == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void playPiece(GamePiece piece, int xCoordinate, int yCoordinate) {
+        int[][] shape = piece.getBlocks();
+        if (canPlayPiece(piece, xCoordinate, yCoordinate)) {
+            for (int y = 0; y < shape.length; y++) {
+                for (int x = 0; x < shape.length; x++) {
+                    int value = shape[x][y];
+                    if (value == 0) {
+                        set(xCoordinate + x, yCoordinate + y, 5);
+                    }
+                }
+            }
+        }
+
     }
 
     /**
