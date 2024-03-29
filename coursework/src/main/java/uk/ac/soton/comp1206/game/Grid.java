@@ -59,14 +59,15 @@ public class Grid {
         }
     }
 
-    public void playPiece(GamePiece piece, int xCoordinate, int yCoordinate) {
+    public void playPiece(GamePiece piece, int x, int y) {
+
         int[][] shape = piece.getBlocks();
-        if (canPlayPiece(piece, xCoordinate, yCoordinate)) {
-            for (int y = 0; y < shape.length; y++) {
-                for (int x = 0; x < shape.length; x++) {
-                    int value = shape[x][y];
+        if (canPlayPiece(piece, x, y)) {
+            for (int j = 0; j < shape.length; j++) {
+                for (int i = 0; i < shape.length; i++) {
+                    int value = shape[i][j];
                     if (value == 0) {
-                        set(xCoordinate + x, yCoordinate + y, 5);
+                        set(x + i, y + j, 5);
                     }
                 }
             }
