@@ -141,6 +141,24 @@ public class Game {
                 }
             }
         }
+        // Clears horizontal lines
+        for (int j = 0; j < cols; j++) {
+            int count = 0;
+            for (int i = 0; i < rows; i++) {
+                if (grid.get(i,j) != 0) {
+                    count++;
+                } else {    // No point checking again if there is a 0
+                    break;
+                }
+            }
+            // It is a full row so need to add all coordinates to the HashSet
+            if (count == cols) {
+                for (int i = 0; i < cols; i++) {
+                    GameBlockCoordinate coordinate = new GameBlockCoordinate(i,j);
+                    toClear.add(coordinate);
+                }
+            }
+        }
         logger.info(toClear);
         // Loop through the hashset and remove all blocks
         for (GameBlockCoordinate coordinate : toClear) {
