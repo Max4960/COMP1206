@@ -38,7 +38,7 @@ public class Communicator {
             //Connect to the server
             ws = socketFactory.createSocket(server);
             ws.connect();
-            logger.info("Connected to " + server);
+            //logger.info("Connected to " + server);
 
             //When a message is received, call the receive method
             ws.addListener(new WebSocketAdapter() {
@@ -48,7 +48,7 @@ public class Communicator {
                 }
                 @Override
                 public void onPingFrame(WebSocket webSocket, WebSocketFrame webSocketFrame) throws Exception {
-                    logger.info("Ping? Pong!");
+                    //logger.info("Ping? Pong!");
                 }
             });
 

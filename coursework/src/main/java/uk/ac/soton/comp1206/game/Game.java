@@ -4,6 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
+import uk.ac.soton.comp1206.component.GameBlockCoordinate;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -121,23 +122,29 @@ public class Game {
     }
 
     public void afterPiece() {
-        HashSet<IntegerProperty> toClear = new HashSet<IntegerProperty>();  // IntegerProperty -> (x,y)
-        // Looping through the rows
-        for (int i = 0; i < cols; i++) {
+        HashSet<GameBlockCoordinate> toClear = new HashSet<GameBlockCoordinate>();  // IntegerProperty -> (x,y)
+        // Looping through the rows - This for loop clears vertical lines
+        for (int i = 0; i < rows; i++) {
             int count = 0;
-            for (int j = 0; j < rows; j++) {
+            for (int j = 0; j < cols; j++) {
                 if (grid.get(i,j) != 0) {
                     count++;
                 } else {    // No point checking again if there is a 0
                     break;
                 }
             }
+            // It is a full row so need to add all coordinates to the HashSet
             if (count == rows) {
-                for (int j = 0; j < rows; j++) {
-                    IntegerProperty coordinate = grid.getGridProperty(i,j);
+                for (int j = 0; j < cols; j++) {
+                    GameBlockCoordinate coordinate = new GameBlockCoordinate(i,j);
                     toClear.add(coordinate);
                 }
             }
+        }
+        logger.info(toClear);
+        // Loop through the hashset and remove all blocks
+        for (GameBlockCoordinate coordinate : toClear) {
+            grid.set(coordinate.getX(), coordinate.getY(), 0);
         }
 
 

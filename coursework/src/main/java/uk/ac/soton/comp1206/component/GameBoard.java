@@ -166,7 +166,7 @@ public class GameBoard extends GridPane {
      * @param block block clicked on
      */
     private void blockClicked(MouseEvent event, GameBlock block) {
-        logger.info("Block clicked: {}", block);
+        //logger.info("Block clicked: {}", block);
 
         if(blockClickedListener != null) {
             blockClickedListener.blockClicked(block);
