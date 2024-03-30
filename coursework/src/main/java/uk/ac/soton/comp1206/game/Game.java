@@ -71,16 +71,16 @@ public class Game {
         int y = gameBlock.getY();
 
         //Get the new value for this block
-        int previousValue = grid.get(x,y);
-        int newValue = previousValue + 1;
-        if (newValue  > GamePiece.PIECES) {
-            newValue = 0;
-        }
+        //int previousValue = grid.get(x,y);
+        //int newValue = previousValue + 1;
+        //if (newValue  > GamePiece.PIECES) {
+        //    newValue = 0;
+        //}
         //GamePiece.createPiece(0);
-        grid.playPiece(spawnPiece(), x, y);
+        grid.playPiece(currentPiece, x, y);
 
         //Update the grid with the new value
-        grid.set(x,y,newValue);
+        //grid.set(x,y,newValue);
     }
 
     /**

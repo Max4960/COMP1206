@@ -52,12 +52,20 @@ public class Grid {
     }
 
     public Boolean canPlayPiece(GamePiece piece, int x, int y) {
-        if (x == 0 || y == 0) {
-            return false;
-        } else {
-            return true;
+        //if (x == 0 || y == 0) {
+        //    return false;
+        //} else {
+        //    return true;
+        //}
+        int[][] shape = piece.getBlocks();
+        for (int i = x-1; i <= x+1; i++) {
+            for (int j = y-1; j <= y+1; j++) {
+                if (get(i,j) == 1) {
+                    return false;
+                }
+            }
         }
-
+        return true;
     }
 
     public void playPiece(GamePiece piece, int x, int y) {
@@ -67,7 +75,7 @@ public class Grid {
                 for (int j = 0; j < shape.length; j++) {// Go to row, then check all columns
                     // Check the value in the matrix is not 0 -> block should be present
                     if (shape[i][j] != 0) {
-                        set(x + i, y + i, piece.getValue());
+                        set(x + i - 1, y + i - 1, piece.getValue());
                     }
                 }
             }
