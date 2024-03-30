@@ -51,23 +51,33 @@ public class Grid {
         }
     }
 
+    /**
+     * Checks that the piece is able to fit in the slot selected.
+     * @param piece The piece being placed
+     * @param x The x position of the piece
+     * @param y The y position of the piece
+     * @return True if the piece can be placed, False otherwise
+     */
     public Boolean canPlayPiece(GamePiece piece, int x, int y) {
-        //if (x == 0 || y == 0) {
-        //    return false;
-        //} else {
-        //    return true;
-        //}
         int[][] shape = piece.getBlocks();
-        for (int i = x-1; i <= x+1; i++) {
-            for (int j = y-1; j <= y+1; j++) {
-                if (get(i,j) == 1) {
-                    return false;
+        for (int i = 0; i < shape.length; i++) {
+            for (int j = 0; j < shape.length; j++) {
+                if (shape[i][j] != 0) { // Skipping the empty parts of shape
+                    if (get(x + i - 1,y + j - 1)!=0) {
+                        return false;
+                    }
                 }
             }
         }
         return true;
     }
 
+    /**
+     * Places a piece in the desired coordinate, does nothing if the piece can't be placed
+     * @param piece The piece being placed
+     * @param x The x position of the piece
+     * @param y The y position of the piece
+     */
     public void playPiece(GamePiece piece, int x, int y) {
         if (canPlayPiece(piece, x, y)) {
             int[][] shape = piece.getBlocks();  // Fetching the shape we want
@@ -75,7 +85,7 @@ public class Grid {
                 for (int j = 0; j < shape.length; j++) {// Go to row, then check all columns
                     // Check the value in the matrix is not 0 -> block should be present
                     if (shape[i][j] != 0) {
-                        set(x + i - 1, y + i - 1, piece.getValue());
+                        set(x + i - 1, y + j - 1, piece.getValue());
                     }
                 }
             }

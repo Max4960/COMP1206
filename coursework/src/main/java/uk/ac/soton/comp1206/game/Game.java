@@ -1,9 +1,11 @@
 package uk.ac.soton.comp1206.game;
 
+import javafx.beans.property.IntegerProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
 
+import java.util.HashSet;
 import java.util.Random;
 
 /**
@@ -78,6 +80,8 @@ public class Game {
         //}
         //GamePiece.createPiece(0);
         grid.playPiece(currentPiece, x, y);
+        afterPiece();
+        nextPiece();
 
         //Update the grid with the new value
         //grid.set(x,y,newValue);
@@ -114,6 +118,29 @@ public class Game {
 
     public void nextPiece() {
         currentPiece = spawnPiece();
+    }
+
+    public void afterPiece() {
+        HashSet<IntegerProperty> toClear = new HashSet<IntegerProperty>();  // IntegerProperty -> (x,y)
+        // Looping through the rows
+        for (int i = 0; i < cols; i++) {
+            int count = 0;
+            for (int j = 0; j < rows; j++) {
+                if (grid.get(i,j) != 0) {
+                    count++;
+                } else {    // No point checking again if there is a 0
+                    break;
+                }
+            }
+            if (count == rows) {
+                for (int j = 0; j < rows; j++) {
+                    IntegerProperty coordinate = grid.getGridProperty(i,j);
+                    toClear.add(coordinate);
+                }
+            }
+        }
+
+
     }
 
 }
