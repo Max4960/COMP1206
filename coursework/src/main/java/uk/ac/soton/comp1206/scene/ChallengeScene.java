@@ -54,15 +54,25 @@ public class ChallengeScene extends BaseScene {
         VBox scoreBox = new VBox();
         scoreBox.setAlignment(Pos.CENTER);
         Text scoreText = new Text("SCORE");
-        Text valueText = new Text();
-        valueText.textProperty().bind(game.score.asString());
+        Text scoreValue = new Text();
+        scoreValue.textProperty().bind(game.score.asString());
         scoreText.getStyleClass().add("heading");
-        valueText.getStyleClass().add("score");
+        scoreValue.getStyleClass().add("score");
         scoreBox.getChildren().add(scoreText);
-        scoreBox.getChildren().add(valueText);
+        scoreBox.getChildren().add(scoreValue);
         mainPane.setLeft(scoreBox);
 
-
+        // Level User Interface
+        VBox levelBox = new VBox();
+        levelBox.setAlignment(Pos.CENTER);
+        Text levelText = new Text("LEVEL");
+        Text levelValue = new Text();
+        levelValue.textProperty().bind(game.level.asString());
+        levelText.getStyleClass().add("heading");
+        levelValue.getStyleClass().add("level");
+        levelBox.getChildren().add(levelText);
+        levelBox.getChildren().add(levelValue);
+        mainPane.setRight(levelBox);
 
         var board = new GameBoard(game.getGrid(),gameWindow.getWidth()/2,gameWindow.getWidth()/2);
         mainPane.setCenter(board);
