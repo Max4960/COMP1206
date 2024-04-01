@@ -124,6 +124,8 @@ public class Game {
     }
 
     public void afterPiece() {
+        int lines = 0;
+        int blocks = 0;
         HashSet<GameBlockCoordinate> toClear = new HashSet<GameBlockCoordinate>();  // IntegerProperty -> (x,y)
         // Looping through the rows - This for loop clears vertical lines
         for (int i = 0; i < rows; i++) {
@@ -141,6 +143,7 @@ public class Game {
                     GameBlockCoordinate coordinate = new GameBlockCoordinate(i,j);
                     toClear.add(coordinate);
                 }
+                lines++;
             }
         }
         // Clears horizontal lines
@@ -159,15 +162,23 @@ public class Game {
                     GameBlockCoordinate coordinate = new GameBlockCoordinate(i,j);
                     toClear.add(coordinate);
                 }
+                lines++;
             }
         }
         logger.info(toClear);
         // Loop through the hashset and remove all blocks
         for (GameBlockCoordinate coordinate : toClear) {
             grid.set(coordinate.getX(), coordinate.getY(), 0);
+            blocks++;
         }
 
+        int current = score.get();
+        score.set(current + score(lines,blocks));
 
+    }
+
+    public int score(int noLines, int noBlocks) {
+        return (noLines * noBlocks * 10);
     }
 
 }
