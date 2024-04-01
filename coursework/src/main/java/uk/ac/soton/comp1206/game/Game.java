@@ -1,6 +1,7 @@
 package uk.ac.soton.comp1206.game;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
@@ -34,6 +35,7 @@ public class Game {
 
     // !---------- Added by Max ----------!
     public GamePiece currentPiece;
+    public SimpleIntegerProperty score = new SimpleIntegerProperty(0); // Has to be SimpleIntegerProperty to be bindable
 
     /**
      * Create a new game with the specified rows and columns. Creates a corresponding grid model.

@@ -1,6 +1,8 @@
 package uk.ac.soton.comp1206.scene;
 
+import javafx.geometry.Pos;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
@@ -8,6 +10,8 @@ import uk.ac.soton.comp1206.component.GameBoard;
 import uk.ac.soton.comp1206.game.Game;
 import uk.ac.soton.comp1206.ui.GamePane;
 import uk.ac.soton.comp1206.ui.GameWindow;
+
+import javafx.scene.control.Label;
 
 /**
  * The Single Player challenge scene. Holds the UI for the single player challenge mode in the game.
@@ -45,6 +49,20 @@ public class ChallengeScene extends BaseScene {
 
         var mainPane = new BorderPane();
         challengePane.getChildren().add(mainPane);
+
+        // Score User Interface
+        VBox scoreBox = new VBox();
+        scoreBox.setAlignment(Pos.CENTER);
+        Text scoreText = new Text("SCORE");
+        Text valueText = new Text();
+        valueText.textProperty().bind(game.score.asString());
+        scoreText.getStyleClass().add("heading");
+        valueText.getStyleClass().add("score");
+        scoreBox.getChildren().add(scoreText);
+        scoreBox.getChildren().add(valueText);
+        mainPane.setLeft(scoreBox);
+
+
 
         var board = new GameBoard(game.getGrid(),gameWindow.getWidth()/2,gameWindow.getWidth()/2);
         mainPane.setCenter(board);
