@@ -12,6 +12,7 @@ import uk.ac.soton.comp1206.ui.GamePane;
 import uk.ac.soton.comp1206.ui.GameWindow;
 
 import javafx.scene.control.Label;
+import uk.ac.soton.comp1206.ui.Multimedia;
 
 /**
  * The Single Player challenge scene. Holds the UI for the single player challenge mode in the game.
@@ -74,6 +75,18 @@ public class ChallengeScene extends BaseScene {
         levelBox.getChildren().add(levelValue);
         mainPane.setRight(levelBox);
 
+        // Lives User Interface
+        HBox livesBox = new HBox();
+        livesBox.setAlignment(Pos.CENTER);
+        Text livesText = new Text("LIVES : ");
+        Text livesValue = new Text();
+        livesValue.textProperty().bind(game.lives.asString());
+        livesText.getStyleClass().add("heading");
+        livesValue.getStyleClass().add("lives");
+        livesBox.getChildren().add(livesText);
+        livesBox.getChildren().add(livesValue);
+        mainPane.setTop(livesBox);
+
         var board = new GameBoard(game.getGrid(),gameWindow.getWidth()/2,gameWindow.getWidth()/2);
         mainPane.setCenter(board);
 
@@ -105,6 +118,7 @@ public class ChallengeScene extends BaseScene {
     @Override
     public void initialise() {
         logger.info("Initialising Challenge");
+        Multimedia.playMusic("game.wav");
         game.start();
     }
 

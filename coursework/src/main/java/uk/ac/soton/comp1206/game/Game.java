@@ -36,7 +36,9 @@ public class Game {
     // !---------- Added by Max ----------!
     public GamePiece currentPiece;
     public SimpleIntegerProperty score = new SimpleIntegerProperty(0); // Has to be SimpleIntegerProperty to be bindable
-    public SimpleIntegerProperty level = new SimpleIntegerProperty(1);
+    public SimpleIntegerProperty level = new SimpleIntegerProperty(0); // Level begins at 0
+    public SimpleIntegerProperty lives = new SimpleIntegerProperty(3);
+    private int multiplier = 1;
 
 
     /**
@@ -177,10 +179,23 @@ public class Game {
         int current = score.get();
         score.set(current + score(lines,blocks));
 
+        // Increase Multiplier
+        if (!toClear.isEmpty()) {
+            multiplier++;
+        } else {
+            multiplier = 1;
+        }
+
+        levelUp();
     }
 
     public int score(int noLines, int noBlocks) {
-        return (noLines * noBlocks * 10);
+        return (noLines * noBlocks * 10 * multiplier);
+    }
+
+    private void levelUp() {
+        int currentScore = score.get();
+        level.set(currentScore / 1000);
     }
 
 }
