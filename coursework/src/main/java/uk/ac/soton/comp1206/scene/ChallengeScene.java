@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
 import uk.ac.soton.comp1206.component.GameBoard;
+import uk.ac.soton.comp1206.component.PieceBoard;
 import uk.ac.soton.comp1206.game.Game;
 import uk.ac.soton.comp1206.ui.GamePane;
 import uk.ac.soton.comp1206.ui.GameWindow;
@@ -89,6 +90,11 @@ public class ChallengeScene extends BaseScene {
 
         var board = new GameBoard(game.getGrid(),gameWindow.getWidth()/2,gameWindow.getWidth()/2);
         mainPane.setCenter(board);
+        var subBoard = new PieceBoard(3,3,gameWindow.getWidth()/4, gameWindow.getWidth()/4);
+        levelBox.getChildren().add(subBoard);
+        subBoard.setTranslateY(50);
+        subBoard.setTranslateX(-10);
+
 
         //Handle block on gameboard grid being clicked
         board.setOnBlockClick(this::blockClicked);

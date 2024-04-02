@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
 import uk.ac.soton.comp1206.component.GameBlockCoordinate;
+import uk.ac.soton.comp1206.component.PieceBoard;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -83,6 +84,7 @@ public class Game {
         grid.playPiece(currentPiece, x, y);
         afterPiece();
         nextPiece();
+
     }
 
     /**
