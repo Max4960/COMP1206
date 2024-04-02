@@ -1,7 +1,11 @@
 package uk.ac.soton.comp1206.scene;
 
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
@@ -46,17 +50,34 @@ public class MenuScene extends BaseScene {
         var mainPane = new BorderPane();
         menuPane.getChildren().add(mainPane);
 
-        //Awful title
-        var title = new Text("TetrECS");
-        title.getStyleClass().add("title");
-        mainPane.setTop(title);
+        // Logo
+
 
         //For now, let us just add a button that starts the game. I'm sure you'll do something way better.
-        var button = new Button("Play");
-        mainPane.setCenter(button);
+        //var button = new Button("Play");
+        //mainPane.setBottom(button);
 
         //Bind the button action to the startGame method in the menu
-        button.setOnAction(this::startGame);
+        //button.setOnAction(this::startGame);
+        VBox menu = new VBox();
+        menu.setAlignment(Pos.CENTER);
+        mainPane.setTop(menu);
+
+        // Logo
+        Image logoBackdrop = new Image(String.valueOf(Multimedia.class.getResource("/images/logoBackdrop.png")));
+        ImageView logoBackdropView = new ImageView(logoBackdrop);
+        menu.getChildren().add(logoBackdropView);
+
+        Text start = new Text("Start");
+        start.getStyleClass().add("menuItem");
+        menu.getChildren().add(start);
+
+
+
+
+        start.setOnMouseClicked(event -> {
+            gameWindow.startChallenge();
+        });
     }
 
     /**
