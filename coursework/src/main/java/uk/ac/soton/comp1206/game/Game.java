@@ -55,7 +55,7 @@ public class Game {
     }
 
     /**
-     * Start the game
+     * Starts the game
      */
     public void start() {
         logger.info("Starting game");
@@ -71,27 +71,18 @@ public class Game {
     }
 
     /**
-     * Handle what should happen when a particular block is clicked
+     * Handles what should happen when a particular block is clicked
      * @param gameBlock the block that was clicked
      */
     public void blockClicked(GameBlock gameBlock) {
-        //Get the position of this block
+        // Get the position of this block
         int x = gameBlock.getX();
         int y = gameBlock.getY();
 
-        //Get the new value for this block
-        //int previousValue = grid.get(x,y);
-        //int newValue = previousValue + 1;
-        //if (newValue  > GamePiece.PIECES) {
-        //    newValue = 0;
-        //}
-        //GamePiece.createPiece(0);
+        // Piece placement
         grid.playPiece(currentPiece, x, y);
         afterPiece();
         nextPiece();
-
-        //Update the grid with the new value
-        //grid.set(x,y,newValue);
     }
 
     /**
@@ -111,22 +102,32 @@ public class Game {
     }
 
     /**
-     * Get the number of rows in this game
+     * Gets the number of rows in this game
      * @return number of rows
      */
     public int getRows() {
         return rows;
     }
 
+    /**
+     * Gets a random Game Piece
+     * @return random Game Piece
+     */
     public GamePiece spawnPiece() {
         Random toPlace = new Random();
         return GamePiece.createPiece(toPlace.nextInt(GamePiece.PIECES));
     }
 
+    /**
+     * Updates currentPiece to a new piece
+     */
     public void nextPiece() {
         currentPiece = spawnPiece();
     }
 
+    /**
+     * Handles the game logic after a move is made
+     */
     public void afterPiece() {
         int lines = 0;
         int blocks = 0;
@@ -179,20 +180,36 @@ public class Game {
         int current = score.get();
         score.set(current + score(lines,blocks));
 
-        // Increase Multiplier
-        if (!toClear.isEmpty()) {
-            multiplier++;
-        } else {
-            multiplier = 1;
-        }
-
+        updateMultiplier(toClear);
         levelUp();
     }
 
+    /**
+     * Returns what the score should be
+     * @param noLines The number of lines cleared
+     * @param noBlocks The number of unique blocks cleared
+     * @return The score achieved this move
+     */
     public int score(int noLines, int noBlocks) {
         return (noLines * noBlocks * 10 * multiplier);
     }
 
+    /**
+     * Updates the multiplier if blocks have been cleared
+     * Otherwise resets the multiplier to 1
+     * @param set The set of blocks to be cleared
+     */
+    private void updateMultiplier(HashSet set) {
+        if (!set.isEmpty()) {
+            multiplier++;
+        } else {
+            multiplier = 1;
+        }
+    }
+
+    /**
+     * Increases the level per 1000 points
+     */
     private void levelUp() {
         int currentScore = score.get();
         level.set(currentScore / 1000);

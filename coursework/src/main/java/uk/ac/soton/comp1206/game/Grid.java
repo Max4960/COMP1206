@@ -1,5 +1,7 @@
+// Packages
 package uk.ac.soton.comp1206.game;
 
+// Imports
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import org.apache.logging.log4j.LogManager;
