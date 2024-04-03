@@ -65,12 +65,13 @@ public class Grid {
         for (int i = 0; i < shape.length; i++) {
             for (int j = 0; j < shape.length; j++) {
                 if (shape[i][j] != 0) { // Skipping the empty parts of shape
-                    if (get(x + i - 1,y + j - 1)!=0) {
+                    if (get(x + i - 1,y + j - 1) != 0) {
                         return false;
                     }
                 }
             }
         }
+        logger.info("Valid Placement");
         return true;
     }
 
@@ -87,7 +88,7 @@ public class Grid {
                 for (int j = 0; j < shape.length; j++) {// Go to row, then check all columns
                     // Check the value in the matrix is not 0 -> block should be present
                     if (shape[i][j] != 0) {
-                        set(x + i - 1, y + j - 1, piece.getValue());
+                        set(x + i - 1, y + j - 1, piece.getValue()); // Needs -1 as offset
                     }
                 }
             }

@@ -40,6 +40,7 @@ public class Game {
 
     // !---------- Added by Max ----------!
     public GamePiece currentPiece; // Needs to be public to display first piece generated on piece board
+    public GamePiece followingPiece;
     public SimpleIntegerProperty score = new SimpleIntegerProperty(0); // Has to be SimpleIntegerProperty to be bindable
     public SimpleIntegerProperty level = new SimpleIntegerProperty(0); // Level begins at 0
     public SimpleIntegerProperty lives = new SimpleIntegerProperty(3);
@@ -56,6 +57,7 @@ public class Game {
         this.rows = rows;
 
         currentPiece = spawnPiece();
+        followingPiece = spawnPiece();
 
         //Create a new grid model to represent the game state
         this.grid = new Grid(cols,rows);
@@ -136,8 +138,9 @@ public class Game {
      * Updates currentPiece to a new piece
      */
     public void nextPiece() {
-        currentPiece = spawnPiece();
-        nextPieceListener.nextPiece(currentPiece);
+        currentPiece = followingPiece;
+        followingPiece = spawnPiece();
+        nextPieceListener.nextPiece(currentPiece, followingPiece);
     }
 
     /**
@@ -232,6 +235,16 @@ public class Game {
 
     public void setNextPieceListener(NextPieceListener listener) {
         this.nextPieceListener = listener;
+    }
+
+    public void rotateCurrentPiece(GamePiece piece) {
+        piece.rotate();
+    }
+
+    public void swapCurrentPiece() {
+        GamePiece temp = currentPiece;
+        currentPiece = followingPiece;
+        followingPiece = temp;
     }
 
 }

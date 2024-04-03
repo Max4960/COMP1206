@@ -1,5 +1,7 @@
+// Packages
 package uk.ac.soton.comp1206.scene;
 
+// Imports
 import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -12,7 +14,6 @@ import uk.ac.soton.comp1206.game.Game;
 import uk.ac.soton.comp1206.game.GamePiece;
 import uk.ac.soton.comp1206.ui.GamePane;
 import uk.ac.soton.comp1206.ui.GameWindow;
-
 import javafx.scene.control.Label;
 import uk.ac.soton.comp1206.ui.Multimedia;
 
@@ -22,8 +23,21 @@ import uk.ac.soton.comp1206.ui.Multimedia;
 public class ChallengeScene extends BaseScene {
 
     private static final Logger logger = LogManager.getLogger(MenuScene.class);
+
+    /**
+     * The instance of the Game being used
+     */
     protected Game game;
+
+    /**
+     * Piece board representing the current piece being placed
+     */
     protected PieceBoard current;
+
+    /**
+     * Piece board representing the next piece to place
+     */
+    protected PieceBoard follower;
 
     /**
      * Create a new Single Player challenge scene
@@ -96,14 +110,17 @@ public class ChallengeScene extends BaseScene {
         levelBox.getChildren().add(current);
         current.setTranslateY(50);
         current.setTranslateX(-10);
+        follower = new PieceBoard(3, 3, gameWindow.getWidth()/5, gameWindow.getWidth()/5);
+        levelBox.getChildren().add(follower);
+        follower.setTranslateY(60);
 
         //Handle block on gameboard grid being clicked
         board.setOnBlockClick(this::blockClicked);
 
-        game.setNextPieceListener((piece) -> {
+        game.setNextPieceListener((first, second) -> {
             //current.setPiece(piece);
-            this.nextPiece(piece);
-            logger.info("CALLED" + piece.toString());
+            nextPiece(first, second);
+            logger.info("CALLED" + first.toString());
         });
     }
 
@@ -116,8 +133,9 @@ public class ChallengeScene extends BaseScene {
         game.blockClicked(gameBlock);
     }
 
-    private void nextPiece(GamePiece piece) {
-        current.setPiece(piece);
+    private void nextPiece(GamePiece first, GamePiece second) {
+        current.setPiece(first);
+        follower.setPiece(second);
     }
 
     /**
@@ -138,9 +156,11 @@ public class ChallengeScene extends BaseScene {
     public void initialise() {
         logger.info("Initialising Challenge");
         Multimedia.playMusic("game.wav");
+        // This is vital for displaying the first piece(s)
         current.setPiece(game.currentPiece);
+        follower.setPiece(game.followingPiece);
         game.start();
-        //updateCurrent();
+
         // Checks if ESC has been pressed
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
