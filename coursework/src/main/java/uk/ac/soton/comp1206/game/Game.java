@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
 import uk.ac.soton.comp1206.component.GameBlockCoordinate;
 import uk.ac.soton.comp1206.component.PieceBoard;
+import uk.ac.soton.comp1206.event.NextPieceListener;
 import uk.ac.soton.comp1206.scene.ChallengeScene;
 
 import java.util.HashSet;
@@ -35,8 +36,10 @@ public class Game {
      */
     protected final Grid grid;
 
+    private NextPieceListener nextPieceListener;
+
     // !---------- Added by Max ----------!
-    public GamePiece currentPiece;
+    public GamePiece currentPiece; // Needs to be public to display first piece generated on piece board
     public SimpleIntegerProperty score = new SimpleIntegerProperty(0); // Has to be SimpleIntegerProperty to be bindable
     public SimpleIntegerProperty level = new SimpleIntegerProperty(0); // Level begins at 0
     public SimpleIntegerProperty lives = new SimpleIntegerProperty(3);
@@ -51,6 +54,8 @@ public class Game {
     public Game(int cols, int rows) {
         this.cols = cols;
         this.rows = rows;
+
+        currentPiece = spawnPiece();
 
         //Create a new grid model to represent the game state
         this.grid = new Grid(cols,rows);
@@ -69,7 +74,7 @@ public class Game {
      */
     public void initialiseGame() {
         logger.info("Initialising game");
-        currentPiece = spawnPiece();
+        //currentPiece = spawnPiece();
 
     }
 
@@ -83,10 +88,14 @@ public class Game {
         int x = gameBlock.getX();
         int y = gameBlock.getY();
 
-        // Piece placement
-        grid.playPiece(currentPiece, x, y);
-        afterPiece();
-        nextPiece();
+        if (getGrid().canPlayPiece(currentPiece, x, y)) {
+            // Piece placement
+            grid.playPiece(currentPiece, x, y);
+            afterPiece();
+            nextPiece();
+        }
+
+
 
     }
 
@@ -128,6 +137,7 @@ public class Game {
      */
     public void nextPiece() {
         currentPiece = spawnPiece();
+        nextPieceListener.nextPiece(currentPiece);
     }
 
     /**
@@ -218,6 +228,10 @@ public class Game {
     private void levelUp() {
         int currentScore = score.get();
         level.set(currentScore / 1000);
+    }
+
+    public void setNextPieceListener(NextPieceListener listener) {
+        this.nextPieceListener = listener;
     }
 
 }

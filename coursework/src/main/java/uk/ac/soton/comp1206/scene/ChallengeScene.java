@@ -99,6 +99,12 @@ public class ChallengeScene extends BaseScene {
 
         //Handle block on gameboard grid being clicked
         board.setOnBlockClick(this::blockClicked);
+
+        game.setNextPieceListener((piece) -> {
+            //current.setPiece(piece);
+            this.nextPiece(piece);
+            logger.info("CALLED" + piece.toString());
+        });
     }
 
 
@@ -110,8 +116,8 @@ public class ChallengeScene extends BaseScene {
         game.blockClicked(gameBlock);
     }
 
-    private void updateCurrent() {
-        current.setPiece(game.currentPiece);
+    private void nextPiece(GamePiece piece) {
+        current.setPiece(piece);
     }
 
     /**
@@ -132,8 +138,9 @@ public class ChallengeScene extends BaseScene {
     public void initialise() {
         logger.info("Initialising Challenge");
         Multimedia.playMusic("game.wav");
+        current.setPiece(game.currentPiece);
         game.start();
-        updateCurrent();
+        //updateCurrent();
         // Checks if ESC has been pressed
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
@@ -144,5 +151,7 @@ public class ChallengeScene extends BaseScene {
             }
         });
     }
+
+
 
 }
