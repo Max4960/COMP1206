@@ -1,6 +1,7 @@
 package uk.ac.soton.comp1206.scene;
 
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.effect.BlendMode;
@@ -61,22 +62,38 @@ public class MenuScene extends BaseScene {
         //button.setOnAction(this::startGame);
         VBox menu = new VBox();
         menu.setAlignment(Pos.CENTER);
+        menu.setPadding(new Insets(10));
         mainPane.setTop(menu);
+
+
 
         // Logo
         Image logoBackdrop = new Image(String.valueOf(Multimedia.class.getResource("/images/logoBackdrop.png")));
         ImageView logoBackdropView = new ImageView(logoBackdrop);
         menu.getChildren().add(logoBackdropView);
 
-        Text start = new Text("Start");
+        Text start = new Text("Start Game");
         start.getStyleClass().add("menuItem");
         menu.getChildren().add(start);
 
+        Text multi = new Text("Multiplayer");
+        multi.getStyleClass().add("menuItem");
+        menu.getChildren().add(multi);
 
+        Text info = new Text("Information");
+        info.getStyleClass().add("menuItem");
+        menu.getChildren().add(info);
 
+        Text quit = new Text("Quit Game");
+        quit.getStyleClass().add("menuItem");
+        menu.getChildren().add(quit);
 
         start.setOnMouseClicked(event -> {
             gameWindow.startChallenge();
+        });
+
+        info.setOnMouseClicked(event -> {
+            gameWindow.startInformation();
         });
     }
 

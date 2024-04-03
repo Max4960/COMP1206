@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
 import uk.ac.soton.comp1206.component.GameBlockCoordinate;
 import uk.ac.soton.comp1206.component.PieceBoard;
+import uk.ac.soton.comp1206.scene.ChallengeScene;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -69,6 +70,7 @@ public class Game {
     public void initialiseGame() {
         logger.info("Initialising game");
         currentPiece = spawnPiece();
+
     }
 
     /**
@@ -76,6 +78,7 @@ public class Game {
      * @param gameBlock the block that was clicked
      */
     public void blockClicked(GameBlock gameBlock) {
+
         // Get the position of this block
         int x = gameBlock.getX();
         int y = gameBlock.getY();

@@ -9,6 +9,7 @@ import uk.ac.soton.comp1206.component.GameBlock;
 import uk.ac.soton.comp1206.component.GameBoard;
 import uk.ac.soton.comp1206.component.PieceBoard;
 import uk.ac.soton.comp1206.game.Game;
+import uk.ac.soton.comp1206.game.GamePiece;
 import uk.ac.soton.comp1206.ui.GamePane;
 import uk.ac.soton.comp1206.ui.GameWindow;
 
@@ -22,6 +23,7 @@ public class ChallengeScene extends BaseScene {
 
     private static final Logger logger = LogManager.getLogger(MenuScene.class);
     protected Game game;
+    protected PieceBoard current;
 
     /**
      * Create a new Single Player challenge scene
@@ -90,15 +92,15 @@ public class ChallengeScene extends BaseScene {
 
         var board = new GameBoard(game.getGrid(),gameWindow.getWidth()/2,gameWindow.getWidth()/2);
         mainPane.setCenter(board);
-        var subBoard = new PieceBoard(3,3,gameWindow.getWidth()/4, gameWindow.getWidth()/4);
-        levelBox.getChildren().add(subBoard);
-        subBoard.setTranslateY(50);
-        subBoard.setTranslateX(-10);
-
+        current = new PieceBoard(3,3,gameWindow.getWidth()/4, gameWindow.getWidth()/4);
+        levelBox.getChildren().add(current);
+        current.setTranslateY(50);
+        current.setTranslateX(-10);
 
         //Handle block on gameboard grid being clicked
         board.setOnBlockClick(this::blockClicked);
     }
+
 
     /**
      * Handle when a block is clicked
@@ -108,14 +110,19 @@ public class ChallengeScene extends BaseScene {
         game.blockClicked(gameBlock);
     }
 
+    private void updateCurrent() {
+        current.setPiece(game.currentPiece);
+    }
+
     /**
-     * Setup the game object and model
+     * Set up the game object and model
      */
     public void setupGame() {
         logger.info("Starting a new challenge");
 
         //Start new game
         game = new Game(5, 5);
+
     }
 
     /**
@@ -126,6 +133,16 @@ public class ChallengeScene extends BaseScene {
         logger.info("Initialising Challenge");
         Multimedia.playMusic("game.wav");
         game.start();
+        updateCurrent();
+        // Checks if ESC has been pressed
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case ESCAPE:
+                    gameWindow.startMenu();
+                default:
+                    break;
+            }
+        });
     }
 
 }

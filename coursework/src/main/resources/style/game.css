@@ -11,6 +11,10 @@
     -fx-background-size: cover;
 }
 
+.info-background {
+    -fx-background-image: url("../images/3.jpg");
+}
+
 .challenge-background {
     -fx-background-image: url("../images/2.jpg");
     -fx-background-size: cover;
