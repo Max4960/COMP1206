@@ -6,6 +6,7 @@ import javafx.scene.layout.GridPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.event.BlockClickedListener;
+import uk.ac.soton.comp1206.event.RightClickedListener;
 import uk.ac.soton.comp1206.game.Grid;
 
 /**
@@ -56,6 +57,8 @@ public class GameBoard extends GridPane {
      * The listener to call when a specific block is clicked
      */
     private BlockClickedListener blockClickedListener;
+
+    private RightClickedListener rightClickedListener;
 
 
     /**
@@ -161,6 +164,10 @@ public class GameBoard extends GridPane {
         this.blockClickedListener = listener;
     }
 
+    public void setOnRightClicked(RightClickedListener listener) {
+        this.rightClickedListener = listener;
+    }
+
     /**
      * Triggered when a block is clicked. Call the attached listener.
      * @param event mouse event
@@ -169,9 +176,20 @@ public class GameBoard extends GridPane {
     private void blockClicked(MouseEvent event, GameBlock block) {
         //logger.info("Block clicked: {}", block);
 
-        if(blockClickedListener != null) {
-            blockClickedListener.blockClicked(block);
+        switch (event.getButton()) {
+            case PRIMARY: // Left click
+                if(blockClickedListener != null) {
+                    blockClickedListener.blockClicked(block);
+                }
+            case SECONDARY: // Right click
+                if(rightClickedListener != null) {
+                    rightClickedListener.rightClicked();
+                }
+            default: // Needed for middle button (or side buttons on some mice)
+                break;
         }
     }
+
+
 
 }

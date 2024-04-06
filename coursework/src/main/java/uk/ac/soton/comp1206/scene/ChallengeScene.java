@@ -114,8 +114,10 @@ public class ChallengeScene extends BaseScene {
         levelBox.getChildren().add(follower);
         follower.setTranslateY(60);
 
-        //Handle block on gameboard grid being clicked
+        //Handle block on game board grid being clicked
         board.setOnBlockClick(this::blockClicked);
+        // For rotations
+        board.setOnRightClicked(this::rightClick);
 
         game.setNextPieceListener((first, second) -> {
             //current.setPiece(piece);
@@ -131,6 +133,16 @@ public class ChallengeScene extends BaseScene {
      */
     private void blockClicked(GameBlock gameBlock) {
         game.blockClicked(gameBlock);
+    }
+
+    /**
+     * Called when the board is right-clicked
+     * Rotates the block and updates the current piece board
+     */
+    private void rightClick() {
+        game.rotateCurrentPiece(game.currentPiece);
+        logger.info("Piece Rotated");
+        current.setPiece(game.currentPiece);
     }
 
     private void nextPiece(GamePiece first, GamePiece second) {
