@@ -1,5 +1,7 @@
+// Packages
 package uk.ac.soton.comp1206.game;
 
+// Imports
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import org.apache.logging.log4j.LogManager;
@@ -9,7 +11,6 @@ import uk.ac.soton.comp1206.component.GameBlockCoordinate;
 import uk.ac.soton.comp1206.component.PieceBoard;
 import uk.ac.soton.comp1206.event.NextPieceListener;
 import uk.ac.soton.comp1206.scene.ChallengeScene;
-
 import java.util.HashSet;
 import java.util.Random;
 
@@ -36,14 +37,34 @@ public class Game {
      */
     protected final Grid grid;
 
+    /**
+     * The next piece listener
+     */
     private NextPieceListener nextPieceListener;
 
-    // !---------- Added by Max ----------!
-    public GamePiece currentPiece; // Needs to be public to display first piece generated on piece board
+    /**
+     * The Game piece currently being played
+     */
+    public GamePiece currentPiece; // NTS: Needs to be public to display first piece generated on piece board
+    /**
+     * The next piece to be placed
+     */
     public GamePiece followingPiece;
-    public SimpleIntegerProperty score = new SimpleIntegerProperty(0); // Has to be SimpleIntegerProperty to be bindable
+    /**
+     * The initial score value stored as a Simple Integer Property to allow binding
+     */
+    public SimpleIntegerProperty score = new SimpleIntegerProperty(0);
+    /**
+     * The initial value for level stored as a Simple Integer Property (note: in this game we start at level zero)
+     */
     public SimpleIntegerProperty level = new SimpleIntegerProperty(0); // Level begins at 0
+    /**
+     * The initial value for lives stored as a Simple Integer Property
+     */
     public SimpleIntegerProperty lives = new SimpleIntegerProperty(3);
+    /**
+     * Member variable representing the multiplier, its default value is one
+     */
     private int multiplier = 1;
 
 
@@ -85,20 +106,16 @@ public class Game {
      * @param gameBlock the block that was clicked
      */
     public void blockClicked(GameBlock gameBlock) {
-
         // Get the position of this block
         int x = gameBlock.getX();
         int y = gameBlock.getY();
-
+        // Check that a piece can be placed
         if (getGrid().canPlayPiece(currentPiece, x, y)) {
             // Piece placement
             grid.playPiece(currentPiece, x, y);
             afterPiece();
             nextPiece();
         }
-
-
-
     }
 
     /**
@@ -147,6 +164,7 @@ public class Game {
      * Handles the game logic after a move is made
      */
     public void afterPiece() {
+        // Local variables keeping track of lines and blocks being cleared
         int lines = 0;
         int blocks = 0;
         HashSet<GameBlockCoordinate> toClear = new HashSet<GameBlockCoordinate>();  // IntegerProperty -> (x,y)
@@ -156,7 +174,7 @@ public class Game {
             for (int j = 0; j < cols; j++) {
                 if (grid.get(i,j) != 0) {
                     count++;
-                } else {    // No point checking again if there is a 0
+                } else {    // No point checking again if there is a 0, improves efficiency
                     break;
                 }
             }
@@ -194,7 +212,7 @@ public class Game {
             grid.set(coordinate.getX(), coordinate.getY(), 0);
             blocks++;
         }
-
+        // Updating the score
         int current = score.get();
         score.set(current + score(lines,blocks));
 
@@ -233,14 +251,25 @@ public class Game {
         level.set(currentScore / 1000);
     }
 
+    /**
+     * Sets the Next Piece Listener
+     * @param listener
+     */
     public void setNextPieceListener(NextPieceListener listener) {
         this.nextPieceListener = listener;
     }
 
+    /**
+     * Rotates the piece based on the Right Clicked Listener
+     * @param piece
+     */
     public void rotateCurrentPiece(GamePiece piece) {
         piece.rotate();
     }
 
+    /**
+     * Swaps the pieces around
+     */
     public void swapCurrentPiece() {
         GamePiece temp = currentPiece;
         currentPiece = followingPiece;

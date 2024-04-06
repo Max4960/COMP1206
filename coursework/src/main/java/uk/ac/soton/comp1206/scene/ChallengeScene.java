@@ -104,6 +104,7 @@ public class ChallengeScene extends BaseScene {
         livesBox.getChildren().add(livesValue);
         mainPane.setTop(livesBox);
 
+        // Setting up board and the two sub boards
         var board = new GameBoard(game.getGrid(),gameWindow.getWidth()/2,gameWindow.getWidth()/2);
         mainPane.setCenter(board);
         current = new PieceBoard(3,3,gameWindow.getWidth()/4, gameWindow.getWidth()/4);
@@ -119,6 +120,7 @@ public class ChallengeScene extends BaseScene {
         // For rotations
         board.setOnRightClicked(this::rightClick);
 
+        // Used to update next pieces
         game.setNextPieceListener((first, second) -> {
             //current.setPiece(piece);
             nextPiece(first, second);
@@ -140,11 +142,18 @@ public class ChallengeScene extends BaseScene {
      * Rotates the block and updates the current piece board
      */
     private void rightClick() {
+        // Rotates the piece
         game.rotateCurrentPiece(game.currentPiece);
         logger.info("Piece Rotated");
+        // Updates the piece board with the rotation
         current.setPiece(game.currentPiece);
     }
 
+    /**
+     * Used to set the next pieces, current & follower are piece boards
+     * @param first - The piece currently being placed
+     * @param second - The next piece to be placed
+     */
     private void nextPiece(GamePiece first, GamePiece second) {
         current.setPiece(first);
         follower.setPiece(second);
