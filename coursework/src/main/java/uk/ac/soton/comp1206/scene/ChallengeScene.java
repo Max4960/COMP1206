@@ -3,6 +3,7 @@ package uk.ac.soton.comp1206.scene;
 
 // Imports
 import javafx.geometry.Pos;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +18,8 @@ import uk.ac.soton.comp1206.ui.GameWindow;
 import javafx.scene.control.Label;
 import uk.ac.soton.comp1206.ui.Multimedia;
 
+
+
 /**
  * The Single Player challenge scene. Holds the UI for the single player challenge mode in the game.
  */
@@ -29,6 +32,8 @@ public class ChallengeScene extends BaseScene {
      */
     protected Game game;
 
+    protected GameBoard gameBoard;
+
     /**
      * Piece board representing the current piece being placed
      */
@@ -38,6 +43,9 @@ public class ChallengeScene extends BaseScene {
      * Piece board representing the next piece to place
      */
     protected PieceBoard follower;
+
+    private int xLocation = 2;  // Used for keys
+    private int yLocation = 2;  // Want to start in the center to improve game feel
 
     /**
      * Create a new Single Player challenge scene
@@ -105,8 +113,8 @@ public class ChallengeScene extends BaseScene {
         mainPane.setTop(livesBox);
 
         // Setting up board and the two sub boards
-        var board = new GameBoard(game.getGrid(),gameWindow.getWidth()/2,gameWindow.getWidth()/2);
-        mainPane.setCenter(board);
+        gameBoard = new GameBoard(game.getGrid(),gameWindow.getWidth()/2,gameWindow.getWidth()/2);
+        mainPane.setCenter(gameBoard);
         current = new PieceBoard(3,3,gameWindow.getWidth()/4, gameWindow.getWidth()/4);
         levelBox.getChildren().add(current);
         current.setTranslateY(50);
@@ -116,9 +124,9 @@ public class ChallengeScene extends BaseScene {
         follower.setTranslateY(60);
 
         //Handle block on game board grid being clicked
-        board.setOnBlockClick(this::blockClicked);
+        gameBoard.setOnBlockClick(this::blockClicked);
         // For rotations
-        board.setOnRightClicked(this::rotate);
+        gameBoard.setOnRightClicked(this::rotate);
         current.setOnMouseClicked(event -> {
             rotate();
         });
@@ -129,6 +137,52 @@ public class ChallengeScene extends BaseScene {
             nextPiece(first, second);
             logger.info("CALLED" + first.toString());
         });
+
+        //root.setOnKeyPressed(this::inputHandler);
+    }
+
+    private void inputHandler(KeyEvent key) {
+        switch (key.getCode()) {
+            case ESCAPE:
+                gameWindow.startMenu();
+                break;
+            case UP: // This formatting acts like an OR
+            case W:
+                logger.info(yLocation);
+                if (yLocation > 0) {
+                    yLocation--;
+                }
+                break;
+            case DOWN:
+            case S:
+                logger.info(yLocation);
+                if (yLocation < gameBoard.getRowCount() - 1) {
+                    yLocation++;
+                }
+                break;
+            case LEFT:
+            case A:
+                logger.info(xLocation);
+                if (xLocation > 0) {
+                    xLocation--;
+                }
+                break;
+            case RIGHT:
+            case D:
+                logger.info(xLocation);
+                if (xLocation < gameBoard.getColumnCount() - 1) {
+                    xLocation++;
+                }
+                break;
+            case ENTER:
+            case X:
+                game.blockClicked(gameBoard.getBlock(xLocation,yLocation));
+                //xLocation = 2;  //Recentering
+                //yLocation = 2;
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -186,14 +240,15 @@ public class ChallengeScene extends BaseScene {
         game.start();
 
         // Checks if ESC has been pressed
-        scene.setOnKeyPressed(event -> {
-            switch (event.getCode()) {
-                case ESCAPE:
-                    gameWindow.startMenu();
-                default:
-                    break;
-            }
-        });
+        //scene.setOnKeyPressed(event -> {
+        //    switch (event.getCode()) {
+        //        case ESCAPE:
+        //            gameWindow.startMenu();
+        //        default:
+        //            break;
+        //    }
+        //});
+        scene.setOnKeyReleased(this::inputHandler);
     }
 
 
