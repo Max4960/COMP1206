@@ -118,7 +118,10 @@ public class ChallengeScene extends BaseScene {
         //Handle block on game board grid being clicked
         board.setOnBlockClick(this::blockClicked);
         // For rotations
-        board.setOnRightClicked(this::rightClick);
+        board.setOnRightClicked(this::rotate);
+        current.setOnMouseClicked(event -> {
+            rotate();
+        });
 
         // Used to update next pieces
         game.setNextPieceListener((first, second) -> {
@@ -138,10 +141,10 @@ public class ChallengeScene extends BaseScene {
     }
 
     /**
-     * Called when the board is right-clicked
+     * Called when the board is right-clicked or piece board is clicked
      * Rotates the block and updates the current piece board
      */
-    private void rightClick() {
+    private void rotate() { // Formerly called rightClick()
         // Rotates the piece
         game.rotateCurrentPiece(game.currentPiece);
         logger.info("Piece Rotated");
