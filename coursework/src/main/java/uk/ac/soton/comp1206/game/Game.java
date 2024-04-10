@@ -263,8 +263,8 @@ public class Game {
      * Rotates the piece based on the Right Clicked Listener
      * @param piece
      */
-    public void rotateCurrentPiece(GamePiece piece) {
-        piece.rotate();
+    public void rotateCurrentPiece(GamePiece piece, int rotations) {
+        piece.rotate(rotations);
     }
 
     /**
