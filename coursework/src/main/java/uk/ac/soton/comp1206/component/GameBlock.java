@@ -122,11 +122,13 @@ public class GameBlock extends Canvas {
         gc.clearRect(0,0,width,height);
 
         //Fill
-        gc.setFill(Color.WHITE);
+        gc.setFill(Color.BLACK);
+        gc.setGlobalAlpha(0.6);
         gc.fillRect(0,0, width, height);
 
         //Border
         gc.setStroke(Color.BLACK);
+        gc.setGlobalAlpha(1);
         gc.strokeRect(0,0,width,height);
     }
 
@@ -142,10 +144,19 @@ public class GameBlock extends Canvas {
 
         //Colour fill
         gc.setFill(colour);
+        gc.setGlobalAlpha(0.8);
         gc.fillRect(0,0, width, height);
+        gc.setFill(Color.WHITE);
+        gc.setGlobalAlpha(0.4);
+        gc.fillPolygon(new double[]{0, width, 0}, new double[]{0,height,height}, 3);
+        gc.setGlobalAlpha(0.5);
+        gc.setFill(Color.WHITE);
+        gc.fillPolygon(new double[]{0, 0, width}, new double[]{height,0,0}, 3);
+        //gc.fillRect(0,0,width/2,height/2);
 
         //Border
-        gc.setStroke(Color.BLACK);
+        gc.setStroke(Color.WHITE);
+        gc.setGlobalAlpha(1);
         gc.strokeRect(0,0,width,height);
     }
 
