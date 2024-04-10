@@ -177,8 +177,25 @@ public class ChallengeScene extends BaseScene {
             case ENTER:
             case X:
                 game.blockClicked(gameBoard.getBlock(xLocation,yLocation));
-                //xLocation = 2;  //Recentering
-                //yLocation = 2;
+                xLocation = 2;  //Recentering
+                yLocation = 2;
+                break;
+            case OPEN_BRACKET:
+            case Q:
+            case Z:
+                //ROTATE LEFT
+                break;
+            case CLOSE_BRACKET:
+            case E:
+            case C:
+                //ROTATE RIGHT
+                break;
+            case SPACE:
+            case R:
+                //SWAP
+                game.swapCurrentPiece();
+                current.setPiece(game.currentPiece);
+                follower.setPiece(game.followingPiece);
                 break;
             default:
                 break;
