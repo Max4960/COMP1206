@@ -87,6 +87,9 @@ public class GameBlock extends Canvas {
 
         //When the value property is updated, call the internal updateValue method
         value.addListener(this::updateValue);
+        // This allows them to be unpainted
+        this.setOnMouseEntered(event -> {highlight();});
+        this.setOnMouseExited(event -> {paint();});
     }
 
     /**
@@ -110,6 +113,7 @@ public class GameBlock extends Canvas {
             //If the block is not empty, paint with the colour represented by the value
             paintColor(COLOURS[value.get()]);
         }
+
     }
 
     /**
@@ -158,6 +162,13 @@ public class GameBlock extends Canvas {
         gc.setStroke(Color.WHITE);
         gc.setGlobalAlpha(1);
         gc.strokeRect(0,0,width,height);
+    }
+
+    public void highlight() {
+        var gc = getGraphicsContext2D();
+        gc.setFill(Color.WHITE);
+        gc.setGlobalAlpha(0.5);
+        gc.fillRect(0, 0, width, height);
     }
 
     /**
