@@ -165,10 +165,12 @@ public class GameBlock extends Canvas {
     }
 
     public void highlight() {
-        var gc = getGraphicsContext2D();
-        gc.setFill(Color.WHITE);
-        gc.setGlobalAlpha(0.5);
-        gc.fillRect(0, 0, width, height);
+        if (this.gameBoard.getClass() == GameBoard.class) {
+            var gc = getGraphicsContext2D();
+            gc.setFill(Color.WHITE);
+            gc.setGlobalAlpha(0.5);
+            gc.fillRect(0, 0, width, height);
+        }
     }
 
     /**
