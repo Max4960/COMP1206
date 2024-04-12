@@ -20,6 +20,9 @@ public class PieceBoard extends GameBoard {
         for (int x = 0; x <= 2; x++) {
             for (int y = 0; y <= 2; y++) {
                 grid.set(x,y,0);
+                if (x == 1 && y == 1) {
+                    getBlock(x,y).setCentre(true);
+                }
             }
         }
         grid.playPiece(piece,1,1);

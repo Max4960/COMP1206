@@ -63,6 +63,8 @@ public class GameBlock extends Canvas {
      */
     private final IntegerProperty value = new SimpleIntegerProperty(0);
 
+    private boolean isCentre = false;
+
     /**
      * Create a new single Game Block
      * @param gameBoard the board this block belongs to
@@ -162,6 +164,15 @@ public class GameBlock extends Canvas {
         gc.setStroke(Color.WHITE);
         gc.setGlobalAlpha(1);
         gc.strokeRect(0,0,width,height);
+
+        if (isCentre) {
+            gc.setGlobalAlpha(0.6);
+            gc.fillOval(0,0,width,height);
+        }
+    }
+
+    public void setCentre(boolean centre) {
+        isCentre = centre;
     }
 
     public void highlight() {
