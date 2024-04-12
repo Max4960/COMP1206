@@ -2,6 +2,7 @@
 package uk.ac.soton.comp1206.scene;
 
 // Imports
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Pos;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -142,6 +143,7 @@ public class ChallengeScene extends BaseScene {
     }
 
     private void inputHandler(KeyEvent key) {
+
         switch (key.getCode()) {
             case ESCAPE:
                 gameWindow.startMenu();
@@ -201,6 +203,15 @@ public class ChallengeScene extends BaseScene {
                 break;
             default:
                 break;
+        }
+        for(var y = 0; y < game.getRows(); y++) {   // There is probably a better way to do this
+            for(var x = 0; x < game.getCols(); x++) {
+                if (y == yLocation && x == xLocation) {
+                    gameBoard.getBlock(x,y).highlight();
+                } else {
+                    gameBoard.getBlock(x,y).paint();
+                }
+            }
         }
     }
 
