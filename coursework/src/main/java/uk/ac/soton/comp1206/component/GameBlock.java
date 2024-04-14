@@ -226,11 +226,12 @@ public class GameBlock extends Canvas {
         AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                opacity -= 0.1; // Works well for timing
+                opacity -= 0.003; // Works well for timing
                 if (opacity <= 0) {
                     paintEmpty();
                     stop();
                 }
+                paintEmpty(); // Have to paint empty so doesnt stack and look solid white - cannot use clear rect as this makes it look odd
                 gc.setGlobalAlpha(opacity);
                 gc.setFill(Color.WHITE);
                 gc.fillRect(0,0,width,height);
