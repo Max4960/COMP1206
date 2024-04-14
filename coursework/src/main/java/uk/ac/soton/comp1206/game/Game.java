@@ -71,6 +71,7 @@ public class Game {
     private int multiplier = 1;
 
     public Timer timer;
+    private GameLoop gLoop;
 
 
     /**
@@ -86,7 +87,9 @@ public class Game {
         followingPiece = spawnPiece();
 
         timer = new Timer();
-        timer.schedule(new GameLoop(timer, this), getTimerDelay());
+        gLoop = new GameLoop(timer, this);
+
+        timer.schedule(gLoop, getTimerDelay());
 
         //Create a new grid model to represent the game state
         this.grid = new Grid(cols,rows);
@@ -121,6 +124,7 @@ public class Game {
         if (getGrid().canPlayPiece(currentPiece, x, y)) {
             // Piece placement
             grid.playPiece(currentPiece, x, y);
+            gLoop.reset(getTimerDelay());
             afterPiece();
             nextPiece();
         }

@@ -68,8 +68,11 @@ public class MenuScene extends BaseScene {
 
 
         // Logo
-        Image logoBackdrop = new Image(String.valueOf(Multimedia.class.getResource("/images/logoBackdrop.png")));
+        Image logoBackdrop = new Image(String.valueOf(Multimedia.class.getResource("/images/TetrECS.png")));
         ImageView logoBackdropView = new ImageView(logoBackdrop);
+        logoBackdropView.setFitWidth(gameWindow.getWidth());
+        logoBackdropView.setFitHeight(gameWindow.getHeight());
+        logoBackdropView.setPreserveRatio(true);
         menu.getChildren().add(logoBackdropView);
 
         Text start = new Text("Start Game");

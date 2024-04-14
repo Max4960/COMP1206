@@ -2,10 +2,13 @@
 package uk.ac.soton.comp1206.scene;
 
 // Imports
+import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Pos;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -126,6 +129,15 @@ public class ChallengeScene extends BaseScene {
         levelBox.getChildren().add(follower);
         follower.setTranslateY(60);
 
+        // Timer
+        Rectangle timeRect = new Rectangle();
+        timeRect.setHeight(gameWindow.getHeight()/11);
+        timeRect.setWidth(gameWindow.getWidth()/1.3);
+        timeRect.setFill(Color.LIME);
+        mainPane.setBottom(timeRect);
+
+        countDown(timeRect, 10000);
+
         //Handle block on game board grid being clicked
         gameBoard.setOnBlockClick(this::blockClicked);
         // For rotations
@@ -147,7 +159,6 @@ public class ChallengeScene extends BaseScene {
     }
 
     private void inputHandler(KeyEvent key) {
-
         switch (key.getCode()) {
             case ESCAPE:
                 gameWindow.startMenu();
@@ -260,6 +271,33 @@ public class ChallengeScene extends BaseScene {
         for (GameBlockCoordinate gameBlockCoordinate : blockCoordinateSet) {
             gameBoard.getBlock(gameBlockCoordinate.getX(),gameBlockCoordinate.getY()).fadeOut();
         }
+    }
+
+    private void countDown(Rectangle timeRect, int time) {
+        long startTime = System.nanoTime(); // Have to use nanoTime
+        double startWidth = timeRect.getWidth();
+        AnimationTimer animationTimer = new AnimationTimer() {
+            long duration = time;
+            int red = 0;
+            int green = 255;
+
+            @Override
+            public void handle(long l) {
+                long elapsed = (l - startTime)/1000000;
+                long remaining = duration - elapsed;
+                double ratio = (double)(remaining)/(double)(duration);
+                logger.info("Ratio " + ratio);
+                logger.info("Remaining " + remaining);
+                logger.info("Duration " + duration);
+                if (remaining > 0) {
+                    timeRect.setWidth(startWidth*(ratio));
+                } else {
+                    stop();
+                }
+
+            }
+        };
+        animationTimer.start();
     }
 
     /**
