@@ -49,6 +49,7 @@ public class ChallengeScene extends BaseScene {
      * Piece board representing the next piece to place
      */
     protected PieceBoard follower;
+    private Rectangle timeRect;
 
     private int xLocation = 2;  // Used for keys
     private int yLocation = 2;  // Want to start in the center to improve game feel
@@ -130,13 +131,13 @@ public class ChallengeScene extends BaseScene {
         follower.setTranslateY(60);
 
         // Timer
-        Rectangle timeRect = new Rectangle();
+        timeRect = new Rectangle();
         timeRect.setHeight(gameWindow.getHeight()/11);
         timeRect.setWidth(gameWindow.getWidth()/1.3);
         timeRect.setFill(Color.LIME);
         mainPane.setBottom(timeRect);
 
-        countDown(timeRect, 10000);
+        //countDown(timeRect, 10000);
 
         //Handle block on game board grid being clicked
         gameBoard.setOnBlockClick(this::blockClicked);
@@ -152,6 +153,12 @@ public class ChallengeScene extends BaseScene {
             nextPiece(first, second);
             logger.info("CALLED" + first.toString());
         });
+
+        game.getLoop().setGameLoopListener((event) -> {
+            countDown(timeRect, game.getTimerDelay());
+        });
+
+
 
         game.setLineClearedListener(this::lineCleared);
 
@@ -320,6 +327,7 @@ public class ChallengeScene extends BaseScene {
         // This is vital for displaying the first piece(s)
         current.setPiece(game.currentPiece);
         follower.setPiece(game.followingPiece);
+        //game.getLoop().setGameLoopListener(this::gameLooped);
         game.start();
 
         // Checks if ESC has been pressed
@@ -334,6 +342,8 @@ public class ChallengeScene extends BaseScene {
         scene.setOnKeyReleased(this::inputHandler);
     }
 
-
+    public void gameLooped(int time) {
+        countDown(timeRect, game.getTimerDelay());
+    }
 
 }

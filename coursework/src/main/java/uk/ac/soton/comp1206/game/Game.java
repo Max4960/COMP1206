@@ -82,10 +82,10 @@ public class Game {
     public Game(int cols, int rows) {
         this.cols = cols;
         this.rows = rows;
-
+        //gLoop.gameLoopListener.gameLooped(12000);
         currentPiece = spawnPiece();
         followingPiece = spawnPiece();
-
+        // TODO: Merge GameLoop into this class
         timer = new Timer();
         gLoop = new GameLoop(timer, this);
 
@@ -128,6 +128,10 @@ public class Game {
             afterPiece();
             nextPiece();
         }
+    }
+
+    public GameLoop getLoop() {
+        return gLoop;
     }
 
     /**

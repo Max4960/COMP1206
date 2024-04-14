@@ -2,6 +2,7 @@ package uk.ac.soton.comp1206.game;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import uk.ac.soton.comp1206.event.GameLoopListener;
 
 import java.util.Timer;
 
@@ -10,6 +11,7 @@ public class GameLoop extends java.util.TimerTask {
     private static final Logger logger = LogManager.getLogger(GameLoop.class);
     private Timer timer;
     private Game game;
+    public GameLoopListener gameLoopListener;
 
     GameLoop(Timer timer, Game game) {
         this.timer = timer;
@@ -18,6 +20,7 @@ public class GameLoop extends java.util.TimerTask {
 
     public void run() {
         logger.info("Game loop started");
+        gameLoopListener.gameLooped(game.getTimerDelay());
         int currentLife = game.lives.get();
         currentLife--;
         game.lives.set(currentLife);
@@ -27,5 +30,9 @@ public class GameLoop extends java.util.TimerTask {
     public void reset(int delay) {
         cancel();
         timer.schedule(new GameLoop(timer, game), delay);
+    }
+
+    public void setGameLoopListener(GameLoopListener listener) {
+        this.gameLoopListener = listener;
     }
 }
