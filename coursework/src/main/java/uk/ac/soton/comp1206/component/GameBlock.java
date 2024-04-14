@@ -127,6 +127,7 @@ public class GameBlock extends Canvas {
     private void paintEmpty() {
         var gc = getGraphicsContext2D();
 
+
         //Clear
         gc.clearRect(0,0,width,height);
 
@@ -221,18 +222,18 @@ public class GameBlock extends Canvas {
 
     public void fadeOut() {
         opacity = 1.0;
+        var gc = getGraphicsContext2D();
         AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                opacity -= 0.003; // Works well for timing
-                if (opacity == 0) {
+                opacity -= 0.1; // Works well for timing
+                if (opacity <= 0) {
+                    paintEmpty();
                     stop();
                 }
-                paintEmpty();
-                var gc = getGraphicsContext2D();
-                gc.setFill(Color.WHITE);
                 gc.setGlobalAlpha(opacity);
-                gc.fillRect(0, 0, width, height);
+                gc.setFill(Color.WHITE);
+                gc.fillRect(0,0,width,height);
             }
         };
         animationTimer.start();

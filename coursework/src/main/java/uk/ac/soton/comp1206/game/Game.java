@@ -185,7 +185,7 @@ public class Game {
                 for (int j = 0; j < cols; j++) {
                     GameBlockCoordinate coordinate = new GameBlockCoordinate(i,j);
                     toClear.add(coordinate);
-                    lineClearedListener.lineCleared(toClear);
+                    //lineClearedListener.lineCleared(toClear);
                 }
                 lines++;
             }
@@ -205,16 +205,21 @@ public class Game {
                 for (int i = 0; i < cols; i++) {
                     GameBlockCoordinate coordinate = new GameBlockCoordinate(i,j);
                     toClear.add(coordinate);
-                    lineClearedListener.lineCleared(toClear);
+                    //lineClearedListener.lineCleared(toClear);
                 }
                 lines++;
             }
         }
+
         logger.info(toClear);
         // Loop through the hashset and remove all blocks
         for (GameBlockCoordinate coordinate : toClear) {
             grid.set(coordinate.getX(), coordinate.getY(), 0);
+            //grid.get(coordinate.getX(),coordinate.getY())
             blocks++;
+        }
+        if (lines > 0) {
+            lineClearedListener.lineCleared(toClear);
         }
         // Updating the score
         int current = score.get();
