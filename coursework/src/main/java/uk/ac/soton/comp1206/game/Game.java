@@ -14,6 +14,7 @@ import uk.ac.soton.comp1206.event.NextPieceListener;
 import uk.ac.soton.comp1206.scene.ChallengeScene;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.Timer;
 
 /**
  * The Game class handles the main logic, state and properties of the TetrECS game. Methods to manipulate the game state
@@ -69,6 +70,8 @@ public class Game {
      */
     private int multiplier = 1;
 
+    public Timer timer;
+
 
     /**
      * Create a new game with the specified rows and columns. Creates a corresponding grid model.
@@ -81,6 +84,9 @@ public class Game {
 
         currentPiece = spawnPiece();
         followingPiece = spawnPiece();
+
+        timer = new Timer();
+        timer.schedule(new GameLoop(timer, this), getTimerDelay());
 
         //Create a new grid model to represent the game state
         this.grid = new Grid(cols,rows);
@@ -220,7 +226,6 @@ public class Game {
         // Updating the score
         int current = score.get();
         score.set(current + score(lines,blocks));
-
         updateMultiplier(toClear);
         levelUp();
     }
@@ -284,6 +289,14 @@ public class Game {
         GamePiece temp = currentPiece;
         currentPiece = followingPiece;
         followingPiece = temp;
+    }
+
+    public int getTimerDelay() {
+        int delay = 12000 - (500 * level.get());
+        if (delay <= 2500) {
+            delay = 2500;
+        }
+        return delay;
     }
 
 }
