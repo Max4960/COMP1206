@@ -1,5 +1,6 @@
 package uk.ac.soton.comp1206.component;
 
+import javafx.animation.AnimationTimer;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
@@ -7,6 +8,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import uk.ac.soton.comp1206.game.Game;
 
 /**
  * The Visual User Interface component representing a single block in the grid.
@@ -64,6 +66,7 @@ public class GameBlock extends Canvas {
     private final IntegerProperty value = new SimpleIntegerProperty(0);
 
     private boolean isCentre = false;
+    private double opacity = 1.0;
 
     /**
      * Create a new single Game Block
@@ -214,6 +217,25 @@ public class GameBlock extends Canvas {
      */
     public void bind(ObservableValue<? extends Number> input) {
         value.bind(input);
+    }
+
+    public void fadeOut() {
+        opacity = 1.0;
+        AnimationTimer animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                opacity -= 0.003; // Works well for timing
+                if (opacity == 0) {
+                    stop();
+                }
+                paintEmpty();
+                var gc = getGraphicsContext2D();
+                gc.setFill(Color.WHITE);
+                gc.setGlobalAlpha(opacity);
+                gc.fillRect(0, 0, width, height);
+            }
+        };
+        animationTimer.start();
     }
 
 }

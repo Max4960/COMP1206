@@ -9,6 +9,8 @@ import uk.ac.soton.comp1206.event.BlockClickedListener;
 import uk.ac.soton.comp1206.event.RightClickedListener;
 import uk.ac.soton.comp1206.game.Grid;
 
+import java.util.Set;
+
 /**
  * A GameBoard is a visual component to represent the visual GameBoard.
  * It extends a GridPane to hold a grid of GameBlocks.
@@ -188,6 +190,10 @@ public class GameBoard extends GridPane {
             default: // Needed for middle button (or side buttons on some mice)
                 break;
         }
+    }
+
+    private void fadeOut(Set<GameBlock> blocks) {
+
     }
 
 

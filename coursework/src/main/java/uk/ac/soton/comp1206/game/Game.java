@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
 import uk.ac.soton.comp1206.component.GameBlockCoordinate;
 import uk.ac.soton.comp1206.component.PieceBoard;
+import uk.ac.soton.comp1206.event.LineClearedListener;
 import uk.ac.soton.comp1206.event.NextPieceListener;
 import uk.ac.soton.comp1206.scene.ChallengeScene;
 import java.util.HashSet;
@@ -41,6 +42,7 @@ public class Game {
      * The next piece listener
      */
     private NextPieceListener nextPieceListener;
+    private LineClearedListener lineClearedListener;
 
     /**
      * The Game piece currently being played
@@ -183,6 +185,7 @@ public class Game {
                 for (int j = 0; j < cols; j++) {
                     GameBlockCoordinate coordinate = new GameBlockCoordinate(i,j);
                     toClear.add(coordinate);
+                    lineClearedListener.lineCleared(toClear);
                 }
                 lines++;
             }
@@ -197,11 +200,12 @@ public class Game {
                     break;
                 }
             }
-            // It is a full row so need to add all coordinates to the HashSet
+            // It is a full column so need to add all coordinates to the HashSet
             if (count == cols) {
                 for (int i = 0; i < cols; i++) {
                     GameBlockCoordinate coordinate = new GameBlockCoordinate(i,j);
                     toClear.add(coordinate);
+                    lineClearedListener.lineCleared(toClear);
                 }
                 lines++;
             }
@@ -259,8 +263,13 @@ public class Game {
         this.nextPieceListener = listener;
     }
 
+    public void setLineClearedListener(LineClearedListener listener) {
+        this.lineClearedListener = listener;
+    }
+
+
     /**
-     * Rotates the piece based on the Right Clicked Listener
+     * Rotates the piece based on the Right-Clicked Listener
      * @param piece
      */
     public void rotateCurrentPiece(GamePiece piece, int rotations) {

@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
+import uk.ac.soton.comp1206.component.GameBlockCoordinate;
 import uk.ac.soton.comp1206.component.GameBoard;
 import uk.ac.soton.comp1206.component.PieceBoard;
 import uk.ac.soton.comp1206.game.Game;
@@ -19,6 +20,7 @@ import uk.ac.soton.comp1206.ui.GameWindow;
 import javafx.scene.control.Label;
 import uk.ac.soton.comp1206.ui.Multimedia;
 
+import java.util.Set;
 
 
 /**
@@ -139,6 +141,8 @@ public class ChallengeScene extends BaseScene {
             logger.info("CALLED" + first.toString());
         });
 
+        game.setLineClearedListener(this::lineCleared);
+
         //root.setOnKeyPressed(this::inputHandler);
     }
 
@@ -250,6 +254,12 @@ public class ChallengeScene extends BaseScene {
     private void nextPiece(GamePiece first, GamePiece second) {
         current.setPiece(first);
         follower.setPiece(second);
+    }
+
+    private void lineCleared(Set<GameBlockCoordinate> blockCoordinateSet) {
+        for (GameBlockCoordinate gameBlockCoordinate : blockCoordinateSet) {
+            gameBoard.getBlock(gameBlockCoordinate.getX(),gameBlockCoordinate.getY()).fadeOut();
+        }
     }
 
     /**
