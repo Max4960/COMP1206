@@ -278,19 +278,18 @@ public class ChallengeScene extends BaseScene {
         double startWidth = timeRect.getWidth();
         AnimationTimer animationTimer = new AnimationTimer() {
             long duration = time;
-            int red = 0;
-            int green = 255;
-
+            double initialRed = 0;
+            double initialGreen = 1;
             @Override
             public void handle(long l) {
                 long elapsed = (l - startTime)/1000000;
                 long remaining = duration - elapsed;
                 double ratio = (double)(remaining)/(double)(duration);
-                logger.info("Ratio " + ratio);
-                logger.info("Remaining " + remaining);
-                logger.info("Duration " + duration);
                 if (remaining > 0) {
                     timeRect.setWidth(startWidth*(ratio));
+                    double red = initialRed + (1-ratio);
+                    double green = initialGreen * ratio;
+                    timeRect.setFill(Color.color((red), (green), 0));
                 } else {
                     stop();
                 }
