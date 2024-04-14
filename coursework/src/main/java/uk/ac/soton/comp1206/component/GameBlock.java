@@ -230,11 +230,12 @@ public class GameBlock extends Canvas {
                 if (opacity <= 0) {
                     paintEmpty();
                     stop();
+                } else {
+                    paintEmpty(); // Have to paint empty so doesn't stack and look solid white - cannot use clear rect as this makes it look odd
+                    gc.setGlobalAlpha(opacity);
+                    gc.setFill(Color.WHITE);
+                    gc.fillRect(0,0,width,height);
                 }
-                paintEmpty(); // Have to paint empty so doesnt stack and look solid white - cannot use clear rect as this makes it look odd
-                gc.setGlobalAlpha(opacity);
-                gc.setFill(Color.WHITE);
-                gc.fillRect(0,0,width,height);
             }
         };
         animationTimer.start();
