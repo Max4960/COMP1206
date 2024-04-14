@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Timer;
 
+// Manages the timer and game loop is initialised in game loop - still a WIP
 public class GameLoop extends java.util.TimerTask {
     private static final Logger logger = LogManager.getLogger(GameLoop.class);
     private Timer timer;
@@ -17,6 +18,9 @@ public class GameLoop extends java.util.TimerTask {
 
     public void run() {
         logger.info("Game loop started");
+        int currentLife = game.lives.get();
+        currentLife--;
+        game.lives.set(currentLife);
         reset(game.getTimerDelay());
     }
 
