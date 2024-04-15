@@ -12,7 +12,10 @@ import uk.ac.soton.comp1206.component.PieceBoard;
 import uk.ac.soton.comp1206.event.GameLoopListener;
 import uk.ac.soton.comp1206.event.LineClearedListener;
 import uk.ac.soton.comp1206.event.NextPieceListener;
+import uk.ac.soton.comp1206.event.ShowScoreListener;
 import uk.ac.soton.comp1206.scene.ChallengeScene;
+import uk.ac.soton.comp1206.ui.GameWindow;
+
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Timer;
@@ -55,6 +58,8 @@ public class Game {
      * The game loop listener
      */
     private GameLoopListener gameLoopListener;
+
+    private ShowScoreListener showScoreListener;
 
     /**
      * The Game piece currently being played
@@ -135,12 +140,17 @@ public class Game {
      */
     public void gameLoop() {
         int currentLife = lives.get();
-        currentLife--;
-        lives.set(currentLife);
-        nextPiece();
-        loop();
-        manageTimer();
-        logger.info("New Loop Started");
+        if (currentLife > 0) {
+            currentLife--;
+            lives.set(currentLife);
+            nextPiece();
+            loop();
+            manageTimer();
+            logger.info("New Loop Started");
+        } else {
+            logger.info("Game Over");
+            showScoreListener.gameOver();
+        }
     }
 
     /**
@@ -336,6 +346,10 @@ public class Game {
      */
     public void setGameLoopListener(GameLoopListener listener) {
         this.gameLoopListener = listener;
+    }
+
+    public void setShowScoreListener(ShowScoreListener listener) {
+        this.showScoreListener = listener;
     }
 
 

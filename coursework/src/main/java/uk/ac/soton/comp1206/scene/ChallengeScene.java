@@ -3,6 +3,7 @@ package uk.ac.soton.comp1206.scene;
 
 // Imports
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Pos;
 import javafx.scene.input.KeyEvent;
@@ -157,8 +158,8 @@ public class ChallengeScene extends BaseScene {
         game.setGameLoopListener((event) -> {
             countDown(game.getTimerDelay());
         });
-
         game.setLineClearedListener(this::lineCleared);
+
     }
 
     private void inputHandler(KeyEvent key) {
@@ -329,8 +330,14 @@ public class ChallengeScene extends BaseScene {
         follower.setPiece(game.followingPiece);
         game.setGameLoopListener(this::countDown);
         game.start();
-
+        game.setShowScoreListener(this::loadScores);
         scene.setOnKeyReleased(this::inputHandler);
     }
 
+    private void loadScores() {
+        game.timer.purge(); // Cleaning threads as a javafx function cant be called on a timer thread
+        game.timer.cancel();
+        Platform.runLater(()->gameWindow.startScore());
+
+    }
 }
