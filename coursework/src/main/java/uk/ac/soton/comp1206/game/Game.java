@@ -116,7 +116,8 @@ public class Game {
         };
         timer = new Timer();
         timer.schedule(loop, getTimerDelay());
-        gameLoopListener.gameLooped(getTimerDelay());
+        loop();
+
     }
 
     public void gameLoop() {
@@ -124,9 +125,14 @@ public class Game {
         currentLife--;
         lives.set(currentLife);
         nextPiece();
-        //gameLoopListener.gameLooped(getTimerDelay());
-        //manageTimer();
+        loop();
+    }
 
+    private void loop() {
+        if (this.gameLoopListener != null) {
+            this.gameLoopListener.gameLooped(getTimerDelay());
+            logger.info("Timer Delay - " + getTimerDelay());
+        }
     }
 
     /**
@@ -150,6 +156,7 @@ public class Game {
         if (getGrid().canPlayPiece(currentPiece, x, y)) {
             // Piece placement
             grid.playPiece(currentPiece, x, y);
+            loop.cancel();
             manageTimer();
             afterPiece();
             nextPiece();

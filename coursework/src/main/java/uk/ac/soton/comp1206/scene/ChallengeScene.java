@@ -289,8 +289,8 @@ public class ChallengeScene extends BaseScene {
             double initialRed = 0;
             double initialGreen = 1;
             @Override
-            public void handle(long l) {
-                long elapsed = (l - startTime)/1000000;
+            public void handle(long processTime) {
+                long elapsed = (processTime - startTime)/1000000;
                 long remaining = duration - elapsed;
                 double ratio = (double)(remaining)/(double)(duration);
                 if (remaining > 0) {
