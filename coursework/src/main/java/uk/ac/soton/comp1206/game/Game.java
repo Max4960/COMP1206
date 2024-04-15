@@ -118,7 +118,7 @@ public class Game {
     /**
      * Updates the timer
      */
-    private void manageTimer() {
+    public void manageTimer() {
         loop = new TimerTask() {
             public void run() {
                 gameLoop();
@@ -133,18 +133,20 @@ public class Game {
      * Called when the bar reaches 0
      * Decreases life. generates a new piece, and resets the bar
      */
-    private void gameLoop() {
+    public void gameLoop() {
         int currentLife = lives.get();
         currentLife--;
         lives.set(currentLife);
         nextPiece();
         loop();
+        manageTimer();
+        logger.info("New Loop Started");
     }
 
     /**
      * A support method that loops the timer
      */
-    private void loop() {
+    public void loop() {
         if (this.gameLoopListener != null) {
             this.gameLoopListener.gameLooped(getTimerDelay());
             logger.info("Timer Delay - " + getTimerDelay());

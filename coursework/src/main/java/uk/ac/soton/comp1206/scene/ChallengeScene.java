@@ -327,6 +327,7 @@ public class ChallengeScene extends BaseScene {
         // This is vital for displaying the first piece(s)
         current.setPiece(game.currentPiece);
         follower.setPiece(game.followingPiece);
+        game.setGameLoopListener(this::countDown);
         game.start();
 
         scene.setOnKeyReleased(this::inputHandler);
