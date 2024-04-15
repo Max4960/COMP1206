@@ -9,12 +9,14 @@ import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
 import uk.ac.soton.comp1206.component.GameBlockCoordinate;
 import uk.ac.soton.comp1206.component.PieceBoard;
+import uk.ac.soton.comp1206.event.GameLoopListener;
 import uk.ac.soton.comp1206.event.LineClearedListener;
 import uk.ac.soton.comp1206.event.NextPieceListener;
 import uk.ac.soton.comp1206.scene.ChallengeScene;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * The Game class handles the main logic, state and properties of the TetrECS game. Methods to manipulate the game state
@@ -44,6 +46,7 @@ public class Game {
      */
     private NextPieceListener nextPieceListener;
     private LineClearedListener lineClearedListener;
+    private GameLoopListener gameLoopListener;
 
     /**
      * The Game piece currently being played
@@ -71,7 +74,8 @@ public class Game {
     private int multiplier = 1;
 
     public Timer timer;
-    private GameLoop gLoop;
+    //private GameLoop gLoop;
+    public TimerTask loop;
 
 
     /**
@@ -86,10 +90,10 @@ public class Game {
         currentPiece = spawnPiece();
         followingPiece = spawnPiece();
         // TODO: Merge GameLoop into this class
-        timer = new Timer();
-        gLoop = new GameLoop(timer, this);
+        //timer = new Timer();
+        //gLoop = new GameLoop(timer, this);
 
-        timer.schedule(gLoop, getTimerDelay());
+        //timer.schedule(gLoop, getTimerDelay());
 
         //Create a new grid model to represent the game state
         this.grid = new Grid(cols,rows);
@@ -101,6 +105,28 @@ public class Game {
     public void start() {
         logger.info("Starting game");
         initialiseGame();
+        manageTimer();
+    }
+
+    public void manageTimer() {
+        loop = new TimerTask() {
+            public void run() {
+                gameLoop();
+            }
+        };
+        timer = new Timer();
+        timer.schedule(loop, getTimerDelay());
+        gameLoopListener.gameLooped(getTimerDelay());
+    }
+
+    public void gameLoop() {
+        int currentLife = lives.get();
+        currentLife--;
+        lives.set(currentLife);
+        nextPiece();
+        //gameLoopListener.gameLooped(getTimerDelay());
+        //manageTimer();
+
     }
 
     /**
@@ -124,15 +150,15 @@ public class Game {
         if (getGrid().canPlayPiece(currentPiece, x, y)) {
             // Piece placement
             grid.playPiece(currentPiece, x, y);
-            gLoop.reset(getTimerDelay());
+            manageTimer();
             afterPiece();
             nextPiece();
         }
     }
 
-    public GameLoop getLoop() {
-        return gLoop;
-    }
+    //public GameLoop getLoop() {
+    //    return gLoop;
+    //}
 
     /**
      * Get the grid model inside this game representing the game state of the board
@@ -279,6 +305,10 @@ public class Game {
 
     public void setLineClearedListener(LineClearedListener listener) {
         this.lineClearedListener = listener;
+    }
+
+    public void setGameLoopListener(GameLoopListener listener) {
+        this.gameLoopListener = listener;
     }
 
 

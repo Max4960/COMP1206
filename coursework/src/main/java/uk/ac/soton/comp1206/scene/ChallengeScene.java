@@ -50,6 +50,7 @@ public class ChallengeScene extends BaseScene {
      */
     protected PieceBoard follower;
     private Rectangle timeRect;
+    private double startWidth;
 
     private int xLocation = 2;  // Used for keys
     private int yLocation = 2;  // Want to start in the center to improve game feel
@@ -135,6 +136,7 @@ public class ChallengeScene extends BaseScene {
         timeRect.setHeight(gameWindow.getHeight()/11);
         timeRect.setWidth(gameWindow.getWidth()/1.3);
         timeRect.setFill(Color.LIME);
+        startWidth = timeRect.getWidth();
         mainPane.setBottom(timeRect);
 
         //countDown(timeRect, 10000);
@@ -154,8 +156,8 @@ public class ChallengeScene extends BaseScene {
             logger.info("CALLED" + first.toString());
         });
 
-        game.getLoop().setGameLoopListener((event) -> {
-            countDown(timeRect, game.getTimerDelay());
+        game.setGameLoopListener((event) -> {
+            countDown(game.getTimerDelay());
         });
 
 
@@ -280,9 +282,8 @@ public class ChallengeScene extends BaseScene {
         }
     }
 
-    private void countDown(Rectangle timeRect, int time) {
+    private void countDown(int time) {
         long startTime = System.nanoTime(); // Have to use nanoTime
-        double startWidth = timeRect.getWidth();
         AnimationTimer animationTimer = new AnimationTimer() {
             long duration = time;
             double initialRed = 0;
@@ -327,7 +328,7 @@ public class ChallengeScene extends BaseScene {
         // This is vital for displaying the first piece(s)
         current.setPiece(game.currentPiece);
         follower.setPiece(game.followingPiece);
-        //game.getLoop().setGameLoopListener(this::gameLooped);
+        //game.setGameLoopListener(this::countDown);
         game.start();
 
         // Checks if ESC has been pressed
@@ -342,8 +343,8 @@ public class ChallengeScene extends BaseScene {
         scene.setOnKeyReleased(this::inputHandler);
     }
 
-    public void gameLooped(int time) {
-        countDown(timeRect, game.getTimerDelay());
-    }
+    //public void gameLooped(int time) {
+    //    countDown(timeRect, game.getTimerDelay());
+   // }
 
 }
