@@ -131,15 +131,13 @@ public class ChallengeScene extends BaseScene {
         levelBox.getChildren().add(follower);
         follower.setTranslateY(60);
 
-        // Timer
+        // Timer - Green bar at bottom of screen
         timeRect = new Rectangle();
         timeRect.setHeight(gameWindow.getHeight()/11);
         timeRect.setWidth(gameWindow.getWidth()/1.3);
         timeRect.setFill(Color.LIME);
-        startWidth = timeRect.getWidth();
+        startWidth = timeRect.getWidth();   // Has to be declared outside the countDown function
         mainPane.setBottom(timeRect);
-
-        //countDown(timeRect, 10000);
 
         //Handle block on game board grid being clicked
         gameBoard.setOnBlockClick(this::blockClicked);
@@ -160,11 +158,7 @@ public class ChallengeScene extends BaseScene {
             countDown(game.getTimerDelay());
         });
 
-
-
         game.setLineClearedListener(this::lineCleared);
-
-        //root.setOnKeyPressed(this::inputHandler);
     }
 
     private void inputHandler(KeyEvent key) {
@@ -231,7 +225,12 @@ public class ChallengeScene extends BaseScene {
         for(var y = 0; y < game.getRows(); y++) {   // There is probably a better way to do this
             for(var x = 0; x < game.getCols(); x++) {
                 if (y == yLocation && x == xLocation) {
-                    gameBoard.getBlock(x,y).highlight();
+                    //gameBoard.getBlock(x,y).highlight();
+                    if (gameBoard.getBlock(x,y).getValue() == 0) {
+                        gameBoard.getBlock(x,y).highlight(true);
+                    } else {
+                        gameBoard.getBlock(x,y).highlight(false);
+                    }
                 } else {
                     gameBoard.getBlock(x,y).paint();
                 }
@@ -297,7 +296,7 @@ public class ChallengeScene extends BaseScene {
                     timeRect.setWidth(startWidth*(ratio));
                     double red = initialRed + (1-ratio);
                     double green = initialGreen * ratio;
-                    timeRect.setFill(Color.color((red), (green), 0));
+                    timeRect.setFill(Color.color(red, green, 0));
                 } else {
                     stop();
                 }
@@ -328,23 +327,9 @@ public class ChallengeScene extends BaseScene {
         // This is vital for displaying the first piece(s)
         current.setPiece(game.currentPiece);
         follower.setPiece(game.followingPiece);
-        //game.setGameLoopListener(this::countDown);
         game.start();
 
-        // Checks if ESC has been pressed
-        //scene.setOnKeyPressed(event -> {
-        //    switch (event.getCode()) {
-        //        case ESCAPE:
-        //            gameWindow.startMenu();
-        //        default:
-        //            break;
-        //    }
-        //});
         scene.setOnKeyReleased(this::inputHandler);
     }
-
-    //public void gameLooped(int time) {
-    //    countDown(timeRect, game.getTimerDelay());
-   // }
 
 }

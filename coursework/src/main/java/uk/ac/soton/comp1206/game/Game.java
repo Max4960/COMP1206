@@ -74,7 +74,6 @@ public class Game {
     private int multiplier = 1;
 
     public Timer timer;
-    //private GameLoop gLoop;
     public TimerTask loop;
 
 
@@ -86,15 +85,8 @@ public class Game {
     public Game(int cols, int rows) {
         this.cols = cols;
         this.rows = rows;
-        //gLoop.gameLoopListener.gameLooped(12000);
         currentPiece = spawnPiece();
         followingPiece = spawnPiece();
-        // TODO: Merge GameLoop into this class
-        //timer = new Timer();
-        //gLoop = new GameLoop(timer, this);
-
-        //timer.schedule(gLoop, getTimerDelay());
-
         //Create a new grid model to represent the game state
         this.grid = new Grid(cols,rows);
     }
@@ -117,7 +109,6 @@ public class Game {
         timer = new Timer();
         timer.schedule(loop, getTimerDelay());
         loop();
-
     }
 
     public void gameLoop() {
@@ -140,8 +131,6 @@ public class Game {
      */
     public void initialiseGame() {
         logger.info("Initialising game");
-        //currentPiece = spawnPiece();
-
     }
 
     /**
@@ -162,10 +151,6 @@ public class Game {
             nextPiece();
         }
     }
-
-    //public GameLoop getLoop() {
-    //    return gLoop;
-    //}
 
     /**
      * Get the grid model inside this game representing the game state of the board

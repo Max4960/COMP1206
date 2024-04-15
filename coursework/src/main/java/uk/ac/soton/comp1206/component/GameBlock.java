@@ -93,7 +93,7 @@ public class GameBlock extends Canvas {
         //When the value property is updated, call the internal updateValue method
         value.addListener(this::updateValue);
         // This allows them to be unpainted
-        this.setOnMouseEntered(event -> {highlight();});
+        this.setOnMouseEntered(event -> {highlight(false);});
         this.setOnMouseExited(event -> {paint();});
     }
 
@@ -179,14 +179,20 @@ public class GameBlock extends Canvas {
         isCentre = centre;
     }
 
-    public void highlight() {
+    public void highlight(boolean empty) {
         if (this.gameBoard.getClass() == GameBoard.class) {
+            if (empty) {
+                paintEmpty();
+            } else {
+                paint();
+            }
             var gc = getGraphicsContext2D();
             gc.setFill(Color.WHITE);
             gc.setGlobalAlpha(0.5);
             gc.fillRect(0, 0, width, height);
         }
     }
+
 
     /**
      * Get the column of this block
