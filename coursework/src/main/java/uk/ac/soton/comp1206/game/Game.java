@@ -45,7 +45,15 @@ public class Game {
      * The next piece listener
      */
     private NextPieceListener nextPieceListener;
+
+    /**
+     * The line cleared listener
+     */
     private LineClearedListener lineClearedListener;
+
+    /**
+     * The game loop listener
+     */
     private GameLoopListener gameLoopListener;
 
     /**
@@ -73,7 +81,14 @@ public class Game {
      */
     private int multiplier = 1;
 
+    /**
+     * The timer used for the game loop
+     */
     public Timer timer;
+
+    /**
+     * The timer task associated with the game loop
+     */
     public TimerTask loop;
 
 
@@ -100,7 +115,10 @@ public class Game {
         manageTimer();
     }
 
-    public void manageTimer() {
+    /**
+     * Updates the timer
+     */
+    private void manageTimer() {
         loop = new TimerTask() {
             public void run() {
                 gameLoop();
@@ -111,7 +129,11 @@ public class Game {
         loop();
     }
 
-    public void gameLoop() {
+    /**
+     * Called when the bar reaches 0
+     * Decreases life. generates a new piece, and resets the bar
+     */
+    private void gameLoop() {
         int currentLife = lives.get();
         currentLife--;
         lives.set(currentLife);
@@ -119,6 +141,9 @@ public class Game {
         loop();
     }
 
+    /**
+     * A support method that loops the timer
+     */
     private void loop() {
         if (this.gameLoopListener != null) {
             this.gameLoopListener.gameLooped(getTimerDelay());
@@ -180,7 +205,7 @@ public class Game {
      * Gets a random Game Piece
      * @return random Game Piece
      */
-    public GamePiece spawnPiece() {
+    private GamePiece spawnPiece() {
         Random toPlace = new Random();
         return GamePiece.createPiece(toPlace.nextInt(GamePiece.PIECES));
     }
@@ -188,7 +213,7 @@ public class Game {
     /**
      * Updates currentPiece to a new piece
      */
-    public void nextPiece() {
+    private void nextPiece() {
         currentPiece = followingPiece;
         followingPiece = spawnPiece();
         nextPieceListener.nextPiece(currentPiece, followingPiece);
@@ -197,7 +222,7 @@ public class Game {
     /**
      * Handles the game logic after a move is made
      */
-    public void afterPiece() {
+    private void afterPiece() {
         // Local variables keeping track of lines and blocks being cleared
         int lines = 0;
         int blocks = 0;
@@ -262,7 +287,7 @@ public class Game {
      * @param noBlocks The number of unique blocks cleared
      * @return The score achieved this move
      */
-    public int score(int noLines, int noBlocks) {
+    private int score(int noLines, int noBlocks) {
         return (noLines * noBlocks * 10 * multiplier);
     }
 
@@ -295,10 +320,18 @@ public class Game {
         this.nextPieceListener = listener;
     }
 
+    /**
+     * Sets the Line Cleared Listener
+     * @param listener
+     */
     public void setLineClearedListener(LineClearedListener listener) {
         this.lineClearedListener = listener;
     }
 
+    /**
+     * Sets the Game Loop Listener
+     * @param listener
+     */
     public void setGameLoopListener(GameLoopListener listener) {
         this.gameLoopListener = listener;
     }
@@ -321,6 +354,10 @@ public class Game {
         followingPiece = temp;
     }
 
+    /**
+     * Calculates the value for the timer delay
+     * @return an int value of the timer delay in milliseconds
+     */
     public int getTimerDelay() {
         int delay = 12000 - (500 * level.get());
         if (delay <= 2500) {
