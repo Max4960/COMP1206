@@ -342,4 +342,8 @@ public class ChallengeScene extends BaseScene {
         Platform.runLater(()->gameWindow.startScore());
 
     }
+
+    public Game getGame() {
+        return game;
+    }
 }

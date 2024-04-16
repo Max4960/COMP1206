@@ -30,6 +30,7 @@ public class GameWindow {
 
     private BaseScene currentScene;
     private Scene scene;
+    private ChallengeScene challengeScene;
 
     //final Communicator communicator;
 
@@ -83,13 +84,16 @@ public class GameWindow {
     /**
      * Display the single player challenge
      */
-    public void startChallenge() { loadScene(new ChallengeScene(this)); }
+    public void startChallenge() {
+        challengeScene = new ChallengeScene(this);
+        loadScene(challengeScene);
+    }
 
     public void startInformation() {
         loadScene(new InstructionsScene(this));
     }
 
-    public void startScore() {loadScene(new ScoreScene(this));}
+    public void startScore() {loadScene(new ScoreScene(this, challengeScene.getGame()));}
 
     /**
      * Set up the default settings for the stage itself (the window), such as the title and minimum width and height.
