@@ -220,6 +220,8 @@ public class ChallengeScene extends BaseScene {
                 current.setPiece(game.currentPiece);
                 follower.setPiece(game.followingPiece);
                 break;
+            case B:
+                gameWindow.startScore();
             default:
                 break;
         }
