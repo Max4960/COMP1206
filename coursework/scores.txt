@@ -1,8 +1,8 @@
-ok:50
-NULL:0
-NULL:0
-NULL:0
-NULL:0
+h:3560
+Max:3410
+m:1840
+s:1180
+dsads:450
 NULL:0
 NULL:0
 NULL:0

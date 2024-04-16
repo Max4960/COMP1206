@@ -66,7 +66,7 @@ public class ScoreScene extends BaseScene {
                     VBox getPlayerInfoBox = new VBox();
                     getPlayerInfoBox.setAlignment(Pos.CENTER);
                     scorePane.getChildren().add(getPlayerInfoBox);
-
+                    // TODO: Fix a highscore replacing the wrong previous high score
                     Text enterName = new Text("Enter Your Name:");
                     enterName.getStyleClass().add("menuItem");
                     getPlayerInfoBox.getChildren().add(enterName);
@@ -118,7 +118,6 @@ public class ScoreScene extends BaseScene {
     public void loadScores() throws IOException {
         String fileName = "coursework/scores.txt";
         File file = new File(fileName);
-
         if (file.exists()) {
             FileReader fr = new FileReader("coursework/scores.txt");
             BufferedReader br = new BufferedReader(fr);
@@ -127,6 +126,7 @@ public class ScoreScene extends BaseScene {
                 String[] parts = line.split(":");
                 localScoresList.add(new Pair<>(parts[0],Integer.parseInt(parts[1])));
             }
+
         } else {
             logger.info("File does not exist");
             return;
@@ -148,6 +148,7 @@ public class ScoreScene extends BaseScene {
                 }
             }
         });
+        localScoresList = new ArrayList<>(localScores.subList(0,10));
         logger.info(String.format("Writing scores to file: %s", localScoresList));
     }
 
