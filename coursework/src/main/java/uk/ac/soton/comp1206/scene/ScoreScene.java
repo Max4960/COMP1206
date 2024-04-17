@@ -66,7 +66,6 @@ public class ScoreScene extends BaseScene {
                     VBox getPlayerInfoBox = new VBox();
                     getPlayerInfoBox.setAlignment(Pos.CENTER);
                     scorePane.getChildren().add(getPlayerInfoBox);
-                    // TODO: Fix a highscore replacing the wrong previous high score
                     Text enterName = new Text("Enter Your Name:");
                     enterName.getStyleClass().add("menuItem");
                     getPlayerInfoBox.getChildren().add(enterName);
@@ -77,6 +76,7 @@ public class ScoreScene extends BaseScene {
                     getPlayerInfoBox.getChildren().add(enterNameButton);
                     enterNameButton.setOnAction(e -> {
                         String playerName = enterNameText.getText();
+                        localScoresList.remove(9);
                         localScoresList.add(new Pair<>(playerName, game.score.get()));
                         enterNameText.setVisible(false);
                         enterNameButton.setVisible(false);
