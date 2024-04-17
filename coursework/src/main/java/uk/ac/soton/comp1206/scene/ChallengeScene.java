@@ -3,14 +3,20 @@ package uk.ac.soton.comp1206.scene;
 
 // Imports
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
@@ -21,9 +27,9 @@ import uk.ac.soton.comp1206.game.Game;
 import uk.ac.soton.comp1206.game.GamePiece;
 import uk.ac.soton.comp1206.ui.GamePane;
 import uk.ac.soton.comp1206.ui.GameWindow;
-import javafx.scene.control.Label;
 import uk.ac.soton.comp1206.ui.Multimedia;
 
+import java.io.*;
 import java.util.Set;
 
 
@@ -56,6 +62,8 @@ public class ChallengeScene extends BaseScene {
     private int xLocation = 2;  // Used for keys
     private int yLocation = 2;  // Want to start in the center to improve game feel
 
+    private IntegerProperty highestScore = new SimpleIntegerProperty();
+
     /**
      * Create a new Single Player challenge scene
      * @param gameWindow the Game Window
@@ -65,6 +73,16 @@ public class ChallengeScene extends BaseScene {
         logger.info("Creating Challenge Scene");
     }
 
+    public void start(Stage stage) {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            checkHighScore();
+            logger.info("called");
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+
+
     /**
      * Build the Challenge window
      */
@@ -73,6 +91,14 @@ public class ChallengeScene extends BaseScene {
         logger.info("Building " + this.getClass().getName());
 
         setupGame();
+
+        checkHighScore();
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            checkHighScore();
+            logger.info("called");
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
 
         root = new GamePane(gameWindow.getWidth(),gameWindow.getHeight());
 
@@ -88,6 +114,14 @@ public class ChallengeScene extends BaseScene {
         // Score User Interface
         VBox scoreBox = new VBox();
         scoreBox.setAlignment(Pos.CENTER);
+        Text highScoreText = new Text("HIGHSCORE");
+        Text highScoreValue = new Text();
+        highScoreValue.textProperty().bind(highestScore.asString());
+        highScoreText.getStyleClass().add("heading");
+        highScoreValue.getStyleClass().add("score");
+        scoreBox.getChildren().add(highScoreText);
+        scoreBox.getChildren().add(highScoreValue);
+
         Text scoreText = new Text("SCORE");
         Text scoreValue = new Text();
         scoreValue.textProperty().bind(game.score.asString());
@@ -345,5 +379,35 @@ public class ChallengeScene extends BaseScene {
 
     public Game getGame() {
         return game;
+    }
+
+    public void checkHighScore() {
+        try {
+            getHighScore();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void getHighScore() throws IOException {
+        int prevHighScore;
+        String fileName = "coursework/scores.txt";
+        File file = new File(fileName);
+        if (file.exists()) {
+            FileReader fr = new FileReader("coursework/scores.txt");
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            line = br.readLine();
+            String[] parts = line.split(":");
+            prevHighScore = Integer.parseInt(parts[1]);
+        } else {
+            logger.info("File does not exist");
+            prevHighScore = 0;
+        }
+        if (prevHighScore >= game.score.get()) {
+            highestScore.set(prevHighScore);
+        } else {
+            highestScore.set(game.score.get());
+        }
     }
 }
