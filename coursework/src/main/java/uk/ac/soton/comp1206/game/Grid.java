@@ -44,7 +44,7 @@ public class Grid {
 
         //Create the grid itself
         grid = new SimpleIntegerProperty[cols][rows];
-
+        logger.info("Initialising Grid with columns: " + cols + ", and rows: " + rows);
         //Add a SimpleIntegerProperty to every block in the grid
         for(var y = 0; y < rows; y++) {
             for(var x = 0; x < cols; x++) {
@@ -71,7 +71,6 @@ public class Grid {
                 }
             }
         }
-        logger.info("Valid Placement");
         return true;
     }
 
@@ -82,6 +81,7 @@ public class Grid {
      * @param y The y position of the piece
      */
     public void playPiece(GamePiece piece, int x, int y) {
+        logger.info("Called playPiece");
         if (canPlayPiece(piece, x, y)) {
             int[][] shape = piece.getBlocks();  // Fetching the shape we want
             for (int i = 0; i < shape.length; i++) {    // This is between 1-3
@@ -92,7 +92,6 @@ public class Grid {
                     }
                 }
             }
-            logger.info("Placed a: " + piece.name);
         }
     }
 

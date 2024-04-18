@@ -146,7 +146,7 @@ public class Game {
             nextPiece();
             loop();
             manageTimer();
-            logger.info("New Loop Started");
+            logger.info("New Game Loop Started");
         } else {
             logger.info("Game Over");
             showScoreListener.gameOver();
@@ -159,7 +159,7 @@ public class Game {
     public void loop() {
         if (this.gameLoopListener != null) {
             this.gameLoopListener.gameLooped(getTimerDelay());
-            logger.info("Timer Delay - " + getTimerDelay());
+            logger.info("Timer Delay - " + getTimerDelay() + " milliseconds");
         }
     }
 
@@ -280,7 +280,7 @@ public class Game {
             }
         }
 
-        logger.info(toClear);
+        logger.info("Clearing: "+ toClear);
         // Loop through the hashset and remove all blocks
         for (GameBlockCoordinate coordinate : toClear) {
             grid.set(coordinate.getX(), coordinate.getY(), 0);
@@ -359,6 +359,7 @@ public class Game {
      */
     public void rotateCurrentPiece(GamePiece piece, int rotations) {
         piece.rotate(rotations);
+        logger.info("Rotating " + piece + " with rotations: " + rotations);
     }
 
     /**
@@ -368,6 +369,7 @@ public class Game {
         GamePiece temp = currentPiece;
         currentPiece = followingPiece;
         followingPiece = temp;
+        logger.info("Swapping " + currentPiece + " to " + followingPiece);
     }
 
     /**
@@ -386,6 +388,7 @@ public class Game {
         timer.cancel();
         timer.purge();
         loop.cancel();
+        logger.info("Killing timer");
     }
 
 }

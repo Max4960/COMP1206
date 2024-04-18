@@ -38,7 +38,7 @@ import java.util.Set;
  */
 public class ChallengeScene extends BaseScene {
 
-    private static final Logger logger = LogManager.getLogger(MenuScene.class);
+    private static final Logger logger = LogManager.getLogger(ChallengeScene.class);
 
     /**
      * The instance of the Game being used
@@ -72,16 +72,6 @@ public class ChallengeScene extends BaseScene {
         super(gameWindow);
         logger.info("Creating Challenge Scene");
     }
-
-    public void start(Stage stage) {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            checkHighScore();
-            logger.info("called");
-        }));
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
-    }
-
 
     /**
      * Build the Challenge window
@@ -185,7 +175,7 @@ public class ChallengeScene extends BaseScene {
         game.setNextPieceListener((first, second) -> {
             //current.setPiece(piece);
             nextPiece(first, second);
-            logger.info("CALLED" + first.toString());
+            logger.info("New Piece " + first.toString());
         });
 
         game.setGameLoopListener((event) -> {
@@ -203,28 +193,28 @@ public class ChallengeScene extends BaseScene {
                 break;
             case UP: // This formatting acts like an OR
             case W:
-                logger.info(yLocation);
+                logger.info("Position: (" + xLocation + ", "+ yLocation + ")");
                 if (yLocation > 0) {
                     yLocation--;
                 }
                 break;
             case DOWN:
             case S:
-                logger.info(yLocation);
+                logger.info("Position: (" + xLocation + ", "+ yLocation + ")");
                 if (yLocation < gameBoard.getRowCount() - 1) {
                     yLocation++;
                 }
                 break;
             case LEFT:
             case A:
-                logger.info(xLocation);
+                logger.info("Position: (" + xLocation + ", "+ yLocation + ")");
                 if (xLocation > 0) {
                     xLocation--;
                 }
                 break;
             case RIGHT:
             case D:
-                logger.info(xLocation);
+                logger.info("Position: (" + xLocation + ", "+ yLocation + ")");
                 if (xLocation < gameBoard.getColumnCount() - 1) {
                     xLocation++;
                 }
@@ -232,6 +222,7 @@ public class ChallengeScene extends BaseScene {
             case ENTER:
             case X:
                 game.blockClicked(gameBoard.getBlock(xLocation,yLocation));
+                logger.info("Position: (" + xLocation + ", "+ yLocation + ")");
                 xLocation = 2;  //Recentering
                 yLocation = 2;
                 break;
