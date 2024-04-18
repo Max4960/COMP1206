@@ -95,7 +95,6 @@ public class ChallengeScene extends BaseScene {
         checkHighScore();
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             checkHighScore();
-            logger.info("called");
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
@@ -200,6 +199,7 @@ public class ChallengeScene extends BaseScene {
         switch (key.getCode()) {
             case ESCAPE:
                 gameWindow.startMenu();
+                game.killTimer();
                 break;
             case UP: // This formatting acts like an OR
             case W:
@@ -254,8 +254,6 @@ public class ChallengeScene extends BaseScene {
                 current.setPiece(game.currentPiece);
                 follower.setPiece(game.followingPiece);
                 break;
-            case B:
-                gameWindow.startScore();
             default:
                 break;
         }
@@ -393,7 +391,7 @@ public class ChallengeScene extends BaseScene {
         int prevHighScore;
         String fileName = "coursework/scores.txt";
         File file = new File(fileName);
-        if (file.exists()) {
+        if (file.exists() && file.length() != 0) {
             FileReader fr = new FileReader("coursework/scores.txt");
             BufferedReader br = new BufferedReader(fr);
             String line;
@@ -401,7 +399,6 @@ public class ChallengeScene extends BaseScene {
             String[] parts = line.split(":");
             prevHighScore = Integer.parseInt(parts[1]);
         } else {
-            logger.info("File does not exist");
             prevHighScore = 0;
         }
         if (prevHighScore >= game.score.get()) {

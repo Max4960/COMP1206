@@ -126,9 +126,16 @@ public class ScoreScene extends BaseScene {
                 String[] parts = line.split(":");
                 localScoresList.add(new Pair<>(parts[0],Integer.parseInt(parts[1])));
             }
-
         } else {
             logger.info("File does not exist");
+            file.createNewFile();
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+                for (int i = 0; i < 10; i++) {
+                    writer.write("NULL:0");
+                }
+            } catch (IOException e) {
+                logger.info("Failed to create scores file");
+            }
             return;
         }
     }

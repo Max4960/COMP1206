@@ -382,4 +382,10 @@ public class Game {
         return delay;
     }
 
+    public void killTimer() {
+        timer.cancel();
+        timer.purge();
+        loop.cancel();
+    }
+
 }
