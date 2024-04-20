@@ -53,9 +53,11 @@ public class ScoreScene extends BaseScene {
         scorePane.setMaxHeight(gameWindow.getHeight());
         scorePane.getStyleClass().add("info-background");
         root.getChildren().add(scorePane);
+        scorePane.setAlignment(Pos.TOP_CENTER);
 
         Text gameOverText = new Text("GAME OVER");
         gameOverText.getStyleClass().add("bigtitle");
+
         scorePane.getChildren().add(gameOverText);
 
         boolean loaded = false;
