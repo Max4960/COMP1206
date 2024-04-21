@@ -34,7 +34,8 @@ public class ScoreScene extends BaseScene {
     SimpleListProperty<Pair<String,Integer>> localScores = new SimpleListProperty<Pair<String,Integer>>(FXCollections.observableList(localScoresList));
 
 
-    SimpleListProperty<Pair<String,Integer>> remoteScores = new SimpleListProperty<>();
+    ArrayList<Pair<String,Integer>> remoteScoresList = new ArrayList<Pair<String,Integer>>();
+    SimpleListProperty<Pair<String,Integer>> remoteScores = new SimpleListProperty<>(FXCollections.observableList(remoteScoresList));
 
     /**
      * Create a new scene, passing in the GameWindow the scene will be displayed in
@@ -49,12 +50,30 @@ public class ScoreScene extends BaseScene {
 
     @Override
     public void initialise() {
-        communicator.addListener(this::loadOnlineScores);
+        communicator.addListener(this::getHighScores);
         communicator.send("HISCORES");
     }
 
-    private void loadOnlineScores(String s) {
-        logger.info(s);
+    /*
+     *
+     */
+    private void getHighScores(String score) {
+        logger.info("Getting Highscores");
+        String[] parts = score.split(" ");
+        loadOnlineScores(parts[1]);
+    }
+
+    /*
+     * This method is seperate from the listener as it will be called again if user has a high score
+     */
+    private void loadOnlineScores(String score) {
+        remoteScores.clear();
+        String[] pairs = score.split("\n");
+
+       for (String line : pairs) {
+           String[] parts = line.split(":");
+           remoteScoresList.add(new Pair<>(parts[0], Integer.parseInt(parts[1])));
+       }
     }
 
     @Override
@@ -119,36 +138,63 @@ public class ScoreScene extends BaseScene {
                             scoreText.getStyleClass().add("scorelist");
                             localVBox.getChildren().add(scoreText);
                         }
+
+                        VBox remoteVBox = new VBox();
+                        remoteVBox.setAlignment(Pos.BOTTOM_RIGHT);
+                        root.getChildren().add(remoteVBox);
+                        Text remoteScoreText = new Text("Remote Scores");
+                        remoteScoreText.getStyleClass().add("menuItem");
+                        remoteVBox.getChildren().add(remoteScoreText);
+
+                        for (Pair<String, Integer> pair : remoteScores) {
+
+                            Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
+                            scoreText.getStyleClass().add("scorelist");
+                            remoteVBox.getChildren().add(scoreText);
+                        }
                     });
+                    loaded = true;
                     break; // DO NOT DELETE
                 }
             }
-            sortScores();
-            try {
-                writeScores();
-            } catch (IOException e1) {
-                throw new RuntimeException(e1);
-            }
-            VBox localVBox = new VBox();
-            localVBox.setAlignment(Pos.BOTTOM_LEFT);
-            scorePane.getChildren().add(localVBox);
-            Text localScoreText = new Text("Local Scores");
-            localScoreText.getStyleClass().add("menuItem");
-            localVBox.getChildren().add(localScoreText);
-            int counter = 0;
-            for (Pair<String, Integer> pair : localScores) {
-                if (counter >= 10) {
-                    break;
+            if (!loaded) {
+                for (int i = 0; i <= 10; i++) {
+                    VBox localVBox = new VBox();
+                    localVBox.setAlignment(Pos.BOTTOM_LEFT);
+                    scorePane.getChildren().add(localVBox);
+                    Text localScoreText = new Text("Local Scores");
+                    localScoreText.getStyleClass().add("menuItem");
+                    localVBox.getChildren().add(localScoreText);
+                    int counter = 0;
+                    for (Pair<String, Integer> pair : localScores) {
+                        if (counter >= 10) {
+                            break;
+                        }
+                        Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
+                        scoreText.getStyleClass().add("scorelist");
+                        localVBox.getChildren().add(scoreText);
+                    }
+
+                    VBox remoteVBox = new VBox();
+                    remoteVBox.setAlignment(Pos.BOTTOM_RIGHT);
+                    root.getChildren().add(remoteVBox);
+                    Text remoteScoreText = new Text("Remote Scores");
+                    remoteScoreText.getStyleClass().add("menuItem");
+                    remoteVBox.getChildren().add(remoteScoreText);
+
+                    for (Pair<String, Integer> pair : remoteScores) {
+                        Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
+                        scoreText.getStyleClass().add("scorelist");
+                        remoteVBox.getChildren().add(scoreText);
+                    }
                 }
-                Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
-                scoreText.getStyleClass().add("scorelist");
-                localVBox.getChildren().add(scoreText);
             }
         } catch (IOException e) {
             logger.info("Failed to load the score file");
             throw new RuntimeException(e);
 
         }
+
     }
 
     public void loadScores() throws IOException {
