@@ -12,6 +12,7 @@ import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.game.Game;
+import uk.ac.soton.comp1206.network.Communicator;
 import uk.ac.soton.comp1206.ui.GamePane;
 import uk.ac.soton.comp1206.ui.GameWindow;
 
@@ -27,8 +28,14 @@ public class ScoreScene extends BaseScene {
     private Game game;
     private boolean printable = false;
 
+    final Communicator communicator;
+
     ArrayList<Pair<String,Integer>> localScoresList = new ArrayList<Pair<String,Integer>>();
     SimpleListProperty<Pair<String,Integer>> localScores = new SimpleListProperty<Pair<String,Integer>>(FXCollections.observableList(localScoresList));
+
+
+    SimpleListProperty<Pair<String,Integer>> remoteScores = new SimpleListProperty<>();
+
     /**
      * Create a new scene, passing in the GameWindow the scene will be displayed in
      *
@@ -37,11 +44,17 @@ public class ScoreScene extends BaseScene {
     public ScoreScene(GameWindow gameWindow, Game game) {
         super(gameWindow);
         this.game = game;
+        this.communicator = gameWindow.getCommunicator();
     }
 
     @Override
     public void initialise() {
+        communicator.addListener(this::loadOnlineScores);
+        communicator.send("HISCORES");
+    }
 
+    private void loadOnlineScores(String s) {
+        logger.info(s);
     }
 
     @Override
@@ -110,6 +123,27 @@ public class ScoreScene extends BaseScene {
                     break; // DO NOT DELETE
                 }
             }
+            sortScores();
+            try {
+                writeScores();
+            } catch (IOException e1) {
+                throw new RuntimeException(e1);
+            }
+            VBox localVBox = new VBox();
+            localVBox.setAlignment(Pos.BOTTOM_LEFT);
+            scorePane.getChildren().add(localVBox);
+            Text localScoreText = new Text("Local Scores");
+            localScoreText.getStyleClass().add("menuItem");
+            localVBox.getChildren().add(localScoreText);
+            int counter = 0;
+            for (Pair<String, Integer> pair : localScores) {
+                if (counter >= 10) {
+                    break;
+                }
+                Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
+                scoreText.getStyleClass().add("scorelist");
+                localVBox.getChildren().add(scoreText);
+            }
         } catch (IOException e) {
             logger.info("Failed to load the score file");
             throw new RuntimeException(e);
@@ -118,10 +152,10 @@ public class ScoreScene extends BaseScene {
     }
 
     public void loadScores() throws IOException {
-        String fileName = "coursework/scores.txt";
+        String fileName = "scores.txt";
         File file = new File(fileName);
         if (file.exists()) {
-            FileReader fr = new FileReader("coursework/scores.txt");
+            FileReader fr = new FileReader(fileName);
             BufferedReader br = new BufferedReader(fr);
             String line;
             while ((line = br.readLine()) != null) {
@@ -163,7 +197,7 @@ public class ScoreScene extends BaseScene {
 
     public void writeScores() throws IOException {
         sortScores();
-        String fileName = "coursework/scores.txt";
+        String fileName = "scores.txt";
         File file = new File(fileName);
         if (!file.exists()) {
             file.createNewFile();
@@ -184,6 +218,5 @@ public class ScoreScene extends BaseScene {
             }
         }
     }
-
 
 }

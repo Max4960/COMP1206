@@ -380,10 +380,10 @@ public class ChallengeScene extends BaseScene {
 
     public void getHighScore() throws IOException {
         int prevHighScore;
-        String fileName = "coursework/scores.txt";
+        String fileName = "scores.txt";
         File file = new File(fileName);
         if (file.exists() && file.length() != 0) {
-            FileReader fr = new FileReader("coursework/scores.txt");
+            FileReader fr = new FileReader("scores.txt");
             BufferedReader br = new BufferedReader(fr);
             String line;
             line = br.readLine();

@@ -167,7 +167,7 @@ public class GameWindow {
      * Get the communicator
      * @return communicator
      */
-    //public Communicator getCommunicator() {
-    //    return communicator;
-    //}
+    public Communicator getCommunicator() {
+        return communicator;
+    }
 }

@@ -232,7 +232,7 @@ public class GameBlock extends Canvas {
         AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                opacity -= 0.003; // Works well for timing
+                opacity -= 0.03; // Works well for timing
                 if (opacity <= 0) {
                     paintEmpty();
                     stop();
