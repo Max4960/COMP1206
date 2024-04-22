@@ -55,9 +55,7 @@ public class ScoreScene extends BaseScene {
         logger.info("Score Scene Initialised");
     }
 
-    /*
-     *
-     */
+/*
     private void getHighScores(String score) {
         //remove space
         logger.info("Getting Highscores");
@@ -65,6 +63,7 @@ public class ScoreScene extends BaseScene {
         String[] parts = score.split(" ");
         loadOnlineScores(parts[1]);
     }
+*/
 
     /*
      * This method is seperate from the listener as it will be called again if user has a high score
@@ -111,7 +110,7 @@ public class ScoreScene extends BaseScene {
             loadOnlineScores(scoreEvent);  // scoreEvent is the string recieved
         });
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1.5), event -> {
             Platform.runLater(() -> {
                 spawnScores();
                 loading.setOpacity(0);

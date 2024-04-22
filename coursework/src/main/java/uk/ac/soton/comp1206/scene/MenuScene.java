@@ -102,6 +102,10 @@ public class MenuScene extends BaseScene {
         info.setOnMouseClicked(event -> {
             gameWindow.startInformation();
         });
+
+        quit.setOnMouseClicked(event -> {
+            gameWindow.quit();
+        });
     }
 
     /**

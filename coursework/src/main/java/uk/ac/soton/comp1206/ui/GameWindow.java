@@ -95,6 +95,10 @@ public class GameWindow {
         loadScene(lobbyScene);
     }
 
+    public void quit() {
+        App.getInstance().shutdown();
+    }
+
     public void startInformation() {
         loadScene(new InstructionsScene(this));
     }
