@@ -246,7 +246,9 @@ public class ChallengeScene extends BaseScene {
                 follower.setPiece(game.followingPiece);
                 break;
             case B:
-                gameWindow.startScore();
+                game.lives.set(0);
+                break;
+
             default:
                 break;
         }

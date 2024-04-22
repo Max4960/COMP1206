@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -28,6 +29,8 @@ public class ScoreScene extends BaseScene {
     private Game game;
     private boolean printable = false;
 
+    private boolean highscoresFetch = false;
+
     final Communicator communicator;
 
     ArrayList<Pair<String,Integer>> localScoresList = new ArrayList<Pair<String,Integer>>();
@@ -35,7 +38,7 @@ public class ScoreScene extends BaseScene {
 
 
     ArrayList<Pair<String,Integer>> remoteScoresList = new ArrayList<Pair<String,Integer>>();
-    SimpleListProperty<Pair<String,Integer>> remoteScores = new SimpleListProperty<>(FXCollections.observableList(remoteScoresList));
+    SimpleListProperty<Pair<String,Integer>> remoteScores = new SimpleListProperty<Pair<String, Integer>>(FXCollections.observableList(remoteScoresList));
 
     /**
      * Create a new scene, passing in the GameWindow the scene will be displayed in
@@ -50,14 +53,18 @@ public class ScoreScene extends BaseScene {
 
     @Override
     public void initialise() {
-        communicator.addListener(this::getHighScores);
+        //communicator.addListener(this::getHighScores);
         communicator.send("HISCORES");
+        communicator.addListener((scoreEvent) -> {
+            getHighScores(scoreEvent);
+        });
     }
 
     /*
      *
      */
     private void getHighScores(String score) {
+        //remove space
         logger.info("Getting Highscores");
         String[] parts = score.split(" ");
         loadOnlineScores(parts[1]);
@@ -67,13 +74,18 @@ public class ScoreScene extends BaseScene {
      * This method is seperate from the listener as it will be called again if user has a high score
      */
     private void loadOnlineScores(String score) {
-        remoteScores.clear();
+        //remoteScores.clear();
+        //remoteScoresList.clear();
         String[] pairs = score.split("\n");
 
+
        for (String line : pairs) {
+       //    //logger.info("load" + line);
            String[] parts = line.split(":");
            remoteScoresList.add(new Pair<>(parts[0], Integer.parseInt(parts[1])));
        }
+       //highscoresFetch = true;
+
     }
 
     @Override
@@ -141,13 +153,15 @@ public class ScoreScene extends BaseScene {
 
                         VBox remoteVBox = new VBox();
                         remoteVBox.setAlignment(Pos.BOTTOM_RIGHT);
-                        root.getChildren().add(remoteVBox);
+                        scorePane.getChildren().add(remoteVBox);
                         Text remoteScoreText = new Text("Remote Scores");
                         remoteScoreText.getStyleClass().add("menuItem");
                         remoteVBox.getChildren().add(remoteScoreText);
-
+                        int counter2 = 0;
                         for (Pair<String, Integer> pair : remoteScores) {
-
+                            if (counter2 >= 10) {
+                                break;
+                            }
                             Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
                             scoreText.getStyleClass().add("scorelist");
                             remoteVBox.getChildren().add(scoreText);
@@ -157,11 +171,14 @@ public class ScoreScene extends BaseScene {
                     break; // DO NOT DELETE
                 }
             }
-            if (!loaded) {
-                for (int i = 0; i <= 10; i++) {
+            if (!loaded /*&& highscoresFetch*/) {
+//                logger.info("loaded");
+//                for (int i = 0; i <= 10; i++) {
+                HBox scoresBox = new HBox();
+                scorePane.getChildren().add(scoresBox);
                     VBox localVBox = new VBox();
                     localVBox.setAlignment(Pos.BOTTOM_LEFT);
-                    scorePane.getChildren().add(localVBox);
+                    scoresBox.getChildren().add(localVBox);
                     Text localScoreText = new Text("Local Scores");
                     localScoreText.getStyleClass().add("menuItem");
                     localVBox.getChildren().add(localScoreText);
@@ -175,26 +192,33 @@ public class ScoreScene extends BaseScene {
                         localVBox.getChildren().add(scoreText);
                     }
 
-                    VBox remoteVBox = new VBox();
-                    remoteVBox.setAlignment(Pos.BOTTOM_RIGHT);
-                    root.getChildren().add(remoteVBox);
-                    Text remoteScoreText = new Text("Remote Scores");
-                    remoteScoreText.getStyleClass().add("menuItem");
-                    remoteVBox.getChildren().add(remoteScoreText);
+                VBox localVBox2 = new VBox();
+                localVBox2.setAlignment(Pos.BOTTOM_RIGHT);
+                scoresBox.getChildren().add(localVBox2);
+                Text localScoreText2 = new Text("Remote Scores");
+                localScoreText2.getStyleClass().add("menuItem");
+                localVBox2.getChildren().add(localScoreText2);
 
+//
                     for (Pair<String, Integer> pair : remoteScores) {
+                        logger.info("printing" + pair);
                         Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
                         scoreText.getStyleClass().add("scorelist");
-                        remoteVBox.getChildren().add(scoreText);
+                        localVBox2.getChildren().add(scoreText);
                     }
+
                 }
-            }
+
         } catch (IOException e) {
             logger.info("Failed to load the score file");
             throw new RuntimeException(e);
 
         }
 
+    }
+
+    private void spawnRemoteScores() {
+        //VBox remoteVBox =
     }
 
     public void loadScores() throws IOException {
