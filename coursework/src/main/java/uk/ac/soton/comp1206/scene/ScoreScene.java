@@ -31,9 +31,6 @@ public class ScoreScene extends BaseScene {
 
     private static final Logger logger = LogManager.getLogger(ScoreScene.class);
     private Game game;
-    private boolean printable = false;
-
-    private boolean highscoresFetch = false;
 
     final Communicator communicator;
     StackPane scorePane = new StackPane();
@@ -55,12 +52,7 @@ public class ScoreScene extends BaseScene {
 
     @Override
     public void initialise() {
-//        communicator.send("HISCORES");
-//        communicator.addListener((scoreEvent) -> {
-//            getHighScores(scoreEvent);
-//
-//        });
-
+        logger.info("Score Scene Initialised");
     }
 
     /*
@@ -78,19 +70,27 @@ public class ScoreScene extends BaseScene {
      * This method is seperate from the listener as it will be called again if user has a high score
      */
     private void loadOnlineScores(String score) {
-        String[] pairs = score.split("\n");
+        logger.info("Fetching High Scores");
+        // Removing Space
+        String[] parts = score.split(" ");
+        String data = parts[1];
+        // Splitting into lines
+        String[] pairs = data.split("\n");
         remoteScores = new SimpleListProperty<>();
         ArrayList<Pair<String,Integer>> remoteScoresList = new ArrayList<Pair<String,Integer>>();
         for (String line : pairs) {
-           String[] parts = line.split(":");
-           remoteScoresList.add(new Pair<>(parts[0], Integer.parseInt(parts[1])));
+            // Separating name and scores
+           String[] halves = line.split(":");
+           remoteScoresList.add(new Pair<>(halves[0], Integer.parseInt(halves[1])));
        }
+        // Setting remoteScores
         remoteScores.set(FXCollections.observableList(remoteScoresList));
         logger.info("Remote Sores Size: " + remoteScores.toArray().length);
     }
 
     @Override
     public void build() {
+        logger.info("Building");
         root = new GamePane(gameWindow.getWidth(),gameWindow.getHeight());
         scorePane.setMaxWidth(gameWindow.getWidth());
         scorePane.setMaxHeight(gameWindow.getHeight());
@@ -107,9 +107,8 @@ public class ScoreScene extends BaseScene {
 
         communicator.send("HISCORES");
 
-
         communicator.addListener((scoreEvent) -> {
-            getHighScores(scoreEvent);
+            loadOnlineScores(scoreEvent);  // scoreEvent is the string recieved
         });
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
@@ -208,29 +207,24 @@ public class ScoreScene extends BaseScene {
                     localVBox.getChildren().add(scoreText);
                 }
 
-                VBox localVBox2 = new VBox();
-                localVBox2.setAlignment(Pos.BOTTOM_RIGHT);
-                scorePane.getChildren().add(localVBox2);
+                VBox remoteVBox = new VBox();
+                remoteVBox.setAlignment(Pos.BOTTOM_RIGHT);
+                scorePane.getChildren().add(remoteVBox);
                 Text localScoreText2 = new Text("Remote Scores");
                 localScoreText2.getStyleClass().add("menuItem");
-                localVBox2.getChildren().add(localScoreText2);
-
+                remoteVBox.getChildren().add(localScoreText2);
 
                 for (Pair<String, Integer> pair : remoteScores) {
-                    logger.info("printing" + pair);
                     Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
                     scoreText.getStyleClass().add("scorelist");
-                    localVBox2.getChildren().add(scoreText);
+                    remoteVBox.getChildren().add(scoreText);
                 }
-
             }
-
         } catch (IOException e) {
             logger.info("Failed to load the score file");
             throw new RuntimeException(e);
-
         }
-        return null;
+        return null;    // This should never be executed
     }
 
     public void loadScores() throws IOException {
@@ -285,10 +279,10 @@ public class ScoreScene extends BaseScene {
             file.createNewFile();
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
                 for (int i = 0; i < 10; i++) {
-                    writer.write("NULL:0");
+                    writer.write("NULL:0\n");
                 }
             } catch (IOException e) {
-                logger.info("Failed to create scores file");
+                logger.info("Write scores failed to create scores file");
             }
         } else {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
