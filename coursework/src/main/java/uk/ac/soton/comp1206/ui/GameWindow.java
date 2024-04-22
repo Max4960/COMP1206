@@ -31,6 +31,7 @@ public class GameWindow {
     private BaseScene currentScene;
     private Scene scene;
     private ChallengeScene challengeScene;
+    private LobbyScene lobbyScene;
 
     final Communicator communicator;
 
@@ -89,6 +90,11 @@ public class GameWindow {
         loadScene(challengeScene);
     }
 
+    public void startLobby() {
+        lobbyScene = new LobbyScene(this);
+        loadScene(lobbyScene);
+    }
+
     public void startInformation() {
         loadScene(new InstructionsScene(this));
     }
@@ -136,7 +142,7 @@ public class GameWindow {
      */
     public void cleanup() {
         logger.info("Clearing up previous scene");
-        //communicator.clearListeners();
+        communicator.clearListeners();
     }
 
     /**

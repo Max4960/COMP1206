@@ -95,6 +95,10 @@ public class MenuScene extends BaseScene {
             gameWindow.startChallenge();
         });
 
+        multi.setOnMouseClicked(event -> {
+            gameWindow.startLobby();
+        });
+
         info.setOnMouseClicked(event -> {
             gameWindow.startInformation();
         });
