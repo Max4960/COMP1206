@@ -1,5 +1,8 @@
 package uk.ac.soton.comp1206.scene;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
@@ -9,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,10 +22,10 @@ import uk.ac.soton.comp1206.ui.GamePane;
 import uk.ac.soton.comp1206.ui.GameWindow;
 
 import java.io.*;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Stack;
 
 public class ScoreScene extends BaseScene {
 
@@ -32,14 +36,12 @@ public class ScoreScene extends BaseScene {
     private boolean highscoresFetch = false;
 
     final Communicator communicator;
+    StackPane scorePane = new StackPane();
 
     ArrayList<Pair<String,Integer>> localScoresList = new ArrayList<Pair<String,Integer>>();
     SimpleListProperty<Pair<String,Integer>> localScores = new SimpleListProperty<Pair<String,Integer>>(FXCollections.observableList(localScoresList));
 
-
-    ArrayList<Pair<String,Integer>> remoteScoresList = new ArrayList<Pair<String,Integer>>();
-    SimpleListProperty<Pair<String,Integer>> remoteScores = new SimpleListProperty<Pair<String, Integer>>(FXCollections.observableList(remoteScoresList));
-
+    SimpleListProperty<Pair<String,Integer>> remoteScores;
     /**
      * Create a new scene, passing in the GameWindow the scene will be displayed in
      *
@@ -53,11 +55,12 @@ public class ScoreScene extends BaseScene {
 
     @Override
     public void initialise() {
-        //communicator.addListener(this::getHighScores);
-        communicator.send("HISCORES");
-        communicator.addListener((scoreEvent) -> {
-            getHighScores(scoreEvent);
-        });
+//        communicator.send("HISCORES");
+//        communicator.addListener((scoreEvent) -> {
+//            getHighScores(scoreEvent);
+//
+//        });
+
     }
 
     /*
@@ -66,6 +69,7 @@ public class ScoreScene extends BaseScene {
     private void getHighScores(String score) {
         //remove space
         logger.info("Getting Highscores");
+        logger.info(score);
         String[] parts = score.split(" ");
         loadOnlineScores(parts[1]);
     }
@@ -74,41 +78,50 @@ public class ScoreScene extends BaseScene {
      * This method is seperate from the listener as it will be called again if user has a high score
      */
     private void loadOnlineScores(String score) {
-        //remoteScores.clear();
-        //remoteScoresList.clear();
         String[] pairs = score.split("\n");
-
-
-       for (String line : pairs) {
-       //    //logger.info("load" + line);
+        remoteScores = new SimpleListProperty<>();
+        ArrayList<Pair<String,Integer>> remoteScoresList = new ArrayList<Pair<String,Integer>>();
+        for (String line : pairs) {
            String[] parts = line.split(":");
            remoteScoresList.add(new Pair<>(parts[0], Integer.parseInt(parts[1])));
        }
-       //highscoresFetch = true;
-
+        remoteScores.set(FXCollections.observableList(remoteScoresList));
+        logger.info("Remote Sores Size: " + remoteScores.toArray().length);
     }
 
     @Override
     public void build() {
         root = new GamePane(gameWindow.getWidth(),gameWindow.getHeight());
-
-        var scorePane = new StackPane();
         scorePane.setMaxWidth(gameWindow.getWidth());
         scorePane.setMaxHeight(gameWindow.getHeight());
         scorePane.getStyleClass().add("info-background");
         root.getChildren().add(scorePane);
         scorePane.setAlignment(Pos.TOP_CENTER);
-
         Text gameOverText = new Text("GAME OVER");
         gameOverText.getStyleClass().add("bigtitle");
 
+        communicator.send("HISCORES");
         scorePane.getChildren().add(gameOverText);
 
+        communicator.addListener((scoreEvent) -> {
+            getHighScores(scoreEvent);
+        });
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
+            Platform.runLater(() -> {
+                spawnScores();
+            });
+        }));
+        timeline.play();
+    }
+
+    private Runnable spawnScores() {
         boolean loaded = false;
         try {
             loadScores();
             for (Pair<String,Integer> score : localScoresList) {
                 if (score.getValue() < game.score.get()) {
+                    loaded = true;
                     VBox getPlayerInfoBox = new VBox();
                     getPlayerInfoBox.setAlignment(Pos.CENTER);
                     scorePane.getChildren().add(getPlayerInfoBox);
@@ -167,30 +180,27 @@ public class ScoreScene extends BaseScene {
                             remoteVBox.getChildren().add(scoreText);
                         }
                     });
-                    loaded = true;
                     break; // DO NOT DELETE
                 }
             }
-            if (!loaded /*&& highscoresFetch*/) {
-//                logger.info("loaded");
-//                for (int i = 0; i <= 10; i++) {
+            if (!loaded) {
                 HBox scoresBox = new HBox();
                 scorePane.getChildren().add(scoresBox);
-                    VBox localVBox = new VBox();
-                    localVBox.setAlignment(Pos.BOTTOM_LEFT);
-                    scoresBox.getChildren().add(localVBox);
-                    Text localScoreText = new Text("Local Scores");
-                    localScoreText.getStyleClass().add("menuItem");
-                    localVBox.getChildren().add(localScoreText);
-                    int counter = 0;
-                    for (Pair<String, Integer> pair : localScores) {
-                        if (counter >= 10) {
-                            break;
-                        }
-                        Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
-                        scoreText.getStyleClass().add("scorelist");
-                        localVBox.getChildren().add(scoreText);
+                VBox localVBox = new VBox();
+                localVBox.setAlignment(Pos.BOTTOM_LEFT);
+                scoresBox.getChildren().add(localVBox);
+                Text localScoreText = new Text("Local Scores");
+                localScoreText.getStyleClass().add("menuItem");
+                localVBox.getChildren().add(localScoreText);
+                int counter = 0;
+                for (Pair<String, Integer> pair : localScores) {
+                    if (counter >= 10) {
+                        break;
                     }
+                    Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
+                    scoreText.getStyleClass().add("scorelist");
+                    localVBox.getChildren().add(scoreText);
+                }
 
                 VBox localVBox2 = new VBox();
                 localVBox2.setAlignment(Pos.BOTTOM_RIGHT);
@@ -199,26 +209,22 @@ public class ScoreScene extends BaseScene {
                 localScoreText2.getStyleClass().add("menuItem");
                 localVBox2.getChildren().add(localScoreText2);
 
-//
-                    for (Pair<String, Integer> pair : remoteScores) {
-                        logger.info("printing" + pair);
-                        Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
-                        scoreText.getStyleClass().add("scorelist");
-                        localVBox2.getChildren().add(scoreText);
-                    }
 
+                for (Pair<String, Integer> pair : remoteScores) {
+                    logger.info("printing" + pair);
+                    Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
+                    scoreText.getStyleClass().add("scorelist");
+                    localVBox2.getChildren().add(scoreText);
                 }
+
+            }
 
         } catch (IOException e) {
             logger.info("Failed to load the score file");
             throw new RuntimeException(e);
 
         }
-
-    }
-
-    private void spawnRemoteScores() {
-        //VBox remoteVBox =
+        return null;
     }
 
     public void loadScores() throws IOException {
@@ -237,7 +243,7 @@ public class ScoreScene extends BaseScene {
             file.createNewFile();
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
                 for (int i = 0; i < 10; i++) {
-                    writer.write("NULL:0");
+                    writer.write("NULL:0\n");
                 }
             } catch (IOException e) {
                 logger.info("Failed to create scores file");
