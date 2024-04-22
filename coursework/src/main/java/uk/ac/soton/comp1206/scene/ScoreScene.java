@@ -99,9 +99,14 @@ public class ScoreScene extends BaseScene {
         scorePane.setAlignment(Pos.TOP_CENTER);
         Text gameOverText = new Text("GAME OVER");
         gameOverText.getStyleClass().add("bigtitle");
+        scorePane.getChildren().add(gameOverText);
+
+        Text loading = new Text("Loading...");
+        loading.getStyleClass().add("menuItem");
+        scorePane.getChildren().add(loading);
 
         communicator.send("HISCORES");
-        scorePane.getChildren().add(gameOverText);
+
 
         communicator.addListener((scoreEvent) -> {
             getHighScores(scoreEvent);
@@ -110,6 +115,7 @@ public class ScoreScene extends BaseScene {
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
             Platform.runLater(() -> {
                 spawnScores();
+                loading.setOpacity(0);
             });
         }));
         timeline.play();
@@ -188,7 +194,7 @@ public class ScoreScene extends BaseScene {
                 scorePane.getChildren().add(scoresBox);
                 VBox localVBox = new VBox();
                 localVBox.setAlignment(Pos.BOTTOM_LEFT);
-                scoresBox.getChildren().add(localVBox);
+                scorePane.getChildren().add(localVBox);
                 Text localScoreText = new Text("Local Scores");
                 localScoreText.getStyleClass().add("menuItem");
                 localVBox.getChildren().add(localScoreText);
@@ -204,7 +210,7 @@ public class ScoreScene extends BaseScene {
 
                 VBox localVBox2 = new VBox();
                 localVBox2.setAlignment(Pos.BOTTOM_RIGHT);
-                scoresBox.getChildren().add(localVBox2);
+                scorePane.getChildren().add(localVBox2);
                 Text localScoreText2 = new Text("Remote Scores");
                 localScoreText2.getStyleClass().add("menuItem");
                 localVBox2.getChildren().add(localScoreText2);
