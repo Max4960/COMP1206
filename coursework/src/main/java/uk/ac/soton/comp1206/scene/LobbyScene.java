@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -31,6 +32,7 @@ public class LobbyScene extends BaseScene {
     VBox lobbyBox = new VBox();
 
     SimpleListProperty<String> lobbyNames;
+    ListView<String> lobbyListViewer = new ListView<>();
 
 
     /**
@@ -86,19 +88,12 @@ public class LobbyScene extends BaseScene {
         Text lobbyText = new Text("Active Lobbies:");
         lobbyText.getStyleClass().add("heading");
         lobbyBox.getChildren().add(lobbyText);
+        lobbyBox.getChildren().add(lobbyListViewer);
     }
 
     public void loadLobbies() {
         logger.info("Found (" + lobbyNames.toArray().length + ") Active Lobbies");
-        lobbyBox.getChildren().clear();
-        Text lobbyText = new Text("Active Lobbies:");
-        lobbyText.getStyleClass().add("heading");
-        lobbyBox.getChildren().add(lobbyText);
-        for (String string : lobbyNames) {
-            //TODO: Change this implementation
-            Text name = new Text(string);
-            name.getStyleClass().add("menuItem");
-            lobbyBox.getChildren().add(name);
-        }
+        lobbyListViewer.setItems(lobbyNames);
+
     }
 }

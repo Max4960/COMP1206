@@ -162,7 +162,6 @@ public class GameBlock extends Canvas {
         gc.setGlobalAlpha(0.5);
         gc.setFill(Color.WHITE);
         gc.fillPolygon(new double[]{0, 0, width}, new double[]{height,0,0}, 3);
-        //gc.fillRect(0,0,width/2,height/2);
 
         //Border
         gc.setStroke(Color.WHITE);
@@ -180,7 +179,7 @@ public class GameBlock extends Canvas {
     }
 
     public void highlight(boolean empty) {
-        if (this.gameBoard.getClass() == GameBoard.class) {
+        if (this.gameBoard.getClass() == GameBoard.class) { // Stops pieceboard highlights
             if (empty) {
                 paintEmpty();
             } else {
@@ -232,7 +231,7 @@ public class GameBlock extends Canvas {
         AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                opacity -= 0.03; // Works well for timing
+                opacity -= 0.01; // Works well for timing
                 if (opacity <= 0) {
                     paintEmpty();
                     stop();

@@ -55,15 +55,6 @@ public class ScoreScene extends BaseScene {
         logger.info("Score Scene Initialised");
     }
 
-/*
-    private void getHighScores(String score) {
-        //remove space
-        logger.info("Getting Highscores");
-        logger.info(score);
-        String[] parts = score.split(" ");
-        loadOnlineScores(parts[1]);
-    }
-*/
 
     /*
      * This method is seperate from the listener as it will be called again if user has a high score
