@@ -4,14 +4,21 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
+import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.network.Communicator;
 import uk.ac.soton.comp1206.ui.GamePane;
 import uk.ac.soton.comp1206.ui.GameWindow;
 
+import java.util.ArrayList;
 import java.util.Timer;
 
 public class LobbyScene extends BaseScene {
@@ -19,6 +26,10 @@ public class LobbyScene extends BaseScene {
     private Timer serverTimer;
     final Communicator communicator;
     private static final Logger logger = LogManager.getLogger(LobbyScene.class);
+    private StackPane lobbyPane = new StackPane();
+    VBox lobbyBox = new VBox();
+
+    SimpleListProperty<String> lobbyNames;
 
 
     /**
@@ -33,9 +44,13 @@ public class LobbyScene extends BaseScene {
 
     @Override
     public void initialise() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1.5), event -> {
+        // Checking lobbies every 5 seconds
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
             communicator.send("LIST");
             communicator.addListener(this::fetchList);
+            Platform.runLater(() -> {
+                loadLobbies();
+            });
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -43,21 +58,46 @@ public class LobbyScene extends BaseScene {
     }
 
     private void fetchList(String message) {
-        logger.info(message);
+        //logger.info(message);
+        String[] parts = message.split(" ");
+        String data = parts[1];
+        String[] lobbies = data.split("\n");
+        lobbyNames = new SimpleListProperty<>();
+        ArrayList<String> lobbyList = new ArrayList<String>();
+        for (String lobby : lobbies) {
+            logger.info("Lobby: " + lobby);
+            lobbyList.add(lobby);
+        }
+        lobbyNames.set(FXCollections.observableList(lobbyList));
     }
 
-    public void fetchList() {
-
-    }
 
     @Override
     public void build() {
         root = new GamePane(gameWindow.getWidth(),gameWindow.getHeight());
 
-        var menuPane = new StackPane();
-        menuPane.setMaxWidth(gameWindow.getWidth());
-        menuPane.setMaxHeight(gameWindow.getHeight());
-        menuPane.getStyleClass().add("menu-background");
-        root.getChildren().add(menuPane);
+        lobbyPane.setMaxWidth(gameWindow.getWidth());
+        lobbyPane.setMaxHeight(gameWindow.getHeight());
+        lobbyPane.getStyleClass().add("menu-background");
+        root.getChildren().add(lobbyPane);
+
+        lobbyBox.setAlignment(Pos.TOP_LEFT);
+        lobbyPane.getChildren().add(lobbyBox);
+        Text lobbyText = new Text("Active Lobbies:");
+        lobbyText.getStyleClass().add("menuItem");
+        lobbyBox.getChildren().add(lobbyText);
+    }
+
+    public void loadLobbies() {
+        logger.info(lobbyNames.toArray().length);
+        lobbyBox.getChildren().clear();
+        Text lobbyText = new Text("Active Lobbies:");
+        lobbyText.getStyleClass().add("heading");
+        lobbyBox.getChildren().add(lobbyText);
+        for (String string : lobbyNames) {
+            Text name = new Text(string);
+            name.getStyleClass().add("menuItem");
+            lobbyBox.getChildren().add(name);
+        }
     }
 }
