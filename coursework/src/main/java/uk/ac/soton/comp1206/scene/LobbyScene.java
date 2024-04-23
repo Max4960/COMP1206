@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -45,7 +46,7 @@ public class LobbyScene extends BaseScene {
     @Override
     public void initialise() {
         // Checking lobbies every 5 seconds
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             communicator.send("LIST");
             communicator.addListener(this::fetchList);
             Platform.runLater(() -> {
@@ -65,7 +66,6 @@ public class LobbyScene extends BaseScene {
         lobbyNames = new SimpleListProperty<>();
         ArrayList<String> lobbyList = new ArrayList<String>();
         for (String lobby : lobbies) {
-            logger.info("Lobby: " + lobby);
             lobbyList.add(lobby);
         }
         lobbyNames.set(FXCollections.observableList(lobbyList));
@@ -84,17 +84,18 @@ public class LobbyScene extends BaseScene {
         lobbyBox.setAlignment(Pos.TOP_LEFT);
         lobbyPane.getChildren().add(lobbyBox);
         Text lobbyText = new Text("Active Lobbies:");
-        lobbyText.getStyleClass().add("menuItem");
+        lobbyText.getStyleClass().add("heading");
         lobbyBox.getChildren().add(lobbyText);
     }
 
     public void loadLobbies() {
-        logger.info(lobbyNames.toArray().length);
+        logger.info("Found (" + lobbyNames.toArray().length + ") Active Lobbies");
         lobbyBox.getChildren().clear();
         Text lobbyText = new Text("Active Lobbies:");
         lobbyText.getStyleClass().add("heading");
         lobbyBox.getChildren().add(lobbyText);
         for (String string : lobbyNames) {
+            //TODO: Change this implementation
             Text name = new Text(string);
             name.getStyleClass().add("menuItem");
             lobbyBox.getChildren().add(name);
