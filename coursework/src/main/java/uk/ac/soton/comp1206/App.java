@@ -55,10 +55,10 @@ public class App extends Application {
     public void openGame() {
         logger.info("Opening game window");
 
-        //Change the width and height in this class to change the base rendering resolution for all game parts
+        // Change the width and height in this class to change the base rendering resolution for all game parts
         var gameWindow = new GameWindow(stage,width,height);
 
-        //Display the GameWindow
+        // Display the GameWindow
         stage.show();
     }
 
