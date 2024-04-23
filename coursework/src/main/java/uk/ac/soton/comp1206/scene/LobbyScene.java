@@ -38,6 +38,8 @@ public class LobbyScene extends BaseScene {
 
     SimpleListProperty<String> lobbyNames;
     ListView<String> lobbyListViewer = new ListView<>();
+    BorderPane gameInfoBox = new BorderPane();
+
 
 
     /**
@@ -138,16 +140,14 @@ public class LobbyScene extends BaseScene {
         lobbyPane.setMaxHeight(gameWindow.getHeight());
         lobbyPane.getStyleClass().add("menu-background");
         root.getChildren().add(lobbyPane);
+        BorderPane border = new BorderPane();
+        lobbyPane.getChildren().add(border);
 
-        //chatBox.setAlignment(Pos.TOP_RIGHT);
-        //chatBox.setMaxWidth(0.4*gameWindow.getWidth());
-        //chatBox.setStyle("-fx-background-color: black;");
-
-        BorderPane gameInfoBox = new BorderPane();
-        gameInfoBox.setMaxWidth(0.4*gameWindow.getWidth());
-        gameInfoBox.setAlignment(root, Pos.CENTER_RIGHT);
+        gameInfoBox.setPrefWidth(0.5*gameWindow.getWidth());// Stops it being too small
+        gameInfoBox.setMaxWidth(0.5*gameWindow.getWidth());
+        border.setRight(gameInfoBox);
         gameInfoBox.getStyleClass().add("gameBox");
-        lobbyPane.getChildren().add(gameInfoBox);
+        //gameInfoBox.setVisible(false);
 
         lobbyBox.setAlignment(Pos.TOP_LEFT);
         lobbyPane.getChildren().add(lobbyBox);
