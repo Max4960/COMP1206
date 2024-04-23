@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -33,6 +34,7 @@ public class LobbyScene extends BaseScene {
     private StackPane lobbyPane = new StackPane();
     private boolean inLobby = false;
     VBox lobbyBox = new VBox();
+    VBox chatBox = new VBox();
 
     SimpleListProperty<String> lobbyNames;
     ListView<String> lobbyListViewer = new ListView<>();
@@ -98,6 +100,10 @@ public class LobbyScene extends BaseScene {
 
         switch (command) {
             case "JOIN":
+                if (!inLobby) {
+                    inLobby = true;
+                    joinLobby(info);
+                }
                 break;
             case "HOST":
                 break;
@@ -133,6 +139,16 @@ public class LobbyScene extends BaseScene {
         lobbyPane.getStyleClass().add("menu-background");
         root.getChildren().add(lobbyPane);
 
+        //chatBox.setAlignment(Pos.TOP_RIGHT);
+        //chatBox.setMaxWidth(0.4*gameWindow.getWidth());
+        //chatBox.setStyle("-fx-background-color: black;");
+
+        BorderPane gameInfoBox = new BorderPane();
+        gameInfoBox.setMaxWidth(0.4*gameWindow.getWidth());
+        gameInfoBox.setAlignment(root, Pos.CENTER_RIGHT);
+        gameInfoBox.getStyleClass().add("gameBox");
+        lobbyPane.getChildren().add(gameInfoBox);
+
         lobbyBox.setAlignment(Pos.TOP_LEFT);
         lobbyPane.getChildren().add(lobbyBox);
         Text lobbyText = new Text("Active Lobbies:");
@@ -158,7 +174,8 @@ public class LobbyScene extends BaseScene {
 
         lobbyListViewer.setOnMouseClicked(event -> {
             String selectedLobby = lobbyListViewer.getSelectionModel().getSelectedItem();
-            joinLobby(selectedLobby);
+            //joinLobby(selectedLobby);
+            communicator.send("JOIN " + selectedLobby);
         });
     }
 
@@ -169,7 +186,7 @@ public class LobbyScene extends BaseScene {
     public void joinLobby(String lobby) {
         inLobby = true;
         logger.info("Joining: " + lobby);
-        communicator.send("JOIN " + lobby);
+
     }
 
     public void loadLobbies() {
