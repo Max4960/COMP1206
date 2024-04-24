@@ -11,10 +11,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -36,9 +38,10 @@ public class LobbyScene extends BaseScene {
     VBox lobbyBox = new VBox();
     VBox chatBox = new VBox();
 
-    SimpleListProperty<String> lobbyNames;
+    SimpleListProperty<String> lobbyNames = new SimpleListProperty<String>(FXCollections.observableArrayList());
     ListView<String> lobbyListViewer = new ListView<>();
     BorderPane gameInfoBox = new BorderPane();
+    TextFlow textflow = new TextFlow();
 
 
 
@@ -94,6 +97,11 @@ public class LobbyScene extends BaseScene {
     private void receiver(String message) {
         logger.info("Receiver received " + message);
         String[] parts = message.split(" ");
+
+        if (parts.length < 2) {
+            return;
+        }
+
         String command = parts[0];
         String info = parts[1];
 
@@ -123,6 +131,7 @@ public class LobbyScene extends BaseScene {
             case "USERS":
                 break;
             case "MSG":
+                showMessage(info);
                 break;
             case "ERROR":
                 break;
@@ -143,11 +152,49 @@ public class LobbyScene extends BaseScene {
         BorderPane border = new BorderPane();
         lobbyPane.getChildren().add(border);
 
-        gameInfoBox.setPrefWidth(0.5*gameWindow.getWidth());// Stops it being too small
-        gameInfoBox.setMaxWidth(0.5*gameWindow.getWidth());
+        //gameInfoBox.setPrefWidth(0.5*gameWindow.getWidth());// Stops it being too small
+        //gameInfoBox.setMaxWidth(0.5*gameWindow.getWidth());
+        //gameInfoBox.setPrefHeight(0.8*gameWindow.getHeight());
+        //gameInfoBox.setMaxHeight(0.8*gameWindow.getHeight());
+
+        VBox chatBox = new VBox();
+        //chatBox.setAlignment(Pos.TOP_RIGHT);
+        chatBox.getStyleClass().add("gameBox");
+        chatBox.setMaxWidth(0.55*gameWindow.getWidth());
+        chatBox.setMaxHeight(0.85*gameWindow.getHeight());
+
+
+
+        lobbyPane.getChildren().add(chatBox);
+        lobbyPane.setAlignment(chatBox, Pos.TOP_RIGHT);
+
+        HBox messageBox = new HBox();
+
+        Text chatTextHeading = new Text("Game Chat:");
+        chatTextHeading.getStyleClass().add("heading");
+        chatBox.getChildren().add(chatTextHeading);
+
+        StackPane textPane = new StackPane();
+        textPane.setPrefHeight(gameWindow.getHeight()*0.5);
+        textPane.setPrefWidth(gameWindow.getWidth()*0.4);
+        textPane.getStyleClass().add("gameBox");
+
+        textPane.getChildren().add(textflow);
+
+        chatBox.getChildren().add(textPane);
+
+        HBox messageInputContainer = new HBox();
+        TextField messageField = new TextField();
+        Button sendMessageButton = new Button("Send");
+        messageInputContainer.getChildren().addAll(messageField, sendMessageButton);
+        chatBox.getChildren().add(messageInputContainer);
+
+
+        gameInfoBox.setBottom(messageBox);
+
         border.setRight(gameInfoBox);
         gameInfoBox.getStyleClass().add("gameBox");
-        //gameInfoBox.setVisible(false);
+        gameInfoBox.setVisible(false);
 
         lobbyBox.setAlignment(Pos.TOP_LEFT);
         lobbyPane.getChildren().add(lobbyBox);
@@ -179,12 +226,29 @@ public class LobbyScene extends BaseScene {
         });
     }
 
+    public void showGameInfoBox(boolean toggle) {
+        gameInfoBox.setVisible(toggle);
+    }
+
+    public void showMessage(String message) {
+        String parts[] = message.split(":");
+        String username = "[" +  parts[0] + "]";
+        String contents = ">" + parts[1];
+        Text send = new Text(username + contents);
+        send.getStyleClass().add("messages");
+        textflow.getChildren().add(send);
+
+    }
+
     public void createLobby(String lobbyName) {
         communicator.send("CREATE " + lobbyName);
+        lobbyNames.add(lobbyName);
+        loadLobbies();
     }
 
     public void joinLobby(String lobby) {
         inLobby = true;
+        showGameInfoBox(true);
         logger.info("Joining: " + lobby);
 
     }
