@@ -47,7 +47,7 @@ public class Game {
     /**
      * The next piece listener
      */
-    private NextPieceListener nextPieceListener;
+    public NextPieceListener nextPieceListener;
 
     /**
      * The line cleared listener

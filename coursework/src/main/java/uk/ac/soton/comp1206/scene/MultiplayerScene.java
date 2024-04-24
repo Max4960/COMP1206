@@ -24,6 +24,7 @@ import uk.ac.soton.comp1206.component.GameBoard;
 import uk.ac.soton.comp1206.component.PieceBoard;
 import uk.ac.soton.comp1206.game.Game;
 import uk.ac.soton.comp1206.game.GamePiece;
+import uk.ac.soton.comp1206.game.MultiplayerGame;
 import uk.ac.soton.comp1206.network.Communicator;
 import uk.ac.soton.comp1206.ui.GamePane;
 import uk.ac.soton.comp1206.ui.GameWindow;
@@ -340,7 +341,7 @@ public class MultiplayerScene extends ChallengeScene {
         logger.info("Starting a new challenge");
 
         //Start new game
-        game = new Game(5, 5);
+        game = new MultiplayerGame(5, 5, communicator);
 
     }
 
