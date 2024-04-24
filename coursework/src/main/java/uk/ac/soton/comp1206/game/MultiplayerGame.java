@@ -3,16 +3,18 @@ package uk.ac.soton.comp1206.game;
 import javafx.application.Platform;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import uk.ac.soton.comp1206.component.GameBlock;
 import uk.ac.soton.comp1206.network.Communicator;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Queue;
 
 public class MultiplayerGame extends Game {
 
     Communicator communicator;
-    private static final Logger logger = LogManager.getLogger(Game.class);
-    private ArrayList<GamePiece> pieces = new ArrayList<GamePiece>();
+    private static final Logger logger = LogManager.getLogger(MultiplayerGame.class);
+    private Queue<GamePiece> pieces = new LinkedList<>();
     int pieceTracker = 0;
 
     /**
@@ -39,7 +41,7 @@ public class MultiplayerGame extends Game {
 
         switch (command) {
             case "PIECE":
-                pieceHandler(Integer.parseInt(info));
+                spawnPiece(Integer.parseInt(info));
             case "SCORE":
                 break;
             case "SCORES":
@@ -53,35 +55,50 @@ public class MultiplayerGame extends Game {
         }
     }
 
-    private void pieceHandler(int value) {
+    public void spawnPiece(int value) {
         GamePiece piece = GamePiece.createPiece(value);
         pieces.add(piece);
+        logger.info(pieces);
+    }
 
-        if (pieceTracker == 0) {
-            spawnPiece();
-            nextPiece();
-            pieceTracker++;
-        } else if (pieceTracker <= 3) {
-            communicator.send("PIECE");
-            followingPiece = pieces.get(0);
-            pieces.remove(0);
-            nextPiece();
-            pieceTracker++;
+
+    public void nextPiece() {
+        currentPiece = followingPiece;
+        followingPiece = pieces.remove();
+        nextPieceListener.nextPiece(currentPiece, followingPiece);
+        communicator.send("PIECE");
+    }
+
+    public void gameLoop() {
+        int currentLife = lives.get();
+        if (currentLife > 0) {
+            currentLife--;
+            lives.set(currentLife);
+            this.nextPiece();
+            loop();
+            manageTimer();
+            logger.info("New Game Loop Started");
+        } else {
+            logger.info("Game Over");
+            showScoreListener.gameOver();
         }
     }
 
-    private void nextPiece() {
-        currentPiece = followingPiece;
-        followingPiece = spawnPiece();
-        nextPieceListener.nextPiece(currentPiece, followingPiece);
+    public void blockClicked(GameBlock gameBlock) {
+        // Get the position of this block
+        int x = gameBlock.getX();
+        int y = gameBlock.getY();
+        // Check that a piece can be placed
+        if (getGrid().canPlayPiece(currentPiece, x, y)) {
+            // Piece placement
+            grid.playPiece(currentPiece, x, y);
+            loop.cancel();
+            manageTimer();
+            afterPiece();
+            this.nextPiece();
+        }
     }
 
-    private GamePiece spawnPiece() {
-        communicator.send("PIECE");
-        GamePiece first = pieces.get(0);
-        pieces.remove(0);
-        return first;
-    }
 
     @Override
     public void initialiseGame() {
@@ -91,8 +108,9 @@ public class MultiplayerGame extends Game {
             });
         });
 
-        for (int i = 0; i < 3; i++) {   // Generating first few pieces
-            communicator.send("PIECE");
-        }
+        communicator.send("PIECE");
+        communicator.send("PIECE");
+        communicator.send("PIECE");
+
     }
 }
