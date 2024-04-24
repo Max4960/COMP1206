@@ -97,6 +97,7 @@ public class LobbyScene extends BaseScene {
     private void receiver(String message) {
         logger.info("Receiver received " + message);
         String[] parts = message.split(" ");
+        String[] data = message.split(" ", 2);
 
         if (parts.length < 2) {
             return;
@@ -131,7 +132,7 @@ public class LobbyScene extends BaseScene {
             case "USERS":
                 break;
             case "MSG":
-                showMessage(info);
+                showMessage(data[1]);
                 break;
             case "ERROR":
                 break;
@@ -150,17 +151,8 @@ public class LobbyScene extends BaseScene {
         lobbyPane.getStyleClass().add("menu-background");
         root.getChildren().add(lobbyPane);
 
-        //gameInfoBox.setPrefWidth(0.5*gameWindow.getWidth());// Stops it being too small
-        //gameInfoBox.setMaxWidth(0.5*gameWindow.getWidth());
-        //gameInfoBox.setPrefHeight(0.8*gameWindow.getHeight());
-        //gameInfoBox.setMaxHeight(0.8*gameWindow.getHeight());
-
-        //chatBox.setAlignment(Pos.TOP_RIGHT);
-        //chatBox.getStyleClass().add("gameBox");
         chatBox.setMaxWidth(0.55*gameWindow.getWidth());
         chatBox.setMaxHeight(0.85*gameWindow.getHeight());
-
-
 
         lobbyPane.getChildren().add(chatBox);
         lobbyPane.setAlignment(chatBox, Pos.TOP_RIGHT);
@@ -173,19 +165,16 @@ public class LobbyScene extends BaseScene {
         textPane.setPrefHeight(gameWindow.getHeight()*0.5);
         textPane.setPrefWidth(gameWindow.getWidth()*0.4);
         textPane.getStyleClass().add("gameBox");
+        textPane.getChildren().add(textflow);
 
-        //textPane.getChildren().add(textflow);
-
-        //chatBox.getChildren().add(textPane);
+        chatBox.getChildren().add(textPane);
 
         HBox messageInputContainer = new HBox();
-
         TextField messageField = new TextField();
+        messageField.setPromptText("Type /nick (name)");
         Button sendMessageButton = new Button("Send");
-        chatBox.getChildren().addAll(messageField, sendMessageButton);
-        //chatBox.getChildren().add(messageInputContainer);
-        //chatBox.setAlignment(messageInputContainer, Pos.BOTTOM_CENTER);
-
+        messageInputContainer.getChildren().addAll(messageField, sendMessageButton);
+        chatBox.getChildren().add(messageInputContainer);
 
         lobbyBox.setMaxWidth(0.45*gameWindow.getWidth());
         lobbyBox.setMaxHeight(0.85*gameWindow.getHeight());
@@ -215,7 +204,8 @@ public class LobbyScene extends BaseScene {
         });
 
         sendMessageButton.setOnAction(event -> {
-
+            String textInput = messageField.getText();
+            sendMessage(textInput);
         });
 
         lobbyListViewer.setOnMouseClicked(event -> {
@@ -225,6 +215,10 @@ public class LobbyScene extends BaseScene {
         });
     }
 
+    public void sendMessage(String text) {
+        communicator.send("MSG " + text);
+    }
+
     public void showGameInfoBox(boolean toggle) {
         gameInfoBox.setVisible(toggle);
     }
@@ -232,10 +226,14 @@ public class LobbyScene extends BaseScene {
     public void showMessage(String message) {
         String parts[] = message.split(":");
         String username = "[" +  parts[0] + "]";
-        String contents = ">" + parts[1];
-        Text send = new Text(username + contents);
+        String contents = " > " + parts[1];
+        Text send = new Text(username + contents + "\n");
         send.getStyleClass().add("messages");
+        send.setFill(Color.WHITE);
         textflow.getChildren().add(send);
+        if (textflow.getChildren().size() > 10) {
+            textflow.getChildren().remove(17);
+        }
 
     }
 
