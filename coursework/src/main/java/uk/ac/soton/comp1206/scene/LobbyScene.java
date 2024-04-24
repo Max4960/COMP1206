@@ -149,17 +149,14 @@ public class LobbyScene extends BaseScene {
         lobbyPane.setMaxHeight(gameWindow.getHeight());
         lobbyPane.getStyleClass().add("menu-background");
         root.getChildren().add(lobbyPane);
-        BorderPane border = new BorderPane();
-        lobbyPane.getChildren().add(border);
 
         //gameInfoBox.setPrefWidth(0.5*gameWindow.getWidth());// Stops it being too small
         //gameInfoBox.setMaxWidth(0.5*gameWindow.getWidth());
         //gameInfoBox.setPrefHeight(0.8*gameWindow.getHeight());
         //gameInfoBox.setMaxHeight(0.8*gameWindow.getHeight());
 
-        VBox chatBox = new VBox();
         //chatBox.setAlignment(Pos.TOP_RIGHT);
-        chatBox.getStyleClass().add("gameBox");
+        //chatBox.getStyleClass().add("gameBox");
         chatBox.setMaxWidth(0.55*gameWindow.getWidth());
         chatBox.setMaxHeight(0.85*gameWindow.getHeight());
 
@@ -167,8 +164,6 @@ public class LobbyScene extends BaseScene {
 
         lobbyPane.getChildren().add(chatBox);
         lobbyPane.setAlignment(chatBox, Pos.TOP_RIGHT);
-
-        HBox messageBox = new HBox();
 
         Text chatTextHeading = new Text("Game Chat:");
         chatTextHeading.getStyleClass().add("heading");
@@ -179,22 +174,22 @@ public class LobbyScene extends BaseScene {
         textPane.setPrefWidth(gameWindow.getWidth()*0.4);
         textPane.getStyleClass().add("gameBox");
 
-        textPane.getChildren().add(textflow);
+        //textPane.getChildren().add(textflow);
 
-        chatBox.getChildren().add(textPane);
+        //chatBox.getChildren().add(textPane);
 
         HBox messageInputContainer = new HBox();
+
         TextField messageField = new TextField();
         Button sendMessageButton = new Button("Send");
-        messageInputContainer.getChildren().addAll(messageField, sendMessageButton);
-        chatBox.getChildren().add(messageInputContainer);
+        chatBox.getChildren().addAll(messageField, sendMessageButton);
+        //chatBox.getChildren().add(messageInputContainer);
+        //chatBox.setAlignment(messageInputContainer, Pos.BOTTOM_CENTER);
 
 
-        gameInfoBox.setBottom(messageBox);
-
-        border.setRight(gameInfoBox);
-        gameInfoBox.getStyleClass().add("gameBox");
-        gameInfoBox.setVisible(false);
+        lobbyBox.setMaxWidth(0.45*gameWindow.getWidth());
+        lobbyBox.setMaxHeight(0.85*gameWindow.getHeight());
+        lobbyPane.setAlignment(lobbyBox, Pos.TOP_LEFT);
 
         lobbyBox.setAlignment(Pos.TOP_LEFT);
         lobbyPane.getChildren().add(lobbyBox);
@@ -217,6 +212,10 @@ public class LobbyScene extends BaseScene {
 
         createLobbyButton.setOnAction(event -> {
             createLobby(createLobbyName.getText());
+        });
+
+        sendMessageButton.setOnAction(event -> {
+
         });
 
         lobbyListViewer.setOnMouseClicked(event -> {
