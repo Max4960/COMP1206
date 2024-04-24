@@ -32,6 +32,7 @@ public class GameWindow {
     private Scene scene;
     private ChallengeScene challengeScene;
     private LobbyScene lobbyScene;
+    private MultiplayerScene multiplayerScene;
 
     final Communicator communicator;
 
@@ -93,6 +94,11 @@ public class GameWindow {
     public void startLobby() {
         lobbyScene = new LobbyScene(this);
         loadScene(lobbyScene);
+    }
+
+    public void startMultiplayer() {
+        multiplayerScene = new MultiplayerScene(this);
+        loadScene(multiplayerScene);
     }
 
     public void quit() {

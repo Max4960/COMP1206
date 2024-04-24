@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -37,6 +38,8 @@ public class LobbyScene extends BaseScene {
     private boolean inLobby = false;
     VBox lobbyBox = new VBox();
     VBox chatBox = new VBox();
+    Button startGameButton = new Button("Start");
+
 
     SimpleListProperty<String> lobbyNames = new SimpleListProperty<String>(FXCollections.observableArrayList());
     ListView<String> lobbyListViewer = new ListView<>();
@@ -99,12 +102,12 @@ public class LobbyScene extends BaseScene {
         String[] parts = message.split(" ");
         String[] data = message.split(" ", 2);
 
-        if (parts.length < 2) {
-            return;
+        String command = parts[0];
+        String info = "";
+        if (parts.length > 1) {
+            info = parts[1];
         }
 
-        String command = parts[0];
-        String info = parts[1];
 
         logger.info(command);
         logger.info(info);
@@ -117,6 +120,7 @@ public class LobbyScene extends BaseScene {
                 }
                 break;
             case "HOST":
+                startGameButton.setVisible(true);
                 break;
             case "CHANNELS":
                 fetchList(message);
@@ -124,10 +128,16 @@ public class LobbyScene extends BaseScene {
                 logger.info(command + " " + info);
                 break;
             case "NICK":
+                // Changing username is managed server side
+                logger.info("New User Name" + info);
                 break;
             case "START":
+                logger.info("Starting Multiplayer");
+                gameWindow.startMultiplayer();
                 break;
             case "PARTED":
+                inLobby = false;
+                showChatBox(false);
                 break;
             case "USERS":
                 break;
@@ -137,6 +147,8 @@ public class LobbyScene extends BaseScene {
             case "ERROR":
                 break;
             case "QUIT":
+                break;
+            default:
                 break;
         }
     }
@@ -174,11 +186,22 @@ public class LobbyScene extends BaseScene {
         messageField.setPromptText("Type /nick (name)");
         Button sendMessageButton = new Button("Send");
         messageInputContainer.getChildren().addAll(messageField, sendMessageButton);
-        chatBox.getChildren().add(messageInputContainer);
 
+        messageInputContainer.setSpacing(10);
+        startGameButton.setStyle("-fx-background-color: lime; -fx-text-fill: white");
+        //startGameButton.setVisible(false);
+
+        Button quitGameButton = new Button("Quit");
+        quitGameButton.setStyle("-fx-background-color: red; -fx-text-fill: white");
+
+
+        messageInputContainer.getChildren().addAll(startGameButton, quitGameButton);
+        chatBox.getChildren().add(messageInputContainer);
         lobbyBox.setMaxWidth(0.45*gameWindow.getWidth());
         lobbyBox.setMaxHeight(0.85*gameWindow.getHeight());
         lobbyPane.setAlignment(lobbyBox, Pos.TOP_LEFT);
+
+        chatBox.setVisible(false);
 
         lobbyBox.setAlignment(Pos.TOP_LEFT);
         lobbyPane.getChildren().add(lobbyBox);
@@ -208,6 +231,10 @@ public class LobbyScene extends BaseScene {
             sendMessage(textInput);
         });
 
+        startGameButton.setOnAction(event -> {
+            communicator.send("START");
+        });
+
         lobbyListViewer.setOnMouseClicked(event -> {
             String selectedLobby = lobbyListViewer.getSelectionModel().getSelectedItem();
             //joinLobby(selectedLobby);
@@ -216,11 +243,15 @@ public class LobbyScene extends BaseScene {
     }
 
     public void sendMessage(String text) {
+        if (text.contains("/nick ")) {
+            String parts[] = text.split(" ");
+            communicator.send("NICK " + parts[1]);
+        }
         communicator.send("MSG " + text);
     }
 
-    public void showGameInfoBox(boolean toggle) {
-        gameInfoBox.setVisible(toggle);
+    public void showChatBox(boolean toggle) {
+        chatBox.setVisible(toggle);
     }
 
     public void showMessage(String message) {
@@ -231,8 +262,8 @@ public class LobbyScene extends BaseScene {
         send.getStyleClass().add("messages");
         send.setFill(Color.WHITE);
         textflow.getChildren().add(send);
-        if (textflow.getChildren().size() > 10) {
-            textflow.getChildren().remove(17);
+        if (textflow.getChildren().size() > 17) {
+            textflow.getChildren().remove(0);
         }
 
     }
@@ -245,7 +276,7 @@ public class LobbyScene extends BaseScene {
 
     public void joinLobby(String lobby) {
         inLobby = true;
-        showGameInfoBox(true);
+        showChatBox(true);
         logger.info("Joining: " + lobby);
 
     }
