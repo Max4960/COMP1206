@@ -20,6 +20,7 @@ import uk.ac.soton.comp1206.game.Game;
 import uk.ac.soton.comp1206.network.Communicator;
 import uk.ac.soton.comp1206.ui.GamePane;
 import uk.ac.soton.comp1206.ui.GameWindow;
+import uk.ac.soton.comp1206.ui.Multimedia;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -53,6 +54,17 @@ public class ScoreScene extends BaseScene {
     @Override
     public void initialise() {
         logger.info("Score Scene Initialised");
+        Multimedia.playMusic("end.wav");
+
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case ESCAPE:
+                    Multimedia.stop();
+                    gameWindow.startMenu();
+                default:
+                    break;
+            }
+        });
     }
 
 

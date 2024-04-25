@@ -86,7 +86,7 @@ public class MenuScene extends BaseScene {
                 scale += factor;
                 logoBackdropView.setScaleX(scale);
                 logoBackdropView.setScaleY(scale);
-                if (scale > 2 || scale < 1) {
+                if (scale > 1.5 || scale < 1) {
                     factor *= -1;
                     speed *= -1;
                 }
@@ -113,10 +113,12 @@ public class MenuScene extends BaseScene {
         menu.getChildren().add(quit);
 
         start.setOnMouseClicked(event -> {
+            Multimedia.stop();
             gameWindow.startChallenge();
         });
 
         multi.setOnMouseClicked(event -> {
+            Multimedia.stop();
             gameWindow.startLobby();
         });
 

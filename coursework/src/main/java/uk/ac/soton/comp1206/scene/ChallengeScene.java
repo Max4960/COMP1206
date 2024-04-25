@@ -189,6 +189,7 @@ public class ChallengeScene extends BaseScene {
         switch (key.getCode()) {
             case ESCAPE:
                 gameWindow.startMenu();
+                Multimedia.stop();
                 game.killTimer();
                 break;
             case UP: // This formatting acts like an OR
@@ -366,6 +367,7 @@ public class ChallengeScene extends BaseScene {
     private void loadScores() {
         game.timer.purge(); // Cleaning threads as a javafx function cant be called on a timer thread
         game.timer.cancel();
+        Multimedia.stop();
         Platform.runLater(()->gameWindow.startScore());
 
     }

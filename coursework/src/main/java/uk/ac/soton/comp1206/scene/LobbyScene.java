@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.network.Communicator;
 import uk.ac.soton.comp1206.ui.GamePane;
 import uk.ac.soton.comp1206.ui.GameWindow;
+import uk.ac.soton.comp1206.ui.Multimedia;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -60,16 +61,13 @@ public class LobbyScene extends BaseScene {
 
     @Override
     public void initialise() {
+        Multimedia.playMusic("ElevatorMusic.mp3");
+
         // Checking lobbies every 5 seconds
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             if (!inLobby) {
                 communicator.send("LIST");
-                //communicator.addListener(this::fetchList);
-                //Platform.runLater(() -> {
-                //    loadLobbies();
-                //});
             }
-
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -78,6 +76,18 @@ public class LobbyScene extends BaseScene {
             Platform.runLater(() -> {
                 receiver(event);
             });
+        });
+
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case ESCAPE:
+                    logger.info("Quit");
+                    communicator.send("QUIT");
+                    Multimedia.stop();
+                    gameWindow.startMenu();
+                default:
+                    break;
+            }
         });
 
     }
@@ -224,6 +234,12 @@ public class LobbyScene extends BaseScene {
 
         createLobbyButton.setOnAction(event -> {
             createLobby(createLobbyName.getText());
+        });
+
+        quitGameButton.setOnAction(event -> {
+            inLobby = false;
+            showChatBox(false);
+            communicator.send("PART");
         });
 
         sendMessageButton.setOnAction(event -> {

@@ -16,12 +16,17 @@ public class Multimedia {
     public static void playAudio(String name) {
         String filePath = String.valueOf(Multimedia.class.getResource("/sounds/" + name));
         audioPlayer = new MediaPlayer(new Media(filePath));
-        //audioPlayer.play();
+        audioPlayer.play();
     }
 
     public static void playMusic(String name) {
         String filePath = String.valueOf(Multimedia.class.getResource("/music/" + name));
         musicPlayer = new MediaPlayer(new Media(filePath));
-        //musicPlayer.play();
+        musicPlayer.setOnEndOfMedia(() -> musicPlayer.seek(musicPlayer.getStartTime()));
+        musicPlayer.play();
+    }
+
+    public static void stop() {
+        musicPlayer.stop();
     }
 }

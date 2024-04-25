@@ -15,6 +15,7 @@ import uk.ac.soton.comp1206.event.NextPieceListener;
 import uk.ac.soton.comp1206.event.ShowScoreListener;
 import uk.ac.soton.comp1206.scene.ChallengeScene;
 import uk.ac.soton.comp1206.ui.GameWindow;
+import uk.ac.soton.comp1206.ui.Multimedia;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -145,12 +146,14 @@ public class Game {
         int currentLife = lives.get();
         if (currentLife > 0) {
             currentLife--;
+            Multimedia.playAudio("lifelose.wav");
             lives.set(currentLife);
             nextPiece();
             loop();
             manageTimer();
             logger.info("New Game Loop Started");
         } else {
+            Multimedia.playAudio("explode.wav");
             logger.info("Game Over");
             showScoreListener.gameOver();
         }
@@ -183,12 +186,15 @@ public class Game {
         int y = gameBlock.getY();
         // Check that a piece can be placed
         if (getGrid().canPlayPiece(currentPiece, x, y)) {
+            Multimedia.playAudio("boom.mp3");
             // Piece placement
             grid.playPiece(currentPiece, x, y);
             loop.cancel();
             manageTimer();
             afterPiece();
             nextPiece();
+        } else {
+            Multimedia.playAudio("fail.wav");
         }
     }
 
@@ -254,6 +260,7 @@ public class Game {
             }
             // It is a full row so need to add all coordinates to the HashSet
             if (count == rows) {
+                Multimedia.playAudio("clear.wav");
                 for (int j = 0; j < cols; j++) {
                     GameBlockCoordinate coordinate = new GameBlockCoordinate(i,j);
                     toClear.add(coordinate);
@@ -274,6 +281,7 @@ public class Game {
             }
             // It is a full column so need to add all coordinates to the HashSet
             if (count == cols) {
+                Multimedia.playAudio("clear.wav");
                 for (int i = 0; i < cols; i++) {
                     GameBlockCoordinate coordinate = new GameBlockCoordinate(i,j);
                     toClear.add(coordinate);
@@ -361,6 +369,7 @@ public class Game {
      * @param piece
      */
     public void rotateCurrentPiece(GamePiece piece, int rotations) {
+        //Multimedia.playAudio("rotate.wav");
         piece.rotate(rotations);
         logger.info("Rotating " + piece + " with rotations: " + rotations);
     }
@@ -369,6 +378,7 @@ public class Game {
      * Swaps the pieces around
      */
     public void swapCurrentPiece() {
+        Multimedia.playAudio("transition.wav");
         GamePiece temp = currentPiece;
         currentPiece = followingPiece;
         followingPiece = temp;

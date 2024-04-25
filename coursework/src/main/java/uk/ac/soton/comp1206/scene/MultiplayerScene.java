@@ -390,6 +390,7 @@ public class MultiplayerScene extends ChallengeScene {
         game.start();
         game.setShowScoreListener(this::loadScores);
         scene.setOnKeyReleased(this::inputHandler);
+
     }
 
     public void receiver(String message) {
