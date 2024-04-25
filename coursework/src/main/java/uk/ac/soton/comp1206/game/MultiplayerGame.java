@@ -1,6 +1,9 @@
 package uk.ac.soton.comp1206.game;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
@@ -28,6 +31,7 @@ public class MultiplayerGame extends Game {
         this.communicator = communicator;
     }
 
+
     private void receiver(String message) {
         logger.info("Receiver received " + message);
         String[] parts = message.split(" ");
@@ -41,7 +45,17 @@ public class MultiplayerGame extends Game {
 
         switch (command) {
             case "PIECE":
-                spawnPiece(Integer.parseInt(info));
+                if (pieceTracker == 0) {
+                    spawnPiece(Integer.parseInt(info));
+                    currentPiece = pieces.remove();
+                } else if (pieceTracker == 1) {
+                    spawnPiece(Integer.parseInt(info));
+                    followingPiece = pieces.remove();
+                    nextPieceListener.nextPiece(currentPiece, followingPiece);
+                } else {
+                    spawnPiece(Integer.parseInt(info));
+                }
+                pieceTracker++;
             case "SCORE":
                 break;
             case "SCORES":
@@ -107,10 +121,10 @@ public class MultiplayerGame extends Game {
                 receiver(event);
             });
         });
-
         communicator.send("PIECE");
         communicator.send("PIECE");
         communicator.send("PIECE");
-
+        communicator.send("PIECE");
+        communicator.send("PIECE");
     }
 }

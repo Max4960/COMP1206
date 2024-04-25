@@ -59,7 +59,7 @@ public class Game {
      */
     private GameLoopListener gameLoopListener;
 
-    private ShowScoreListener showScoreListener;
+    public ShowScoreListener showScoreListener;
 
     /**
      * The Game piece currently being played
@@ -105,8 +105,11 @@ public class Game {
     public Game(int cols, int rows) {
         this.cols = cols;
         this.rows = rows;
+
         currentPiece = spawnPiece();
         followingPiece = spawnPiece();
+
+
         //Create a new grid model to represent the game state
         this.grid = new Grid(cols,rows);
     }
@@ -234,7 +237,7 @@ public class Game {
     /**
      * Handles the game logic after a move is made
      */
-    private void afterPiece() {
+    public void afterPiece() {
         // Local variables keeping track of lines and blocks being cleared
         int lines = 0;
         int blocks = 0;
