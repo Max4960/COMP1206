@@ -1,5 +1,6 @@
 package uk.ac.soton.comp1206.scene;
 
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -62,7 +63,7 @@ public class MenuScene extends BaseScene {
         //button.setOnAction(this::startGame);
         VBox menu = new VBox();
         menu.setAlignment(Pos.CENTER);
-        menu.setPadding(new Insets(10));
+        menu.setPadding(new Insets(100));
         mainPane.setTop(menu);
 
 
@@ -70,10 +71,30 @@ public class MenuScene extends BaseScene {
         // Logo
         Image logoBackdrop = new Image(String.valueOf(Multimedia.class.getResource("/images/TetrECS.png")));
         ImageView logoBackdropView = new ImageView(logoBackdrop);
-        logoBackdropView.setFitWidth(gameWindow.getWidth());
-        logoBackdropView.setFitHeight(gameWindow.getHeight());
+        logoBackdropView.setFitWidth(gameWindow.getWidth()/2);
+        logoBackdropView.setFitHeight(gameWindow.getHeight()/2);
         logoBackdropView.setPreserveRatio(true);
         menu.getChildren().add(logoBackdropView);
+
+        AnimationTimer timer = new AnimationTimer() {
+            double scale = 1.0;
+            double factor = 0.01;
+            double rotation = 0.0;
+            double speed = 0.1;
+            @Override
+            public void handle(long l) {
+                scale += factor;
+                logoBackdropView.setScaleX(scale);
+                logoBackdropView.setScaleY(scale);
+                if (scale > 2 || scale < 1) {
+                    factor *= -1;
+                    speed *= -1;
+                }
+                rotation += speed;
+                logoBackdropView.setRotate(rotation);
+            }
+        };
+        timer.start();
 
         Text start = new Text("Start Game");
         start.getStyleClass().add("menuItem");

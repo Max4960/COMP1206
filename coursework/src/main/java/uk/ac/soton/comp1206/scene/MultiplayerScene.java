@@ -6,6 +6,9 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -16,12 +19,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import uk.ac.soton.comp1206.component.GameBlock;
-import uk.ac.soton.comp1206.component.GameBlockCoordinate;
-import uk.ac.soton.comp1206.component.GameBoard;
-import uk.ac.soton.comp1206.component.PieceBoard;
+import uk.ac.soton.comp1206.component.*;
 import uk.ac.soton.comp1206.game.Game;
 import uk.ac.soton.comp1206.game.GamePiece;
 import uk.ac.soton.comp1206.game.MultiplayerGame;
@@ -34,6 +35,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Set;
 
 public class MultiplayerScene extends ChallengeScene {
@@ -43,7 +47,7 @@ public class MultiplayerScene extends ChallengeScene {
     /**
      * The instance of the Game being used
      */
-    protected Game game;
+    protected MultiplayerGame game;
 
     protected GameBoard gameBoard;
 
@@ -58,6 +62,10 @@ public class MultiplayerScene extends ChallengeScene {
     protected PieceBoard follower;
     private Rectangle timeRect;
     private double startWidth;
+
+    private ArrayList<Pair<String, Integer>> playerScores = new ArrayList<>();
+    private ObservableList<Pair<String, Integer>> scoreList;
+    private LeaderboardBox leaderboard;
 
     private int xLocation = 2;  // Used for keys
     private int yLocation = 2;  // Want to start in the center to improve game feel
@@ -102,16 +110,17 @@ public class MultiplayerScene extends ChallengeScene {
 
         // Score User Interface
         VBox scoreBox = new VBox();
-        scoreBox.setAlignment(Pos.CENTER);
+        scoreBox.setAlignment(Pos.TOP_LEFT);
         javafx.scene.text.Text highScoreText = new javafx.scene.text.Text("HIGHSCORE");
         javafx.scene.text.Text highScoreValue = new javafx.scene.text.Text();
         highScoreValue.textProperty().bind(highestScore.asString());
         highScoreText.getStyleClass().add("heading");
         highScoreValue.getStyleClass().add("score");
-        scoreBox.getChildren().add(highScoreText);
-        scoreBox.getChildren().add(highScoreValue);
+        //scoreBox.getChildren().add(highScoreText);
+        //scoreBox.getChildren().add(highScoreValue);
 
-        javafx.scene.text.Text scoreText = new javafx.scene.text.Text("SCORE");
+
+        javafx.scene.text.Text scoreText = new javafx.scene.text.Text("YOUR SCORE");
         javafx.scene.text.Text scoreValue = new javafx.scene.text.Text();
         scoreValue.textProperty().bind(game.score.asString());
         scoreText.getStyleClass().add("heading");
@@ -119,6 +128,21 @@ public class MultiplayerScene extends ChallengeScene {
         scoreBox.getChildren().add(scoreText);
         scoreBox.getChildren().add(scoreValue);
         mainPane.setLeft(scoreBox);
+
+        leaderboard = new LeaderboardBox();
+        scoreList = FXCollections.observableArrayList(playerScores);
+        SimpleListProperty<Pair<String, Integer>> leaderboardList = new SimpleListProperty<>(scoreList);
+        leaderboard.getScores().bind(leaderboardList);
+        scoreBox.getChildren().add(leaderboard);
+
+//        for (Pair player : game.getPlayerScores()) {
+//            String name = (String) player.getKey();
+//            String score = (String) player.getValue();
+//            Text playerNameAndScore = new Text(name + " " + score);
+//            playerNameAndScore.getStyleClass().add("score");
+//            scoreBox.getChildren().add(playerNameAndScore);
+//        }
+
 
         // Level User Interface
         VBox levelBox = new VBox();
@@ -355,11 +379,60 @@ public class MultiplayerScene extends ChallengeScene {
         // This is vital for displaying the first piece(s)
         current.setPiece(game.currentPiece);
         follower.setPiece(game.followingPiece);
+
+        communicator.addListener(event -> {
+            Platform.runLater(() -> {
+                this.receiver(event);
+            });
+        });
+        communicator.send("SCORES");
         game.setGameLoopListener(this::countDown);
         game.start();
         game.setShowScoreListener(this::loadScores);
         scene.setOnKeyReleased(this::inputHandler);
     }
+
+    public void receiver(String message) {
+        String[] parts = message.split(" ");
+        String command = parts[0];
+        String info = parts[1];
+
+        switch (command) {
+            case "SCORES":
+                handleScores(info);
+            default:
+                break;
+        }
+    }
+
+    private void handleScores(String data) {
+        playerScores.clear();
+        String[] lines = data.split("\n");
+
+        for (String line : lines) {
+            String[] parts = line.split(":");
+            playerScores.add(new Pair(parts[0], Integer.parseInt(parts[1])));
+        }
+        sortScores();
+        logger.info("Player Scores: " + playerScores);
+        scoreList.addAll(playerScores);
+    }
+
+    public void sortScores() {  // Adapted from ScoreScene
+        // Sorting by integer values
+        Collections.sort(playerScores, new Comparator<Pair<String,Integer>>() {
+            // Sorts Highest -> Lowest
+            @Override
+            public int compare(Pair<String, Integer> o1, Pair<String, Integer> o2) {
+                if (o1.getValue() > o2.getValue()) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
+    }
+
 
     private void loadScores() {
         game.timer.purge(); // Cleaning threads as a javafx function cant be called on a timer thread

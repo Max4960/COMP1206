@@ -61,7 +61,7 @@ public class GameWindow {
         communicator = new Communicator("ws://ofb-labs.soton.ac.uk:9700");
 
         //Go to menu
-        startMenu();
+        startSplash();
     }
 
     /**
@@ -81,6 +81,10 @@ public class GameWindow {
      */
     public void startMenu() {
         loadScene(new MenuScene(this));
+    }
+
+    public void startSplash() {
+        loadScene(new SplashScene(this));
     }
 
     /**

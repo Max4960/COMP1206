@@ -4,20 +4,22 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.util.Duration;
+import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
 import uk.ac.soton.comp1206.network.Communicator;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class MultiplayerGame extends Game {
 
     Communicator communicator;
     private static final Logger logger = LogManager.getLogger(MultiplayerGame.class);
     private Queue<GamePiece> pieces = new LinkedList<>();
+
+    private ArrayList<Pair<String, Integer>> playerScores;
+
     int pieceTracker = 0;
 
     /**
@@ -59,6 +61,7 @@ public class MultiplayerGame extends Game {
             case "SCORE":
                 break;
             case "SCORES":
+                //scoresHandler(info);
                 break;
             case "MSG":
                 break;
@@ -69,10 +72,40 @@ public class MultiplayerGame extends Game {
         }
     }
 
+    public void scoresHandler(String data) {
+        playerScores.clear();
+        String[] lines = data.split("\n");
+
+        for (String line : lines) {
+            String[] parts = line.split(":");
+            playerScores.add(new Pair(parts[0], Integer.parseInt(parts[1])));
+        }
+        sortScores();
+    }
+
+    public void sortScores() {  // Adapted from ScoreScene
+        // Sorting by integer values
+        Collections.sort(playerScores, new Comparator<Pair<String,Integer>>() {
+            // Sorts Highest -> Lowest
+            @Override
+            public int compare(Pair<String, Integer> o1, Pair<String, Integer> o2) {
+                if (o1.getValue() > o2.getValue()) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
+    }
+
     public void spawnPiece(int value) {
         GamePiece piece = GamePiece.createPiece(value);
         pieces.add(piece);
         logger.info(pieces);
+    }
+
+    public ArrayList<Pair<String, Integer>> getPlayerScores() {
+        return playerScores;
     }
 
 
@@ -121,6 +154,7 @@ public class MultiplayerGame extends Game {
                 receiver(event);
             });
         });
+        playerScores = new ArrayList<>();
         communicator.send("PIECE");
         communicator.send("PIECE");
         communicator.send("PIECE");
