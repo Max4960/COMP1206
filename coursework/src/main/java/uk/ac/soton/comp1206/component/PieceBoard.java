@@ -27,5 +27,4 @@ public class PieceBoard extends GameBoard {
         }
         grid.playPiece(piece,1,1);
     }
-
 }

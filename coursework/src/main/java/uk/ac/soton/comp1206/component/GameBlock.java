@@ -168,7 +168,7 @@ public class GameBlock extends Canvas {
         gc.setGlobalAlpha(1);
         gc.strokeRect(0,0,width,height);
 
-        if (isCentre) {
+        if (isCentre) { // Applying a circle to the central block
             gc.setGlobalAlpha(0.6);
             gc.fillOval(0,0,width,height);
         }
@@ -232,7 +232,7 @@ public class GameBlock extends Canvas {
             @Override
             public void handle(long l) {
                 opacity -= 0.05; // Works well for timing
-                if (opacity <= 0) {
+                if (opacity <= 0) { // Needs to be reverted to empty state to avoid visual bugs
                     paintEmpty();
                     stop();
                 } else {

@@ -114,7 +114,7 @@ public class GameBoard extends GridPane {
      * Build the GameBoard by creating a block at every x and y column and row
      */
     protected void build() {
-        logger.info("Building grid: {} x {}",cols,rows);
+        logger.info("Building grid: {} x {}", cols, rows);
 
         setMaxWidth(width);
         setMaxHeight(height);
@@ -191,11 +191,4 @@ public class GameBoard extends GridPane {
                 break;
         }
     }
-
-    private void fadeOut(Set<GameBlock> blocks) {
-
-    }
-
-
-
 }

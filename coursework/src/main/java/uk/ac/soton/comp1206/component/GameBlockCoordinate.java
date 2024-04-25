@@ -80,7 +80,8 @@ public class GameBlockCoordinate {
     public GameBlockCoordinate subtract(int x, int y) {
         return new GameBlockCoordinate(
                 getX() - x,
-                getY() - y);
+                getY() - y
+        );
     }
 
     /**
