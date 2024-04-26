@@ -422,6 +422,9 @@ public class MultiplayerScene extends ChallengeScene {
         for (String line : lines) {
             String[] parts = line.split(":");
             playerScores.add(new Pair(parts[0], Integer.parseInt(parts[1])));
+            if (parts[2].equals("DEAD") || parts[2].equals("-1")) {
+                leaderboard.kill(parts[0]);
+            }
         }
         sortScores();
         logger.info("Player Scores: " + playerScores);

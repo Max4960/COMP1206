@@ -10,6 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.game.MultiplayerGame;
 
+import java.util.ArrayList;
+
 /**
  * <p>LeaderboardBox class.</p>
  *
@@ -21,6 +23,7 @@ public class LeaderboardBox extends VBox {
     private static final Logger logger = LogManager.getLogger(LeaderboardBox.class);
 
     public SimpleListProperty<Pair<String, Integer>> scores = new SimpleListProperty<>();
+    ArrayList<String> theFallen = new ArrayList<>();
     VBox scoreBox = new VBox();
 
     /**
@@ -45,6 +48,10 @@ public class LeaderboardBox extends VBox {
         return scores;
     }
 
+    public void kill(String name) {
+        theFallen.add(name);
+    }
+
     /**
      * <p>updateScores.</p>
      */
@@ -54,7 +61,11 @@ public class LeaderboardBox extends VBox {
 
         for (Pair pair : scores) {
             Text text = new Text(pair.getKey() + " " + pair.getValue());
-            text.getStyleClass().add("hiscore");
+            if (theFallen.contains(pair.getKey())) {    // A dead player
+                text.getStyleClass().add("deadhiscore");
+            } else {
+                text.getStyleClass().add("hiscore");
+            }
             scoreBox.getChildren().add(text);
         }
     }
