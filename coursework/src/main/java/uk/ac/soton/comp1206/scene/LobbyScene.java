@@ -31,26 +31,40 @@ import java.util.ArrayList;
 import java.util.Timer;
 
 /**
- * <p>LobbyScene class.</p>
- *
- * @author ASUS
- * @version $Id: $Id
+ * LobbyScene class
+ * Allows the player to create and join lobbies
  */
 public class LobbyScene extends BaseScene {
 
-    private Timer serverTimer;
+    /**
+     * The Communicator
+     */
     final Communicator communicator;
     private static final Logger logger = LogManager.getLogger(LobbyScene.class);
     private StackPane lobbyPane = new StackPane();
+
+    /**
+     * Used to determine whether the player is in a lobby
+     */
     private boolean inLobby = false;
     VBox lobbyBox = new VBox();
     VBox chatBox = new VBox();
     Button startGameButton = new Button("Start");
 
-
+    /**
+     * A list of the active lobbies
+     */
     SimpleListProperty<String> lobbyNames = new SimpleListProperty<String>(FXCollections.observableArrayList());
+
+    /**
+     * A list view to display the lobbies
+     */
     ListView<String> lobbyListViewer = new ListView<>();
     BorderPane gameInfoBox = new BorderPane();
+
+    /**
+     * Used for the chat
+     */
     TextFlow textflow = new TextFlow();
 
 
@@ -65,12 +79,14 @@ public class LobbyScene extends BaseScene {
         this.communicator = gameWindow.getCommunicator();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Initialises the lobby scene
+     */
     @Override
     public void initialise() {
         Multimedia.playMusic("ElevatorMusic.mp3");
 
-        // Checking lobbies every 5 seconds
+        // Checking lobbies every second
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             if (!inLobby) {
                 communicator.send("LIST");
@@ -100,7 +116,10 @@ public class LobbyScene extends BaseScene {
     }
 
 
-
+    /**
+     * Used to display the list of active lobbies
+     * @param message message recieved from the communicator
+     */
     private void fetchList(String message) {
         //logger.info(message);
         String[] parts = message.split(" ");
@@ -114,6 +133,10 @@ public class LobbyScene extends BaseScene {
         lobbyNames.set(FXCollections.observableList(lobbyList));
     }
 
+    /**
+     * Handles messages received by the communicator
+     * @param message The message recieved by the communicator
+     */
     private void receiver(String message) {
         logger.info("Receiver received " + message);
         String[] parts = message.split(" ");
@@ -124,7 +147,6 @@ public class LobbyScene extends BaseScene {
         if (parts.length > 1) {
             info = parts[1];
         }
-
 
         logger.info(command);
         logger.info(info);
@@ -164,6 +186,7 @@ public class LobbyScene extends BaseScene {
             case "ERROR":
                 break;
             case "QUIT":
+                startGameButton.setVisible(false);
                 break;
             default:
                 break;
@@ -171,7 +194,9 @@ public class LobbyScene extends BaseScene {
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * Builds the lobby scene
+     */
     @Override
     public void build() {
         root = new GamePane(gameWindow.getWidth(),gameWindow.getHeight());
@@ -207,7 +232,7 @@ public class LobbyScene extends BaseScene {
 
         messageInputContainer.setSpacing(10);
         startGameButton.setStyle("-fx-background-color: lime; -fx-text-fill: white");
-        //startGameButton.setVisible(false);
+        startGameButton.setVisible(false);
 
         Button quitGameButton = new Button("Quit");
         quitGameButton.setStyle("-fx-background-color: red; -fx-text-fill: white");
@@ -267,9 +292,9 @@ public class LobbyScene extends BaseScene {
     }
 
     /**
-     * <p>sendMessage.</p>
+     * Used to send a message
      *
-     * @param text a {@link java.lang.String} object
+     * @param text a the String to send
      */
     public void sendMessage(String text) {
         if (text.contains("/nick ")) {
@@ -280,7 +305,7 @@ public class LobbyScene extends BaseScene {
     }
 
     /**
-     * <p>showChatBox.</p>
+     * Show the chat box
      *
      * @param toggle a boolean
      */
@@ -289,9 +314,9 @@ public class LobbyScene extends BaseScene {
     }
 
     /**
-     * <p>showMessage.</p>
+     * Show a message and the user who sent it
      *
-     * @param message a {@link java.lang.String} object
+     * @param message a String object
      */
     public void showMessage(String message) {
         String parts[] = message.split(":");
@@ -308,9 +333,9 @@ public class LobbyScene extends BaseScene {
     }
 
     /**
-     * <p>createLobby.</p>
+     * Creates a new lobby
      *
-     * @param lobbyName a {@link java.lang.String} object
+     * @param lobbyName a String object
      */
     public void createLobby(String lobbyName) {
         communicator.send("CREATE " + lobbyName);
@@ -319,9 +344,9 @@ public class LobbyScene extends BaseScene {
     }
 
     /**
-     * <p>joinLobby.</p>
+     * Method to handle the player joining a lobby
      *
-     * @param lobby a {@link java.lang.String} object
+     * @param lobby a String object
      */
     public void joinLobby(String lobby) {
         inLobby = true;
@@ -331,7 +356,7 @@ public class LobbyScene extends BaseScene {
     }
 
     /**
-     * <p>loadLobbies.</p>
+     * Loads the list of lobbies
      */
     public void loadLobbies() {
         logger.info("Found (" + lobbyNames.toArray().length + ") Active Lobbies");

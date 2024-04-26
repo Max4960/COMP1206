@@ -19,14 +19,10 @@ import uk.ac.soton.comp1206.ui.Multimedia;
 
 /**
  * The main menu of the game. Provides a gateway to the rest of the game.
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public class MenuScene extends BaseScene {
 
     private static final Logger logger = LogManager.getLogger(MenuScene.class);
-
 
     /**
      * Create a new menu scene
@@ -39,8 +35,6 @@ public class MenuScene extends BaseScene {
     }
 
     /**
-     * {@inheritDoc}
-     *
      * Build the menu layout
      */
     @Override
@@ -58,15 +52,6 @@ public class MenuScene extends BaseScene {
         var mainPane = new BorderPane();
         menuPane.getChildren().add(mainPane);
 
-        // Logo
-
-
-        //For now, let us just add a button that starts the game. I'm sure you'll do something way better.
-        //var button = new Button("Play");
-        //mainPane.setBottom(button);
-
-        //Bind the button action to the startGame method in the menu
-        //button.setOnAction(this::startGame);
         VBox menu = new VBox();
         menu.setAlignment(Pos.CENTER);
         menu.setPadding(new Insets(100));
@@ -138,8 +123,6 @@ public class MenuScene extends BaseScene {
     }
 
     /**
-     * {@inheritDoc}
-     *
      * Initialise the menu
      */
     @Override
@@ -148,7 +131,7 @@ public class MenuScene extends BaseScene {
     }
 
     /**
-     * Handle when the Start Game button is pressed
+     * Handle when the Start Game button is pressed - not used
      * @param event event
      */
     private void startGame(ActionEvent event) {

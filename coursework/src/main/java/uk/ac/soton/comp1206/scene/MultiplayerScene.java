@@ -296,9 +296,10 @@ public class MultiplayerScene extends ChallengeScene {
                 break;
             case T:
                 chatSender.setVisible(true);
-            case B:
-                game.lives.set(0);
                 break;
+//            case B: // used in debugging
+//                game.lives.set(0);
+//                break;
             default:
                 break;
         }

@@ -7,9 +7,6 @@ import uk.ac.soton.comp1206.ui.GameWindow;
 
 /**
  * A Base Scene used in the game. Handles common functionality between all scenes.
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public abstract class BaseScene {
 

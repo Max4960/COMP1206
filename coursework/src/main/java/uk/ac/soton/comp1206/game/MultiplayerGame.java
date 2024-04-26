@@ -15,34 +15,44 @@ import uk.ac.soton.comp1206.ui.Multimedia;
 import java.util.*;
 
 /**
- * <p>MultiplayerGame class.</p>
- *
- * @author ASUS
- * @version $Id: $Id
+ * Multiplayer Game extends the game class
+ * Has methods to handle the unique functionality of a multiplayer game
  */
 public class MultiplayerGame extends Game {
 
+    /**
+     * The MultiplayerGame's communicator
+     */
     Communicator communicator;
     private static final Logger logger = LogManager.getLogger(MultiplayerGame.class);
+
+    /**
+     * A queue representing the next pieces to be played
+     */
     private Queue<GamePiece> pieces = new LinkedList<>();
 
+    /**
+     * ArrayList representing the players scores
+     */
     private ArrayList<Pair<String, Integer>> playerScores;
 
-    int pieceTracker = 0;
+    private int pieceTracker = 0;
 
     /**
      * Create a new game with the specified rows and columns. Creates a corresponding grid model.
      *
      * @param cols number of columns
      * @param rows number of rows
-     * @param communicator a {@link uk.ac.soton.comp1206.network.Communicator} object
+     * @param communicator a object
      */
     public MultiplayerGame(int cols, int rows, Communicator communicator) {
         super(cols, rows);
         this.communicator = communicator;
     }
 
-
+    /**
+     * The reciever methods recieves messages from the communicator and handles them accordingly
+     */
     private void receiver(String message) {
         logger.info("Receiver received " + message);
         String[] parts = message.split(" ");
@@ -81,24 +91,10 @@ public class MultiplayerGame extends Game {
         }
     }
 
-    /**
-     * <p>scoresHandler.</p>
-     *
-     * @param data a {@link java.lang.String} object
-     */
-    public void scoresHandler(String data) {
-        playerScores.clear();
-        String[] lines = data.split("\n");
 
-        for (String line : lines) {
-            String[] parts = line.split(":");
-            playerScores.add(new Pair(parts[0], Integer.parseInt(parts[1])));
-        }
-        sortScores();
-    }
 
     /**
-     * <p>sortScores.</p>
+     * Sorts the score list
      */
     public void sortScores() {  // Adapted from ScoreScene
         // Sorting by integer values
@@ -118,9 +114,9 @@ public class MultiplayerGame extends Game {
 
 
     /**
-     * <p>spawnPiece.</p>
+     * Spawns a game piece
      *
-     * @param value a int
+     * @param value value of the piece to be spawned
      */
     public void spawnPiece(int value) {
         GamePiece piece = GamePiece.createPiece(value);
@@ -128,18 +124,11 @@ public class MultiplayerGame extends Game {
         logger.info(pieces);
     }
 
-    /**
-     * <p>Getter for the field <code>playerScores</code>.</p>
-     *
-     * @return a {@link java.util.ArrayList} object
-     */
-    public ArrayList<Pair<String, Integer>> getPlayerScores() {
-        return playerScores;
-    }
+
 
 
     /**
-     * <p>nextPiece.</p>
+     * Handles setting the pieces
      */
     public void nextPiece() {
         currentPiece = followingPiece;
@@ -149,7 +138,8 @@ public class MultiplayerGame extends Game {
     }
 
     /**
-     * <p>gameLoop.</p>
+     * Called when bar reaches 0
+     * Decreases life, generates a piece, resets bar
      */
     public void gameLoop() {
         int currentLife = lives.get();
@@ -157,16 +147,21 @@ public class MultiplayerGame extends Game {
             currentLife--;
             lives.set(currentLife);
             this.nextPiece();
+            communicator.send("LIVES " + currentLife);
             loop();
             manageTimer();
             logger.info("New Game Loop Started");
         } else {
             logger.info("Game Over");
+            communicator.send("DIE");
             showScoreListener.gameOver();
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Handles when a block is clicked
+     * @param gameBlock the block that was clicked
+     */
     public void blockClicked(GameBlock gameBlock) {
         // Get the position of this block
         int x = gameBlock.getX();
@@ -183,7 +178,9 @@ public class MultiplayerGame extends Game {
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * Initialises the game
+     */
     @Override
     public void initialiseGame() {
         communicator.addListener(event -> {

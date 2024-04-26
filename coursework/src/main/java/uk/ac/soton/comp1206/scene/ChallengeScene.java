@@ -35,9 +35,6 @@ import java.util.Set;
 
 /**
  * The Single Player challenge scene. Holds the UI for the single player challenge mode in the game.
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public class ChallengeScene extends BaseScene {
 
@@ -48,6 +45,9 @@ public class ChallengeScene extends BaseScene {
      */
     protected Game game;
 
+    /**
+     * Instance of game board being used
+     */
     protected GameBoard gameBoard;
 
     /**
@@ -59,6 +59,10 @@ public class ChallengeScene extends BaseScene {
      * Piece board representing the next piece to place
      */
     protected PieceBoard follower;
+
+    /**
+     * Bar showing the time left
+     */
     private Rectangle timeRect;
     private double startWidth;
 
@@ -78,8 +82,6 @@ public class ChallengeScene extends BaseScene {
     }
 
     /**
-     * {@inheritDoc}
-     *
      * Build the Challenge window
      */
     @Override
@@ -191,6 +193,10 @@ public class ChallengeScene extends BaseScene {
 
     }
 
+    /**
+     * Used to handle when the keyboard is pressed
+     * @param key the key pressed
+     */
     private void inputHandler(KeyEvent key) {
         switch (key.getCode()) {
             case ESCAPE:
@@ -252,10 +258,6 @@ public class ChallengeScene extends BaseScene {
                 current.setPiece(game.currentPiece);
                 follower.setPiece(game.followingPiece);
                 break;
-            case B:
-                game.lives.set(0);
-                break;
-
             default:
                 break;
         }
@@ -296,6 +298,9 @@ public class ChallengeScene extends BaseScene {
         current.setPiece(game.currentPiece);
     }
 
+    /**
+     * Rotates the block left and updates the current piece board
+     */
     private void rotateLeft() {
         game.rotateCurrentPiece(game.currentPiece, 3);
         logger.info("Rotated Left");
@@ -312,12 +317,20 @@ public class ChallengeScene extends BaseScene {
         follower.setPiece(second);
     }
 
+    /**
+     * Called when a line is cleared
+     * @param blockCoordinateSet Hash Set of all blocks just cleared
+     */
     private void lineCleared(Set<GameBlockCoordinate> blockCoordinateSet) {
         for (GameBlockCoordinate gameBlockCoordinate : blockCoordinateSet) {
             gameBoard.getBlock(gameBlockCoordinate.getX(),gameBlockCoordinate.getY()).fadeOut();
         }
     }
 
+    /**
+     * Manages the timer bar
+      * @param time how long to run for
+     */
     private void countDown(int time) {
         long startTime = System.nanoTime(); // Have to use nanoTime
         AnimationTimer animationTimer = new AnimationTimer() {
@@ -351,12 +364,9 @@ public class ChallengeScene extends BaseScene {
 
         //Start new game
         game = new Game(5, 5);
-
     }
 
     /**
-     * {@inheritDoc}
-     *
      * Initialise the scene and start the game
      */
     @Override
@@ -372,6 +382,9 @@ public class ChallengeScene extends BaseScene {
         scene.setOnKeyReleased(this::inputHandler);
     }
 
+    /**
+     * Stops the game and loads the Score Scene
+     */
     private void loadScores() {
         game.timer.purge(); // Cleaning threads as a javafx function cant be called on a timer thread
         game.timer.cancel();
@@ -381,16 +394,16 @@ public class ChallengeScene extends BaseScene {
     }
 
     /**
-     * <p>Getter for the field <code>game</code>.</p>
+     * Getter for the game object
      *
-     * @return a {@link uk.ac.soton.comp1206.game.Game} object
+     * @return a Game object
      */
     public Game getGame() {
         return game;
     }
 
     /**
-     * <p>checkHighScore.</p>
+     * Used for getting the High Score
      */
     public void checkHighScore() {
         try {
@@ -401,7 +414,7 @@ public class ChallengeScene extends BaseScene {
     }
 
     /**
-     * <p>getHighScore.</p>
+     * Checks the scores file for the high score
      *
      * @throws java.io.IOException if any.
      */

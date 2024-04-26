@@ -14,25 +14,25 @@ import uk.ac.soton.comp1206.ui.GameWindow;
 import uk.ac.soton.comp1206.ui.Multimedia;
 
 /**
- * <p>InstructionsScene class.</p>
- *
- * @author ASUS
- * @version $Id: $Id
+ * InstructionsScene class
+ * Holds the instructions as well as a dynamically generated list of pieces
  */
 public class InstructionsScene extends BaseScene{
     private static final Logger logger = LogManager.getLogger(InstructionsScene.class);
 
     /**
-     * <p>Constructor for InstructionsScene.</p>
+     * Constructor for InstructionsScene
      *
-     * @param gameWindow a {@link uk.ac.soton.comp1206.ui.GameWindow} object
+     * @param gameWindow a GameWindow object
      */
     public InstructionsScene(GameWindow gameWindow) {
         super(gameWindow);
         logger.info("Creating Instructions Scene");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Builds the Scene
+     */
     @Override
     public void build() {
         root = new GamePane(gameWindow.getWidth(),gameWindow.getHeight());
@@ -74,7 +74,9 @@ public class InstructionsScene extends BaseScene{
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Initialises the scene
+     */
     @Override
     public void initialise() {
         // Checks if ESC has been pressed
