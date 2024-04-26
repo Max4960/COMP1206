@@ -3,9 +3,6 @@ package uk.ac.soton.comp1206;
 /**
  * This Launcher class is used to allow the game to be built into a shaded jar file which then loads JavaFX. This
  * Launcher is used when running as a shaded jar file.
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public class Launcher {
 

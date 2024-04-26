@@ -44,10 +44,7 @@ import java.util.Comparator;
 import java.util.Set;
 
 /**
- * <p>MultiplayerScene class.</p>
- *
- * @author ASUS
- * @version $Id: $Id
+ * Extends the challenge scene and handles the multiplayer game functionality
  */
 public class MultiplayerScene extends ChallengeScene {
 
@@ -58,6 +55,9 @@ public class MultiplayerScene extends ChallengeScene {
      */
     protected MultiplayerGame game;
 
+    /**
+     * The instance of the Game board being used
+     */
     protected GameBoard gameBoard;
 
     /**
@@ -72,6 +72,7 @@ public class MultiplayerScene extends ChallengeScene {
     private Rectangle timeRect;
     private double startWidth;
 
+    // Chat
     Text chat;
     TextField chatSender;
 
@@ -96,7 +97,9 @@ public class MultiplayerScene extends ChallengeScene {
         communicator = gameWindow.getCommunicator();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Builds the Multiplayer Scene
+     */
     @Override
     public void build() {
         logger.info("Building " + this.getClass().getName());
@@ -233,9 +236,14 @@ public class MultiplayerScene extends ChallengeScene {
         game.setLineClearedListener(this::lineCleared);
     }
 
+    /**
+     * Used to handle when a key is pressed
+     * @param key the key pressed
+     */
     private void inputHandler(KeyEvent key) {
         switch (key.getCode()) {
             case ESCAPE:
+                Multimedia.stop();
                 communicator.send("DIE");
                 gameWindow.startMenu();
                 game.killTimer();
@@ -341,6 +349,9 @@ public class MultiplayerScene extends ChallengeScene {
         current.setPiece(game.currentPiece);
     }
 
+    /**
+     * Rotates the block left and updates the current piece board
+     */
     private void rotateLeft() {
         game.rotateCurrentPiece(game.currentPiece, 3);
         logger.info("Rotated Left");
@@ -357,12 +368,20 @@ public class MultiplayerScene extends ChallengeScene {
         follower.setPiece(second);
     }
 
+    /**
+     * Called when a line is cleared
+     * @param blockCoordinateSet Hash Set of all blocks just cleared
+     */
     private void lineCleared(Set<GameBlockCoordinate> blockCoordinateSet) {
         for (GameBlockCoordinate gameBlockCoordinate : blockCoordinateSet) {
             gameBoard.getBlock(gameBlockCoordinate.getX(),gameBlockCoordinate.getY()).fadeOut();
         }
     }
 
+    /**
+     * Manages the timer bar
+     * @param time how long to run for
+     */
     private void countDown(int time) {
         long startTime = System.nanoTime(); // Have to use nanoTime
         AnimationTimer animationTimer = new AnimationTimer() {
@@ -400,18 +419,16 @@ public class MultiplayerScene extends ChallengeScene {
     }
 
     /**
-     * {@inheritDoc}
-     *
      * Initialise the scene and start the game
      */
     @Override
     public void initialise() {
+        Multimedia.stop();
         logger.info("Initialising Challenge");
         Multimedia.playMusic("game.wav");
         // This is vital for displaying the first piece(s)
         current.setPiece(game.currentPiece);
         follower.setPiece(game.followingPiece);
-        //game.getScore().a
 
         communicator.addListener(event -> {
             Platform.runLater(() -> {
@@ -427,7 +444,7 @@ public class MultiplayerScene extends ChallengeScene {
     }
 
     /**
-     * <p>receiver.</p>
+     * Receives messages from the communicator
      *
      * @param message a {@link java.lang.String} object
      */
@@ -448,6 +465,10 @@ public class MultiplayerScene extends ChallengeScene {
         }
     }
 
+    /**
+     * Handles the score messages
+     * @param data the score sent
+     */
     private void handleScores(String data) {
         playerScores.clear();
         String[] lines = data.split("\n");
@@ -466,7 +487,7 @@ public class MultiplayerScene extends ChallengeScene {
     }
 
     /**
-     * <p>sortScores.</p>
+     * Sorts the scores
      */
     public void sortScores() {  // Adapted from ScoreScene
         // Sorting by integer values
@@ -483,26 +504,29 @@ public class MultiplayerScene extends ChallengeScene {
         });
     }
 
-
+    /**
+     * Loads the score scene
+     */
     private void loadScores() {
         communicator.send("DIE");
+        Multimedia.stop();
         game.timer.purge(); // Cleaning threads as a javafx function cant be called on a timer thread
         game.timer.cancel();
-        Platform.runLater(()->gameWindow.startScore());
+        Platform.runLater(()->gameWindow.startOnlineScore());
 
     }
 
     /**
-     * <p>Getter for the field <code>game</code>.</p>
+     * Returns the Game instance
      *
-     * @return a {@link uk.ac.soton.comp1206.game.Game} object
+     * @return a Game object
      */
     public Game getGame() {
         return game;
     }
 
     /**
-     * <p>checkHighScore.</p>
+     * Used for getting the High Score
      */
     public void checkHighScore() {
         try {
@@ -513,7 +537,7 @@ public class MultiplayerScene extends ChallengeScene {
     }
 
     /**
-     * <p>getHighScore.</p>
+     * Checks the scores file for the high score
      *
      * @throws java.io.IOException if any.
      */

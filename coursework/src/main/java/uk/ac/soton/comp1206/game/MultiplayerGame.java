@@ -145,6 +145,7 @@ public class MultiplayerGame extends Game {
         int currentLife = lives.get();
         if (currentLife > 0) {
             currentLife--;
+            Multimedia.playAudio("lifelose.wav");
             lives.set(currentLife);
             this.nextPiece();
             communicator.send("LIVES " + currentLife);
@@ -152,6 +153,7 @@ public class MultiplayerGame extends Game {
             manageTimer();
             logger.info("New Game Loop Started");
         } else {
+            Multimedia.playAudio("explode.wav");
             logger.info("Game Over");
             communicator.send("DIE");
             showScoreListener.gameOver();
@@ -168,12 +170,15 @@ public class MultiplayerGame extends Game {
         int y = gameBlock.getY();
         // Check that a piece can be placed
         if (getGrid().canPlayPiece(currentPiece, x, y)) {
+            Multimedia.playAudio("boom.mp3");
             // Piece placement
             grid.playPiece(currentPiece, x, y);
             loop.cancel();
             manageTimer();
             afterPiece();
             this.nextPiece();
+        } else {
+            Multimedia.playAudio("fail.wav");
         }
     }
 

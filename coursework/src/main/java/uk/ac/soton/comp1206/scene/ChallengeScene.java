@@ -329,7 +329,7 @@ public class ChallengeScene extends BaseScene {
 
     /**
      * Manages the timer bar
-      * @param time how long to run for
+     * @param time how long to run for
      */
     private void countDown(int time) {
         long startTime = System.nanoTime(); // Have to use nanoTime

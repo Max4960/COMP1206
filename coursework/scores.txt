@@ -1,10 +1,10 @@
 Max:6970
 max:5440
+maax:5390
+max:4670
 bbbbb:3860
+MaxVideo:3530
+max:2590
 max:1800
 USER:1000
 USER:900
-USER:800
-USER:700
-USER:600
-max:550

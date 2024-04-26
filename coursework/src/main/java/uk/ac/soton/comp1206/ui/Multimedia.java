@@ -8,22 +8,19 @@ import org.apache.logging.log4j.Logger;
 import java.net.URL;
 
 /**
- * <p>Multimedia class.</p>
- *
- * @author ASUS
- * @version $Id: $Id
+ * The multimedia class handles the audio effects
  */
 public class Multimedia {
-    /** Constant <code>logger</code> */
+
     public static final Logger logger = LogManager.getLogger(GamePane.class);
 
     private static MediaPlayer audioPlayer;
     private static MediaPlayer musicPlayer;
 
     /**
-     * <p>playAudio.</p>
+     * Plays a sound effect
      *
-     * @param name a {@link java.lang.String} object
+     * @param name of sound effect
      */
     public static void playAudio(String name) {
         String filePath = String.valueOf(Multimedia.class.getResource("/sounds/" + name));
@@ -32,9 +29,9 @@ public class Multimedia {
     }
 
     /**
-     * <p>playMusic.</p>
+     * Plays a music file
      *
-     * @param name a {@link java.lang.String} object
+     * @param name name of the song
      */
     public static void playMusic(String name) {
         String filePath = String.valueOf(Multimedia.class.getResource("/music/" + name));
@@ -44,7 +41,7 @@ public class Multimedia {
     }
 
     /**
-     * <p>stop.</p>
+     * Stops the music
      */
     public static void stop() {
         musicPlayer.stop();

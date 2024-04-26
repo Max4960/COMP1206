@@ -1,5 +1,6 @@
 package uk.ac.soton.comp1206.scene;
 
+import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -29,28 +30,38 @@ import java.util.Comparator;
 import java.util.Stack;
 
 /**
- * <p>ScoreScene class.</p>
- *
- * @author ASUS
- * @version $Id: $Id
+ * Displays the local high scores and online high scores at the end of a game
  */
 public class ScoreScene extends BaseScene {
 
     private static final Logger logger = LogManager.getLogger(ScoreScene.class);
+
+    /**
+     * Game instance
+     */
     private Game game;
 
+    /**
+     * The communicator used to get the highscores
+     */
     final Communicator communicator;
     StackPane scorePane = new StackPane();
 
+    /**
+     * used to load the local scores from the file
+     */
     ArrayList<Pair<String,Integer>> localScoresList = new ArrayList<Pair<String,Integer>>();
     SimpleListProperty<Pair<String,Integer>> localScores = new SimpleListProperty<Pair<String,Integer>>(FXCollections.observableList(localScoresList));
 
+    /**
+     * Represents the list of the online top scores
+     */
     SimpleListProperty<Pair<String,Integer>> remoteScores;
     /**
      * Create a new scene, passing in the GameWindow the scene will be displayed in
      *
      * @param gameWindow the game window
-     * @param game a {@link uk.ac.soton.comp1206.game.Game} object
+     * @param game a Game object
      */
     public ScoreScene(GameWindow gameWindow, Game game) {
         super(gameWindow);
@@ -58,7 +69,9 @@ public class ScoreScene extends BaseScene {
         this.communicator = gameWindow.getCommunicator();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Initialises the scene
+     */
     @Override
     public void initialise() {
         logger.info("Score Scene Initialised");
@@ -77,6 +90,7 @@ public class ScoreScene extends BaseScene {
 
 
     /*
+     * Loads the online scores
      * This method is seperate from the listener as it will be called again if user has a high score
      */
     private void loadOnlineScores(String score) {
@@ -98,7 +112,9 @@ public class ScoreScene extends BaseScene {
         logger.info("Remote Sores Size: " + remoteScores.toArray().length);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Builds the scene
+     */
     @Override
     public void build() {
         logger.info("Building");
@@ -131,6 +147,10 @@ public class ScoreScene extends BaseScene {
         timeline.play();
     }
 
+    /**
+     * Loads the scores into the scene
+     * @return null if failed to load
+     */
     private Runnable spawnScores() {
         boolean loaded = false;
         try {
@@ -178,6 +198,19 @@ public class ScoreScene extends BaseScene {
                             Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
                             scoreText.getStyleClass().add("scorelist");
                             localVBox.getChildren().add(scoreText);
+                            AnimationTimer timer = new AnimationTimer() {
+                                double opacity = 0.0;
+                                @Override
+                                public void handle(long l) {
+                                    opacity += 0.01;
+                                    if (opacity >= 1) {
+                                        opacity = 1;
+                                        stop();
+                                    }
+                                    scoreText.setOpacity(opacity);
+                                }
+                            };
+                            timer.start();
                         }
 
                         VBox remoteVBox = new VBox();
@@ -194,6 +227,19 @@ public class ScoreScene extends BaseScene {
                             Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
                             scoreText.getStyleClass().add("scorelist");
                             remoteVBox.getChildren().add(scoreText);
+                            AnimationTimer timer = new AnimationTimer() {
+                                double opacity = 0.0;
+                                @Override
+                                public void handle(long l) {
+                                    opacity += 0.01;
+                                    if (opacity >= 1) {
+                                        opacity = 1;
+                                        stop();
+                                    }
+                                    scoreText.setOpacity(opacity);
+                                }
+                            };
+                            timer.start();
                         }
                     });
                     break; // DO NOT DELETE
@@ -216,6 +262,19 @@ public class ScoreScene extends BaseScene {
                     Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
                     scoreText.getStyleClass().add("scorelist");
                     localVBox.getChildren().add(scoreText);
+                    AnimationTimer timer = new AnimationTimer() {
+                        double opacity = 0.0;
+                        @Override
+                        public void handle(long l) {
+                            opacity += 0.01;
+                            if (opacity >= 1) {
+                                opacity = 1;
+                                stop();
+                            }
+                            scoreText.setOpacity(opacity);
+                        }
+                    };
+                    timer.start();
                 }
 
                 VBox remoteVBox = new VBox();
@@ -229,6 +288,19 @@ public class ScoreScene extends BaseScene {
                     Text scoreText = new Text(pair.getKey() + " " + pair.getValue().toString());
                     scoreText.getStyleClass().add("scorelist");
                     remoteVBox.getChildren().add(scoreText);
+                    AnimationTimer timer = new AnimationTimer() {
+                        double opacity = 0.0;
+                        @Override
+                        public void handle(long l) {
+                            opacity += 0.01;
+                            if (opacity >= 1) {
+                                opacity = 1;
+                                stop();
+                            }
+                            scoreText.setOpacity(opacity);
+                        }
+                    };
+                    timer.start();
                 }
             }
         } catch (IOException e) {
@@ -239,7 +311,7 @@ public class ScoreScene extends BaseScene {
     }
 
     /**
-     * <p>loadScores.</p>
+     * Load scores from text file
      *
      * @throws java.io.IOException if any.
      */
@@ -269,7 +341,7 @@ public class ScoreScene extends BaseScene {
     }
 
     /**
-     * <p>sortScores.</p>
+     * Sorts the scores by value
      */
     public void sortScores() {  // Originally called writeScores - Made into a separate method
         // Sorting by integer values
@@ -291,7 +363,7 @@ public class ScoreScene extends BaseScene {
     }
 
     /**
-     * <p>writeScores.</p>
+     * Writes the scores to the file
      *
      * @throws java.io.IOException if any.
      */

@@ -10,9 +10,6 @@ import uk.ac.soton.comp1206.ui.GameWindow;
 
 /**
  * JavaFX Application class
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public class App extends Application {
 

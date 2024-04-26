@@ -18,9 +18,6 @@ import uk.ac.soton.comp1206.scene.*;
  *
  * The GameWindow has methods to launch each of the different parts of the game by switching scenes. You can add more
  * methods here to add more screens to the game.
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public class GameWindow {
 
@@ -88,7 +85,7 @@ public class GameWindow {
     }
 
     /**
-     * <p>startSplash.</p>
+     * Display splash screen
      */
     public void startSplash() {
         loadScene(new SplashScene(this));
@@ -103,7 +100,7 @@ public class GameWindow {
     }
 
     /**
-     * <p>startLobby.</p>
+     * Display the lobby
      */
     public void startLobby() {
         lobbyScene = new LobbyScene(this);
@@ -111,7 +108,7 @@ public class GameWindow {
     }
 
     /**
-     * <p>startMultiplayer.</p>
+     * Display the multiplayer game
      */
     public void startMultiplayer() {
         multiplayerScene = new MultiplayerScene(this);
@@ -119,23 +116,32 @@ public class GameWindow {
     }
 
     /**
-     * <p>quit.</p>
+     * Quit the program
      */
     public void quit() {
         App.getInstance().shutdown();
     }
 
     /**
-     * <p>startInformation.</p>
+     * Display informatioon
      */
     public void startInformation() {
         loadScene(new InstructionsScene(this));
     }
 
     /**
-     * <p>startScore.</p>
+     * Start the score scene for single player
      */
-    public void startScore() {loadScene(new ScoreScene(this, challengeScene.getGame()));}
+    public void startScore() {
+        loadScene(new ScoreScene(this, challengeScene.getGame()));
+    }
+
+    /**
+     * Start the score scene for multi player
+     */
+    public void startOnlineScore() {
+        loadScene(new ScoreScene(this, multiplayerScene.getGame()));
+    }
 
     /**
      * Set up the default settings for the stage itself (the window), such as the title and minimum width and height.

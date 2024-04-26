@@ -14,17 +14,14 @@ import uk.ac.soton.comp1206.ui.GameWindow;
 import uk.ac.soton.comp1206.ui.Multimedia;
 
 /**
- * <p>SplashScene class.</p>
- *
- * @author ASUS
- * @version $Id: $Id
+ * The splash screen class
  */
 public class SplashScene extends BaseScene{
 
     /**
-     * <p>Constructor for SplashScene.</p>
+     * Constructor for splash screen
      *
-     * @param gameWindow a {@link uk.ac.soton.comp1206.ui.GameWindow} object
+     * @param gameWindow a GameWindow object
      */
     public SplashScene(GameWindow gameWindow) {
         super(gameWindow);
@@ -37,7 +34,9 @@ public class SplashScene extends BaseScene{
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Builds the splash screen
+     */
     @Override
     public void build() {
         root = new GamePane(gameWindow.getWidth(), gameWindow.getHeight());
