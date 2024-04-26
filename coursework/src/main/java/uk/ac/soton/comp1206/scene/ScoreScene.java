@@ -28,6 +28,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Stack;
 
+/**
+ * <p>ScoreScene class.</p>
+ *
+ * @author ASUS
+ * @version $Id: $Id
+ */
 public class ScoreScene extends BaseScene {
 
     private static final Logger logger = LogManager.getLogger(ScoreScene.class);
@@ -44,6 +50,7 @@ public class ScoreScene extends BaseScene {
      * Create a new scene, passing in the GameWindow the scene will be displayed in
      *
      * @param gameWindow the game window
+     * @param game a {@link uk.ac.soton.comp1206.game.Game} object
      */
     public ScoreScene(GameWindow gameWindow, Game game) {
         super(gameWindow);
@@ -51,6 +58,7 @@ public class ScoreScene extends BaseScene {
         this.communicator = gameWindow.getCommunicator();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void initialise() {
         logger.info("Score Scene Initialised");
@@ -90,6 +98,7 @@ public class ScoreScene extends BaseScene {
         logger.info("Remote Sores Size: " + remoteScores.toArray().length);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void build() {
         logger.info("Building");
@@ -229,6 +238,11 @@ public class ScoreScene extends BaseScene {
         return null;    // This should never be executed
     }
 
+    /**
+     * <p>loadScores.</p>
+     *
+     * @throws java.io.IOException if any.
+     */
     public void loadScores() throws IOException {
         String fileName = "scores.txt";
         File file = new File(fileName);
@@ -254,6 +268,9 @@ public class ScoreScene extends BaseScene {
         }
     }
 
+    /**
+     * <p>sortScores.</p>
+     */
     public void sortScores() {  // Originally called writeScores - Made into a separate method
         // Sorting by integer values
         // Used Java Docs https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#sort-java.util.List-java.util.Comparator-
@@ -273,6 +290,11 @@ public class ScoreScene extends BaseScene {
         logger.info(String.format("Writing scores to file: %s", localScoresList));
     }
 
+    /**
+     * <p>writeScores.</p>
+     *
+     * @throws java.io.IOException if any.
+     */
     public void writeScores() throws IOException {
         sortScores();
         String fileName = "scores.txt";

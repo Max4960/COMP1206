@@ -8,10 +8,18 @@ import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.component.GameBlock;
+import uk.ac.soton.comp1206.component.GameBlockCoordinate;
 import uk.ac.soton.comp1206.network.Communicator;
+import uk.ac.soton.comp1206.ui.Multimedia;
 
 import java.util.*;
 
+/**
+ * <p>MultiplayerGame class.</p>
+ *
+ * @author ASUS
+ * @version $Id: $Id
+ */
 public class MultiplayerGame extends Game {
 
     Communicator communicator;
@@ -27,6 +35,7 @@ public class MultiplayerGame extends Game {
      *
      * @param cols number of columns
      * @param rows number of rows
+     * @param communicator a {@link uk.ac.soton.comp1206.network.Communicator} object
      */
     public MultiplayerGame(int cols, int rows, Communicator communicator) {
         super(cols, rows);
@@ -72,6 +81,11 @@ public class MultiplayerGame extends Game {
         }
     }
 
+    /**
+     * <p>scoresHandler.</p>
+     *
+     * @param data a {@link java.lang.String} object
+     */
     public void scoresHandler(String data) {
         playerScores.clear();
         String[] lines = data.split("\n");
@@ -83,6 +97,9 @@ public class MultiplayerGame extends Game {
         sortScores();
     }
 
+    /**
+     * <p>sortScores.</p>
+     */
     public void sortScores() {  // Adapted from ScoreScene
         // Sorting by integer values
         Collections.sort(playerScores, new Comparator<Pair<String,Integer>>() {
@@ -98,17 +115,32 @@ public class MultiplayerGame extends Game {
         });
     }
 
+
+
+    /**
+     * <p>spawnPiece.</p>
+     *
+     * @param value a int
+     */
     public void spawnPiece(int value) {
         GamePiece piece = GamePiece.createPiece(value);
         pieces.add(piece);
         logger.info(pieces);
     }
 
+    /**
+     * <p>Getter for the field <code>playerScores</code>.</p>
+     *
+     * @return a {@link java.util.ArrayList} object
+     */
     public ArrayList<Pair<String, Integer>> getPlayerScores() {
         return playerScores;
     }
 
 
+    /**
+     * <p>nextPiece.</p>
+     */
     public void nextPiece() {
         currentPiece = followingPiece;
         followingPiece = pieces.remove();
@@ -116,6 +148,9 @@ public class MultiplayerGame extends Game {
         communicator.send("PIECE");
     }
 
+    /**
+     * <p>gameLoop.</p>
+     */
     public void gameLoop() {
         int currentLife = lives.get();
         if (currentLife > 0) {
@@ -131,6 +166,7 @@ public class MultiplayerGame extends Game {
         }
     }
 
+    /** {@inheritDoc} */
     public void blockClicked(GameBlock gameBlock) {
         // Get the position of this block
         int x = gameBlock.getX();
@@ -147,6 +183,7 @@ public class MultiplayerGame extends Game {
     }
 
 
+    /** {@inheritDoc} */
     @Override
     public void initialiseGame() {
         communicator.addListener(event -> {

@@ -18,6 +18,9 @@ import org.apache.logging.log4j.Logger;
  * but will be scaled up or down as the window is resized.
  *
  * You should not need to modify this class
+ *
+ * @author ASUS
+ * @version $Id: $Id
  */
 public class GamePane extends StackPane {
 
@@ -30,6 +33,7 @@ public class GamePane extends StackPane {
 
     /**
      * Create a new scalable GamePane with the given drawing width and height.
+     *
      * @param width width
      * @param height height
      */
@@ -44,6 +48,7 @@ public class GamePane extends StackPane {
 
     /**
      * Update the scalar being used by this draw pane
+     *
      * @param scalar scalar
      */
     protected void setScalar(double scalar) {
@@ -51,6 +56,8 @@ public class GamePane extends StackPane {
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Use a Graphics Transformation to scale everything inside this pane. Padding is added to the edges to maintain
      * the correct aspect ratio and keep the display centred.
      */

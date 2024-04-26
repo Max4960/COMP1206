@@ -18,6 +18,9 @@ import uk.ac.soton.comp1206.scene.*;
  *
  * The GameWindow has methods to launch each of the different parts of the game by switching scenes. You can add more
  * methods here to add more screens to the game.
+ *
+ * @author ASUS
+ * @version $Id: $Id
  */
 public class GameWindow {
 
@@ -38,6 +41,7 @@ public class GameWindow {
 
     /**
      * Create a new GameWindow attached to the given stage with the specified width and height
+     *
      * @param stage stage
      * @param width width
      * @param height height
@@ -83,6 +87,9 @@ public class GameWindow {
         loadScene(new MenuScene(this));
     }
 
+    /**
+     * <p>startSplash.</p>
+     */
     public void startSplash() {
         loadScene(new SplashScene(this));
     }
@@ -95,24 +102,39 @@ public class GameWindow {
         loadScene(challengeScene);
     }
 
+    /**
+     * <p>startLobby.</p>
+     */
     public void startLobby() {
         lobbyScene = new LobbyScene(this);
         loadScene(lobbyScene);
     }
 
+    /**
+     * <p>startMultiplayer.</p>
+     */
     public void startMultiplayer() {
         multiplayerScene = new MultiplayerScene(this);
         loadScene(multiplayerScene);
     }
 
+    /**
+     * <p>quit.</p>
+     */
     public void quit() {
         App.getInstance().shutdown();
     }
 
+    /**
+     * <p>startInformation.</p>
+     */
     public void startInformation() {
         loadScene(new InstructionsScene(this));
     }
 
+    /**
+     * <p>startScore.</p>
+     */
     public void startScore() {loadScene(new ScoreScene(this, challengeScene.getGame()));}
 
     /**
@@ -127,6 +149,7 @@ public class GameWindow {
 
     /**
      * Load a given scene which extends BaseScene and switch over.
+     *
      * @param newScene new scene to load
      */
     public void loadScene(BaseScene newScene) {
@@ -161,6 +184,7 @@ public class GameWindow {
 
     /**
      * Get the current scene being displayed
+     *
      * @return scene
      */
     public Scene getScene() {
@@ -169,6 +193,7 @@ public class GameWindow {
 
     /**
      * Get the width of the Game Window
+     *
      * @return width
      */
     public int getWidth() {
@@ -177,6 +202,7 @@ public class GameWindow {
 
     /**
      * Get the height of the Game Window
+     *
      * @return height
      */
     public int getHeight() {
@@ -185,6 +211,7 @@ public class GameWindow {
 
     /**
      * Get the communicator
+     *
      * @return communicator
      */
     public Communicator getCommunicator() {

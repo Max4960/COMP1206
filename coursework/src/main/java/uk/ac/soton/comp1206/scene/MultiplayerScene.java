@@ -40,6 +40,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
 
+/**
+ * <p>MultiplayerScene class.</p>
+ *
+ * @author ASUS
+ * @version $Id: $Id
+ */
 public class MultiplayerScene extends ChallengeScene {
 
     private static final Logger logger = LogManager.getLogger(MultiplayerScene.class);
@@ -84,6 +90,7 @@ public class MultiplayerScene extends ChallengeScene {
         communicator = gameWindow.getCommunicator();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void build() {
         logger.info("Building " + this.getClass().getName());
@@ -134,14 +141,6 @@ public class MultiplayerScene extends ChallengeScene {
         SimpleListProperty<Pair<String, Integer>> leaderboardList = new SimpleListProperty<>(scoreList);
         leaderboard.getScores().bind(leaderboardList);
         scoreBox.getChildren().add(leaderboard);
-
-//        for (Pair player : game.getPlayerScores()) {
-//            String name = (String) player.getKey();
-//            String score = (String) player.getValue();
-//            Text playerNameAndScore = new Text(name + " " + score);
-//            playerNameAndScore.getStyleClass().add("score");
-//            scoreBox.getChildren().add(playerNameAndScore);
-//        }
 
 
         // Level User Interface
@@ -297,6 +296,8 @@ public class MultiplayerScene extends ChallengeScene {
      */
     private void blockClicked(GameBlock gameBlock) {
         game.blockClicked(gameBlock);
+        communicator.send("SCORES");
+        communicator.send("SCORE " + game.getScore());
     }
 
     /**
@@ -370,6 +371,8 @@ public class MultiplayerScene extends ChallengeScene {
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Initialise the scene and start the game
      */
     @Override
@@ -379,6 +382,7 @@ public class MultiplayerScene extends ChallengeScene {
         // This is vital for displaying the first piece(s)
         current.setPiece(game.currentPiece);
         follower.setPiece(game.followingPiece);
+        //game.getScore().a
 
         communicator.addListener(event -> {
             Platform.runLater(() -> {
@@ -393,6 +397,11 @@ public class MultiplayerScene extends ChallengeScene {
 
     }
 
+    /**
+     * <p>receiver.</p>
+     *
+     * @param message a {@link java.lang.String} object
+     */
     public void receiver(String message) {
         String[] parts = message.split(" ");
         String command = parts[0];
@@ -416,9 +425,13 @@ public class MultiplayerScene extends ChallengeScene {
         }
         sortScores();
         logger.info("Player Scores: " + playerScores);
+        scoreList.clear();
         scoreList.addAll(playerScores);
     }
 
+    /**
+     * <p>sortScores.</p>
+     */
     public void sortScores() {  // Adapted from ScoreScene
         // Sorting by integer values
         Collections.sort(playerScores, new Comparator<Pair<String,Integer>>() {
@@ -442,10 +455,18 @@ public class MultiplayerScene extends ChallengeScene {
 
     }
 
+    /**
+     * <p>Getter for the field <code>game</code>.</p>
+     *
+     * @return a {@link uk.ac.soton.comp1206.game.Game} object
+     */
     public Game getGame() {
         return game;
     }
 
+    /**
+     * <p>checkHighScore.</p>
+     */
     public void checkHighScore() {
         try {
             getHighScore();
@@ -454,6 +475,11 @@ public class MultiplayerScene extends ChallengeScene {
         }
     }
 
+    /**
+     * <p>getHighScore.</p>
+     *
+     * @throws java.io.IOException if any.
+     */
     public void getHighScore() throws IOException {
         int prevHighScore;
         String fileName = "scores.txt";

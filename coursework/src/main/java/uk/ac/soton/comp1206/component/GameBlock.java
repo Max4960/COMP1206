@@ -18,6 +18,9 @@ import uk.ac.soton.comp1206.game.Game;
  * Displays an empty square (when the value is 0) or a coloured square depending on value.
  *
  * The GameBlock value should be bound to a corresponding block in the Grid model.
+ *
+ * @author ASUS
+ * @version $Id: $Id
  */
 public class GameBlock extends Canvas {
 
@@ -70,6 +73,7 @@ public class GameBlock extends Canvas {
 
     /**
      * Create a new single Game Block
+     *
      * @param gameBoard the board this block belongs to
      * @param x the column the block exists in
      * @param y the row the block exists in
@@ -174,10 +178,20 @@ public class GameBlock extends Canvas {
         }
     }
 
+    /**
+     * <p>setCentre.</p>
+     *
+     * @param centre a boolean
+     */
     public void setCentre(boolean centre) {
         isCentre = centre;
     }
 
+    /**
+     * <p>highlight.</p>
+     *
+     * @param empty a boolean
+     */
     public void highlight(boolean empty) {
         if (this.gameBoard.getClass() == GameBoard.class) { // Stops pieceboard highlights
             if (empty) {
@@ -195,6 +209,7 @@ public class GameBlock extends Canvas {
 
     /**
      * Get the column of this block
+     *
      * @return column number
      */
     public int getX() {
@@ -203,6 +218,7 @@ public class GameBlock extends Canvas {
 
     /**
      * Get the row of this block
+     *
      * @return row number
      */
     public int getY() {
@@ -211,6 +227,7 @@ public class GameBlock extends Canvas {
 
     /**
      * Get the current value held by this block, representing its colour
+     *
      * @return value
      */
     public int getValue() {
@@ -219,12 +236,16 @@ public class GameBlock extends Canvas {
 
     /**
      * Bind the value of this block to another property. Used to link the visual block to a corresponding block in the Grid.
+     *
      * @param input property to bind the value to
      */
     public void bind(ObservableValue<? extends Number> input) {
         value.bind(input);
     }
 
+    /**
+     * <p>fadeOut.</p>
+     */
     public void fadeOut() {
         opacity = 1.0;
         var gc = getGraphicsContext2D();

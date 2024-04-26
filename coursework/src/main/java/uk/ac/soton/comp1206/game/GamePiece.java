@@ -5,6 +5,9 @@ package uk.ac.soton.comp1206.game;
  *
  * The GamePiece class also contains a factory for producing a GamePiece of a particular shape, as specified by it's
  * number.
+ *
+ * @author ASUS
+ * @version $Id: $Id
  */
 public class GamePiece {
 
@@ -30,6 +33,7 @@ public class GamePiece {
 
     /**
      * Create a new GamePiece of the specified piece number
+     *
      * @param piece piece number
      * @return the created GamePiece
      */
@@ -132,6 +136,7 @@ public class GamePiece {
 
     /**
      * Create a new GamePiece of the specified piece number and rotation
+     *
      * @param piece piece number
      * @param rotation number of times to rotate
      * @return the created GamePiece
@@ -166,6 +171,7 @@ public class GamePiece {
 
     /**
      * Get the value of this piece
+     *
      * @return piece value
      */
     public int getValue() {
@@ -174,6 +180,7 @@ public class GamePiece {
 
     /**
      * Get the block makeup of this piece
+     *
      * @return 2D grid of the blocks representing the piece shape
      */
     public int[][] getBlocks() {
@@ -182,6 +189,7 @@ public class GamePiece {
 
     /**
      * Rotate this piece the given number of rotations
+     *
      * @param rotations number of rotations
      */
     public void rotate(int rotations) {
@@ -213,6 +221,7 @@ public class GamePiece {
 
     /**
      * Return the string representation of this piece
+     *
      * @return the name of this piece
      */
     public String toString() {

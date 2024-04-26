@@ -20,6 +20,9 @@ import java.util.Set;
  *
  * The GameBoard is only a visual representation and should not contain game logic or model logic in it, which should
  * take place in the Grid.
+ *
+ * @author ASUS
+ * @version $Id: $Id
  */
 public class GameBoard extends GridPane {
 
@@ -65,6 +68,7 @@ public class GameBoard extends GridPane {
 
     /**
      * Create a new GameBoard, based off a given grid, with a visual width and height.
+     *
      * @param grid linked grid
      * @param width the visual width
      * @param height the visual height
@@ -102,6 +106,7 @@ public class GameBoard extends GridPane {
 
     /**
      * Get a specific block from the GameBoard, specified by it's row and column
+     *
      * @param x column
      * @param y row
      * @return game block at the given column and row
@@ -133,8 +138,10 @@ public class GameBoard extends GridPane {
 
     /**
      * Create a block at the given x and y position in the GameBoard
+     *
      * @param x column
      * @param y row
+     * @return a {@link uk.ac.soton.comp1206.component.GameBlock} object
      */
     protected GameBlock createBlock(int x, int y) {
         var blockWidth = width / cols;
@@ -160,12 +167,18 @@ public class GameBoard extends GridPane {
 
     /**
      * Set the listener to handle an event when a block is clicked
+     *
      * @param listener listener to add
      */
     public void setOnBlockClick(BlockClickedListener listener) {
         this.blockClickedListener = listener;
     }
 
+    /**
+     * <p>setOnRightClicked.</p>
+     *
+     * @param listener a {@link uk.ac.soton.comp1206.event.RightClickedListener} object
+     */
     public void setOnRightClicked(RightClickedListener listener) {
         this.rightClickedListener = listener;
     }

@@ -30,6 +30,12 @@ import uk.ac.soton.comp1206.ui.Multimedia;
 import java.util.ArrayList;
 import java.util.Timer;
 
+/**
+ * <p>LobbyScene class.</p>
+ *
+ * @author ASUS
+ * @version $Id: $Id
+ */
 public class LobbyScene extends BaseScene {
 
     private Timer serverTimer;
@@ -59,6 +65,7 @@ public class LobbyScene extends BaseScene {
         this.communicator = gameWindow.getCommunicator();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void initialise() {
         Multimedia.playMusic("ElevatorMusic.mp3");
@@ -164,6 +171,7 @@ public class LobbyScene extends BaseScene {
     }
 
 
+    /** {@inheritDoc} */
     @Override
     public void build() {
         root = new GamePane(gameWindow.getWidth(),gameWindow.getHeight());
@@ -258,6 +266,11 @@ public class LobbyScene extends BaseScene {
         });
     }
 
+    /**
+     * <p>sendMessage.</p>
+     *
+     * @param text a {@link java.lang.String} object
+     */
     public void sendMessage(String text) {
         if (text.contains("/nick ")) {
             String parts[] = text.split(" ");
@@ -266,10 +279,20 @@ public class LobbyScene extends BaseScene {
         communicator.send("MSG " + text);
     }
 
+    /**
+     * <p>showChatBox.</p>
+     *
+     * @param toggle a boolean
+     */
     public void showChatBox(boolean toggle) {
         chatBox.setVisible(toggle);
     }
 
+    /**
+     * <p>showMessage.</p>
+     *
+     * @param message a {@link java.lang.String} object
+     */
     public void showMessage(String message) {
         String parts[] = message.split(":");
         String username = "[" +  parts[0] + "]";
@@ -284,12 +307,22 @@ public class LobbyScene extends BaseScene {
 
     }
 
+    /**
+     * <p>createLobby.</p>
+     *
+     * @param lobbyName a {@link java.lang.String} object
+     */
     public void createLobby(String lobbyName) {
         communicator.send("CREATE " + lobbyName);
         lobbyNames.add(lobbyName);
         loadLobbies();
     }
 
+    /**
+     * <p>joinLobby.</p>
+     *
+     * @param lobby a {@link java.lang.String} object
+     */
     public void joinLobby(String lobby) {
         inLobby = true;
         showChatBox(true);
@@ -297,6 +330,9 @@ public class LobbyScene extends BaseScene {
 
     }
 
+    /**
+     * <p>loadLobbies.</p>
+     */
     public void loadLobbies() {
         logger.info("Found (" + lobbyNames.toArray().length + ") Active Lobbies");
         lobbyListViewer.setItems(lobbyNames);

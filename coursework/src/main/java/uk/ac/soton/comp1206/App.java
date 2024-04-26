@@ -10,6 +10,9 @@ import uk.ac.soton.comp1206.ui.GameWindow;
 
 /**
  * JavaFX Application class
+ *
+ * @author ASUS
+ * @version $Id: $Id
  */
 public class App extends Application {
 
@@ -29,6 +32,7 @@ public class App extends Application {
 
     /**
      * Start the game
+     *
      * @param args commandline arguments
      */
     public static void main(String[] args) {
@@ -37,8 +41,9 @@ public class App extends Application {
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Called by JavaFX with the primary stage as a parameter. Begins the game by opening the Game Window
-     * @param stage the default stage, main window
      */
     @Override
     public void start(Stage stage) {
@@ -72,6 +77,7 @@ public class App extends Application {
 
     /**
      * Get the singleton App instance
+     *
      * @return the app
      */
     public static App getInstance() {

@@ -19,6 +19,9 @@ import uk.ac.soton.comp1206.ui.Multimedia;
 
 /**
  * The main menu of the game. Provides a gateway to the rest of the game.
+ *
+ * @author ASUS
+ * @version $Id: $Id
  */
 public class MenuScene extends BaseScene {
 
@@ -27,6 +30,7 @@ public class MenuScene extends BaseScene {
 
     /**
      * Create a new menu scene
+     *
      * @param gameWindow the Game Window this will be displayed in
      */
     public MenuScene(GameWindow gameWindow) {
@@ -35,6 +39,8 @@ public class MenuScene extends BaseScene {
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Build the menu layout
      */
     @Override
@@ -132,6 +138,8 @@ public class MenuScene extends BaseScene {
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Initialise the menu
      */
     @Override

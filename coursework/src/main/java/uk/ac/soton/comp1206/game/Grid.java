@@ -18,6 +18,9 @@ import uk.ac.soton.comp1206.component.GameBoard;
  * The Grid contains functions related to modifying the model, for example, placing a piece inside the grid.
  *
  * The Grid should be linked to a GameBoard for its display.
+ *
+ * @author ASUS
+ * @version $Id: $Id
  */
 public class Grid {
 
@@ -35,6 +38,7 @@ public class Grid {
 
     /**
      * Create a new Grid with the specified number of columns and rows and initialise them
+     *
      * @param cols number of columns
      * @param rows number of rows
      */
@@ -55,6 +59,7 @@ public class Grid {
 
     /**
      * Checks that the piece is able to fit in the slot selected.
+     *
      * @param piece The piece being placed
      * @param x The x position of the piece
      * @param y The y position of the piece
@@ -76,6 +81,7 @@ public class Grid {
 
     /**
      * Places a piece in the desired coordinate, does nothing if the piece can't be placed
+     *
      * @param piece The piece being placed
      * @param x The x position of the piece
      * @param y The y position of the piece
@@ -97,6 +103,7 @@ public class Grid {
 
     /**
      * Get the Integer property contained inside the grid at a given row and column index. Can be used for binding.
+     *
      * @param x column
      * @param y row
      * @return the IntegerProperty at the given x and y in this grid
@@ -107,6 +114,7 @@ public class Grid {
 
     /**
      * Update the value at the given x and y index within the grid
+     *
      * @param x column
      * @param y row
      * @param value the new value
@@ -117,6 +125,7 @@ public class Grid {
 
     /**
      * Get the value represented at the given x and y index within the grid
+     *
      * @param x column
      * @param y row
      * @return the value
@@ -133,6 +142,7 @@ public class Grid {
 
     /**
      * Get the number of columns in this game
+     *
      * @return number of columns
      */
     public int getCols() {
@@ -141,6 +151,7 @@ public class Grid {
 
     /**
      * Get the number of rows in this game
+     *
      * @return number of rows
      */
     public int getRows() {

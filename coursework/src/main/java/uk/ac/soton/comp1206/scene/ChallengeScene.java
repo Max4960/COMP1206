@@ -35,6 +35,9 @@ import java.util.Set;
 
 /**
  * The Single Player challenge scene. Holds the UI for the single player challenge mode in the game.
+ *
+ * @author ASUS
+ * @version $Id: $Id
  */
 public class ChallengeScene extends BaseScene {
 
@@ -66,6 +69,7 @@ public class ChallengeScene extends BaseScene {
 
     /**
      * Create a new Single Player challenge scene
+     *
      * @param gameWindow the Game Window
      */
     public ChallengeScene(GameWindow gameWindow) {
@@ -74,6 +78,8 @@ public class ChallengeScene extends BaseScene {
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Build the Challenge window
      */
     @Override
@@ -349,6 +355,8 @@ public class ChallengeScene extends BaseScene {
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Initialise the scene and start the game
      */
     @Override
@@ -372,10 +380,18 @@ public class ChallengeScene extends BaseScene {
 
     }
 
+    /**
+     * <p>Getter for the field <code>game</code>.</p>
+     *
+     * @return a {@link uk.ac.soton.comp1206.game.Game} object
+     */
     public Game getGame() {
         return game;
     }
 
+    /**
+     * <p>checkHighScore.</p>
+     */
     public void checkHighScore() {
         try {
             getHighScore();
@@ -384,6 +400,11 @@ public class ChallengeScene extends BaseScene {
         }
     }
 
+    /**
+     * <p>getHighScore.</p>
+     *
+     * @throws java.io.IOException if any.
+     */
     public void getHighScore() throws IOException {
         int prevHighScore;
         String fileName = "scores.txt";

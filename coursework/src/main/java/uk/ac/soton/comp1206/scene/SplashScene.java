@@ -13,18 +13,31 @@ import uk.ac.soton.comp1206.ui.GamePane;
 import uk.ac.soton.comp1206.ui.GameWindow;
 import uk.ac.soton.comp1206.ui.Multimedia;
 
+/**
+ * <p>SplashScene class.</p>
+ *
+ * @author ASUS
+ * @version $Id: $Id
+ */
 public class SplashScene extends BaseScene{
 
+    /**
+     * <p>Constructor for SplashScene.</p>
+     *
+     * @param gameWindow a {@link uk.ac.soton.comp1206.ui.GameWindow} object
+     */
     public SplashScene(GameWindow gameWindow) {
         super(gameWindow);
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public void initialise() {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public void build() {
         root = new GamePane(gameWindow.getWidth(), gameWindow.getHeight());

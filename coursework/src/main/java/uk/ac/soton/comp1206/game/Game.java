@@ -25,6 +25,9 @@ import java.util.TimerTask;
 /**
  * The Game class handles the main logic, state and properties of the TetrECS game. Methods to manipulate the game state
  * and to handle actions made by the player should take place inside this class.
+ *
+ * @author ASUS
+ * @version $Id: $Id
  */
 public class Game {
 
@@ -53,7 +56,7 @@ public class Game {
     /**
      * The line cleared listener
      */
-    private LineClearedListener lineClearedListener;
+    public LineClearedListener lineClearedListener;
 
     /**
      * The game loop listener
@@ -100,6 +103,7 @@ public class Game {
 
     /**
      * Create a new game with the specified rows and columns. Creates a corresponding grid model.
+     *
      * @param cols number of columns
      * @param rows number of rows
      */
@@ -178,6 +182,7 @@ public class Game {
 
     /**
      * Handles what should happen when a particular block is clicked
+     *
      * @param gameBlock the block that was clicked
      */
     public void blockClicked(GameBlock gameBlock) {
@@ -200,6 +205,7 @@ public class Game {
 
     /**
      * Get the grid model inside this game representing the game state of the board
+     *
      * @return game grid model
      */
     public Grid getGrid() {
@@ -208,6 +214,7 @@ public class Game {
 
     /**
      * Get the number of columns in this game
+     *
      * @return number of columns
      */
     public int getCols() {
@@ -216,6 +223,7 @@ public class Game {
 
     /**
      * Gets the number of rows in this game
+     *
      * @return number of rows
      */
     public int getRows() {
@@ -310,7 +318,7 @@ public class Game {
      * @param noBlocks The number of unique blocks cleared
      * @return The score achieved this move
      */
-    private int score(int noLines, int noBlocks) {
+    public int score(int noLines, int noBlocks) {
         return (noLines * noBlocks * 10 * multiplier);
     }
 
@@ -319,7 +327,7 @@ public class Game {
      * Otherwise resets the multiplier to 1
      * @param set The set of blocks to be cleared
      */
-    private void updateMultiplier(HashSet set) {
+    public void updateMultiplier(HashSet set) {
         if (!set.isEmpty()) {
             multiplier++;
         } else {
@@ -330,14 +338,15 @@ public class Game {
     /**
      * Increases the level per 1000 points
      */
-    private void levelUp() {
+    public void levelUp() {
         int currentScore = score.get();
         level.set(currentScore / 1000);
     }
 
     /**
      * Sets the Next Piece Listener
-     * @param listener
+     *
+     * @param listener a {@link uk.ac.soton.comp1206.event.NextPieceListener} object
      */
     public void setNextPieceListener(NextPieceListener listener) {
         this.nextPieceListener = listener;
@@ -345,7 +354,8 @@ public class Game {
 
     /**
      * Sets the Line Cleared Listener
-     * @param listener
+     *
+     * @param listener a {@link uk.ac.soton.comp1206.event.LineClearedListener} object
      */
     public void setLineClearedListener(LineClearedListener listener) {
         this.lineClearedListener = listener;
@@ -353,20 +363,31 @@ public class Game {
 
     /**
      * Sets the Game Loop Listener
-     * @param listener
+     *
+     * @param listener a {@link uk.ac.soton.comp1206.event.GameLoopListener} object
      */
     public void setGameLoopListener(GameLoopListener listener) {
         this.gameLoopListener = listener;
     }
 
+    /**
+     * <p>Setter for the field <code>showScoreListener</code>.</p>
+     *
+     * @param listener a {@link uk.ac.soton.comp1206.event.ShowScoreListener} object
+     */
     public void setShowScoreListener(ShowScoreListener listener) {
         this.showScoreListener = listener;
     }
 
+    public int getScore() {
+        return score.get();
+    }
 
     /**
      * Rotates the piece based on the Right-Clicked Listener
-     * @param piece
+     *
+     * @param piece a {@link uk.ac.soton.comp1206.game.GamePiece} object
+     * @param rotations a int
      */
     public void rotateCurrentPiece(GamePiece piece, int rotations) {
         //Multimedia.playAudio("rotate.wav");
@@ -387,6 +408,7 @@ public class Game {
 
     /**
      * Calculates the value for the timer delay
+     *
      * @return an int value of the timer delay in milliseconds
      */
     public int getTimerDelay() {
@@ -397,6 +419,9 @@ public class Game {
         return delay;
     }
 
+    /**
+     * <p>killTimer.</p>
+     */
     public void killTimer() {
         timer.cancel();
         timer.purge();

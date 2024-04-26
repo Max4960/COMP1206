@@ -13,6 +13,9 @@ import java.util.List;
  * Uses web sockets to talk to a web socket server and relays communication to attached listeners
  *
  * YOU DO NOT NEED TO WORRY ABOUT THIS CLASS! Leave it be :-)
+ *
+ * @author ASUS
+ * @version $Id: $Id
  */
 public class Communicator {
 
@@ -82,7 +85,8 @@ public class Communicator {
         }
     }
 
-    /** Send a message to the server
+    /**
+     * Send a message to the server
      *
      * @param message Message to send
      */
@@ -94,6 +98,7 @@ public class Communicator {
 
     /**
      * Add a new listener to receive messages from the server
+     *
      * @param listener the listener to add
      */
     public void addListener(CommunicationsListener listener) {

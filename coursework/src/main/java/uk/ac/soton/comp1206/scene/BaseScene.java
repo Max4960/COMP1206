@@ -7,6 +7,9 @@ import uk.ac.soton.comp1206.ui.GameWindow;
 
 /**
  * A Base Scene used in the game. Handles common functionality between all scenes.
+ *
+ * @author ASUS
+ * @version $Id: $Id
  */
 public abstract class BaseScene {
 
@@ -17,6 +20,7 @@ public abstract class BaseScene {
 
     /**
      * Create a new scene, passing in the GameWindow the scene will be displayed in
+     *
      * @param gameWindow the game window
      */
     public BaseScene(GameWindow gameWindow) {
@@ -35,6 +39,7 @@ public abstract class BaseScene {
 
     /**
      * Create a new JavaFX scene using the root contained within this scene
+     *
      * @return JavaFX scene
      */
     public Scene setScene() {
@@ -47,6 +52,7 @@ public abstract class BaseScene {
 
     /**
      * Get the JavaFX scene contained inside
+     *
      * @return JavaFX scene
      */
     public Scene getScene() {
