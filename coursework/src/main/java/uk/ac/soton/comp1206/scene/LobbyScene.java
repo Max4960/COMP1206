@@ -184,6 +184,7 @@ public class LobbyScene extends BaseScene {
                 showMessage(data[1]);
                 break;
             case "ERROR":
+                logger.info("ERROR: "  + info);
                 break;
             case "QUIT":
                 startGameButton.setVisible(false);
