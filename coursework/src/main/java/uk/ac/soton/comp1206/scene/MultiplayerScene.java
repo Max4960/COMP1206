@@ -10,6 +10,9 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -68,6 +71,9 @@ public class MultiplayerScene extends ChallengeScene {
     protected PieceBoard follower;
     private Rectangle timeRect;
     private double startWidth;
+
+    Text chat;
+    TextField chatSender;
 
     private ArrayList<Pair<String, Integer>> playerScores = new ArrayList<>();
     private ObservableList<Pair<String, Integer>> scoreList;
@@ -156,6 +162,7 @@ public class MultiplayerScene extends ChallengeScene {
         mainPane.setRight(levelBox);
 
         // Lives User Interface
+        VBox container = new VBox();
         HBox livesBox = new HBox();
         livesBox.setAlignment(Pos.CENTER);
         javafx.scene.text.Text livesText = new javafx.scene.text.Text("LIVES : ");
@@ -165,7 +172,13 @@ public class MultiplayerScene extends ChallengeScene {
         livesValue.getStyleClass().add("lives");
         livesBox.getChildren().add(livesText);
         livesBox.getChildren().add(livesValue);
-        mainPane.setTop(livesBox);
+        chat = new Text("CHAT");
+        chat.getStyleClass().add("heading");
+
+        container.getChildren().add(livesBox);
+        container.getChildren().add(chat);
+
+        mainPane.setTop(container);
 
         // Setting up board and the two sub boards
         gameBoard = new GameBoard(game.getGrid(),gameWindow.getWidth()/2,gameWindow.getWidth()/2);
@@ -177,6 +190,19 @@ public class MultiplayerScene extends ChallengeScene {
         follower = new PieceBoard(3, 3, gameWindow.getWidth()/5, gameWindow.getWidth()/5);
         levelBox.getChildren().add(follower);
         follower.setTranslateY(60);
+
+        chatSender = new TextField();
+        chatSender.setPromptText("Y to send");
+        chatSender.setVisible(false);
+        container.getChildren().add(chatSender);
+
+        chatSender.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode().equals(KeyCode.Y)) {
+                communicator.send("MSG " + chatSender.getText());
+                chatSender.setVisible(false);
+                chatSender.clear();
+            }
+        });
 
         // Timer - Green bar at bottom of screen
         timeRect = new Rectangle();
@@ -210,6 +236,7 @@ public class MultiplayerScene extends ChallengeScene {
     private void inputHandler(KeyEvent key) {
         switch (key.getCode()) {
             case ESCAPE:
+                communicator.send("DIE");
                 gameWindow.startMenu();
                 game.killTimer();
                 break;
@@ -267,10 +294,11 @@ public class MultiplayerScene extends ChallengeScene {
                 current.setPiece(game.currentPiece);
                 follower.setPiece(game.followingPiece);
                 break;
+            case T:
+                chatSender.setVisible(true);
             case B:
                 game.lives.set(0);
                 break;
-
             default:
                 break;
         }
@@ -410,6 +438,10 @@ public class MultiplayerScene extends ChallengeScene {
         switch (command) {
             case "SCORES":
                 handleScores(info);
+                break;
+            case "MSG":
+                chat.setText(info);
+                break;
             default:
                 break;
         }
@@ -452,6 +484,7 @@ public class MultiplayerScene extends ChallengeScene {
 
 
     private void loadScores() {
+        communicator.send("DIE");
         game.timer.purge(); // Cleaning threads as a javafx function cant be called on a timer thread
         game.timer.cancel();
         Platform.runLater(()->gameWindow.startScore());

@@ -12,15 +12,9 @@ import uk.ac.soton.comp1206.game.Game;
 
 /**
  * The Visual User Interface component representing a single block in the grid.
- *
  * Extends Canvas and is responsible for drawing itself.
- *
  * Displays an empty square (when the value is 0) or a coloured square depending on value.
- *
  * The GameBlock value should be bound to a corresponding block in the Grid model.
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public class GameBlock extends Canvas {
 
@@ -48,6 +42,9 @@ public class GameBlock extends Canvas {
             Color.PURPLE
     };
 
+    /**
+     * The gameBoard the block is associated with
+     */
     private final GameBoard gameBoard;
 
     private final double width;
@@ -68,7 +65,14 @@ public class GameBlock extends Canvas {
      */
     private final IntegerProperty value = new SimpleIntegerProperty(0);
 
+    /**
+     * Boolean determining if this block is the centre-most block in the pieceboard
+     */
     private boolean isCentre = false;
+
+    /**
+     * A double representing the blocks opacity
+     */
     private double opacity = 1.0;
 
     /**
@@ -179,18 +183,18 @@ public class GameBlock extends Canvas {
     }
 
     /**
-     * <p>setCentre.</p>
+     * Is used to set the block to central if it is
      *
-     * @param centre a boolean
+     * @param centre a boolean stating if the block is the central
      */
     public void setCentre(boolean centre) {
         isCentre = centre;
     }
 
     /**
-     * <p>highlight.</p>
+     * Creates a highlight effect when this block is hovered over
      *
-     * @param empty a boolean
+     * @param empty states whether the block is empty or not
      */
     public void highlight(boolean empty) {
         if (this.gameBoard.getClass() == GameBoard.class) { // Stops pieceboard highlights
@@ -244,7 +248,7 @@ public class GameBlock extends Canvas {
     }
 
     /**
-     * <p>fadeOut.</p>
+     * Fades out the block - called when this block has been cleared
      */
     public void fadeOut() {
         opacity = 1.0;

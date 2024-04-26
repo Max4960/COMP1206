@@ -2,9 +2,6 @@ package uk.ac.soton.comp1206.event;
 
 /**
  * The Communications Listener is used for listening to messages received by the communicator.
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public interface CommunicationsListener {
 

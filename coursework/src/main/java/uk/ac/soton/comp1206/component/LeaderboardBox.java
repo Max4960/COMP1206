@@ -13,21 +13,27 @@ import uk.ac.soton.comp1206.game.MultiplayerGame;
 import java.util.ArrayList;
 
 /**
- * <p>LeaderboardBox class.</p>
- *
- * @author ASUS
- * @version $Id: $Id
+ * Extends a VBox and is used for storing the scores of the users in the game
  */
 public class LeaderboardBox extends VBox {
 
     private static final Logger logger = LogManager.getLogger(LeaderboardBox.class);
 
+    /**
+     * Simple list property of the scores of the players
+     */
     public SimpleListProperty<Pair<String, Integer>> scores = new SimpleListProperty<>();
+
+    /**
+     * Array list to keep track of dead players
+     */
     ArrayList<String> theFallen = new ArrayList<>();
+
+    // Holds scores
     VBox scoreBox = new VBox();
 
     /**
-     * <p>Constructor for LeaderboardBox.</p>
+     * Constructor for LeaderboardBox
      */
     public LeaderboardBox() {
         scores.addListener((ListChangeListener<? super Pair<String, Integer>>) (c) -> {
@@ -40,20 +46,24 @@ public class LeaderboardBox extends VBox {
     }
 
     /**
-     * <p>Getter for the field <code>scores</code>.</p>
-     *
-     * @return a {@link javafx.beans.property.SimpleListProperty} object
+     * Getter for the scores simple list property
+     * Is also used to bind the score value
+     * @return a simple list property representing scores
      */
     public SimpleListProperty<Pair<String, Integer>> getScores() {
         return scores;
     }
 
+    /**
+     * Adds a player to list of dead players
+     * @param name name of dead player
+     */
     public void kill(String name) {
         theFallen.add(name);
     }
 
     /**
-     * <p>updateScores.</p>
+     * Updates the leaderboard
      */
     public void updateScores() {
         logger.info("Updating scores");
@@ -63,7 +73,7 @@ public class LeaderboardBox extends VBox {
             Text text = new Text(pair.getKey() + " " + pair.getValue());
             if (theFallen.contains(pair.getKey())) {    // A dead player
                 text.getStyleClass().add("deadhiscore");
-            } else {
+            } else {    // A living player
                 text.getStyleClass().add("hiscore");
             }
             scoreBox.getChildren().add(text);

@@ -18,9 +18,6 @@ import uk.ac.soton.comp1206.component.GameBoard;
  * The Grid contains functions related to modifying the model, for example, placing a piece inside the grid.
  *
  * The Grid should be linked to a GameBoard for its display.
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public class Grid {
 

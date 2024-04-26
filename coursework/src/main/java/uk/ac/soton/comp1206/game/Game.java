@@ -25,9 +25,6 @@ import java.util.TimerTask;
 /**
  * The Game class handles the main logic, state and properties of the TetrECS game. Methods to manipulate the game state
  * and to handle actions made by the player should take place inside this class.
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public class Game {
 
@@ -63,6 +60,9 @@ public class Game {
      */
     private GameLoopListener gameLoopListener;
 
+    /**
+     * The show score listener
+     */
     public ShowScoreListener showScoreListener;
 
     /**
@@ -85,6 +85,7 @@ public class Game {
      * The initial value for lives stored as a Simple Integer Property
      */
     public SimpleIntegerProperty lives = new SimpleIntegerProperty(3);
+
     /**
      * Member variable representing the multiplier, its default value is one
      */
@@ -346,7 +347,7 @@ public class Game {
     /**
      * Sets the Next Piece Listener
      *
-     * @param listener a {@link uk.ac.soton.comp1206.event.NextPieceListener} object
+     * @param listener representing the next piece listener
      */
     public void setNextPieceListener(NextPieceListener listener) {
         this.nextPieceListener = listener;
@@ -355,7 +356,7 @@ public class Game {
     /**
      * Sets the Line Cleared Listener
      *
-     * @param listener a {@link uk.ac.soton.comp1206.event.LineClearedListener} object
+     * @param listener representing the line cleared listener
      */
     public void setLineClearedListener(LineClearedListener listener) {
         this.lineClearedListener = listener;
@@ -364,21 +365,25 @@ public class Game {
     /**
      * Sets the Game Loop Listener
      *
-     * @param listener a {@link uk.ac.soton.comp1206.event.GameLoopListener} object
+     * @param listener representing the game loop listener
      */
     public void setGameLoopListener(GameLoopListener listener) {
         this.gameLoopListener = listener;
     }
 
     /**
-     * <p>Setter for the field <code>showScoreListener</code>.</p>
+     * Sets the Show Score Listener
      *
-     * @param listener a {@link uk.ac.soton.comp1206.event.ShowScoreListener} object
+     * @param listener representing the show score listener
      */
     public void setShowScoreListener(ShowScoreListener listener) {
         this.showScoreListener = listener;
     }
 
+    /**
+     * Getter to fetch the game score
+     * @return return int of the game score
+     */
     public int getScore() {
         return score.get();
     }
@@ -386,8 +391,8 @@ public class Game {
     /**
      * Rotates the piece based on the Right-Clicked Listener
      *
-     * @param piece a {@link uk.ac.soton.comp1206.game.GamePiece} object
-     * @param rotations a int
+     * @param piece a Game Piece object
+     * @param rotations a int stating the rotations
      */
     public void rotateCurrentPiece(GamePiece piece, int rotations) {
         //Multimedia.playAudio("rotate.wav");
@@ -420,7 +425,7 @@ public class Game {
     }
 
     /**
-     * <p>killTimer.</p>
+     * Stops the game timer
      */
     public void killTimer() {
         timer.cancel();

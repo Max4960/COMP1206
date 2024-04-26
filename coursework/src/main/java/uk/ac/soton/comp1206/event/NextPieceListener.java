@@ -5,9 +5,6 @@ import uk.ac.soton.comp1206.game.GamePiece;
 /**
  * The Next Piece Listener is called whenever a new piece is generated
  * This is used to update the representing piece boards
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public interface NextPieceListener {
 

@@ -8,20 +8,18 @@ import uk.ac.soton.comp1206.game.GamePiece;
 import uk.ac.soton.comp1206.game.Grid;
 
 /**
- * <p>PieceBoard class.</p>
- *
- * @author ASUS
- * @version $Id: $Id
+ * Is an extension of the gameboard class
+ * Handles the visuals of the current and next piece
  */
 public class PieceBoard extends GameBoard {
     private static final Logger logger = LogManager.getLogger(PieceBoard.class);
     //private BlockClickedListener blockClickedListener;
 
     /**
-     * <p>Constructor for PieceBoard.</p>
+     * The constructor for pieceboard
      *
-     * @param cols a int
-     * @param rows a int
+     * @param cols an int showing columns
+     * @param rows an int showing rows
      * @param width a double
      * @param height a double
      */
@@ -30,9 +28,9 @@ public class PieceBoard extends GameBoard {
     }
 
     /**
-     * <p>setPiece.</p>
+     * Clears the board then sets the board to have the desired piece
      *
-     * @param piece a {@link uk.ac.soton.comp1206.game.GamePiece} object
+     * @param piece a piece object
      */
     public void setPiece(GamePiece piece) {
         // Need to clean board first

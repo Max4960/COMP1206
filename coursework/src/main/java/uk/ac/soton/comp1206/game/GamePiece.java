@@ -5,9 +5,6 @@ package uk.ac.soton.comp1206.game;
  *
  * The GamePiece class also contains a factory for producing a GamePiece of a particular shape, as specified by it's
  * number.
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public class GamePiece {
 
@@ -227,7 +224,4 @@ public class GamePiece {
     public String toString() {
         return this.name;
     }
-
-
-
 }

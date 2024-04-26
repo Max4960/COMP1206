@@ -7,9 +7,6 @@ import java.util.Set;
 /**
  * The Line Cleared Listener is called when a line is cleared in-game
  * It takes a set of block coordinates to have the fade out animation played
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public interface LineClearedListener {
 

@@ -1,15 +1,12 @@
 package uk.ac.soton.comp1206.event;
 
 /**
- * <p>ShowScoreListener interface.</p>
- *
- * @author ASUS
- * @version $Id: $Id
+ * Used to display the scores once the game is over
  */
 public interface ShowScoreListener {
 
     /**
-     * <p>gameOver.</p>
+     * Handle a game over event
      */
     public void gameOver();
 }

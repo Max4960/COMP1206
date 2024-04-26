@@ -4,11 +4,7 @@ import javafx.beans.NamedArg;
 
 /**
  * Represents a row and column representation of a block in the grid. Holds the x (column) and y (row).
- *
  * Useful for use in a set or list or other form of collection.
- *
- * @author ASUS
- * @version $Id: $Id
  */
 public class GameBlockCoordinate {
 
@@ -105,9 +101,10 @@ public class GameBlockCoordinate {
     }
 
     /**
-     * {@inheritDoc}
+     * Compare this GameBlockCoordinate to another GameBlockCoordinate4
      *
-     * Compare this GameBlockCoordinate to another GameBlockCoordinate
+     * @param obj - object to compare to
+     * @return true if they are the same object, false otherwise
      */
     @Override public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -118,8 +115,6 @@ public class GameBlockCoordinate {
     }
 
     /**
-     * {@inheritDoc}
-     *
      * Calculate a hash code of this GameBlockCoordinate, used for comparisons
      */
     @Override public int hashCode() {
@@ -133,8 +128,6 @@ public class GameBlockCoordinate {
     }
 
     /**
-     * {@inheritDoc}
-     *
      * Return a string representation of this GameBlockCoordinate
      */
     @Override public String toString() {
